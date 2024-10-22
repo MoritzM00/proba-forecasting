@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "Probabilistic-Forecasting"
+version = "0.0.0"
+description = "Probabilistic Forecasting Challenge in summer term 24 at KIT"
+authors = [{ name = "Moritz Mistol", email = "moritz.mistol@gmail.com" }]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = ["numpy>=2.1.1"]
+
+
+[tool.uv]
+dev-dependencies = [
+    "pdoc>=14.7.0",
+    "pre-commit>=3.8.0",
+    "pytest>=8.3.3",
+    "ruff>=0.6.5",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/probafcst"]
+
+
+[tool.ruff]
+line-length = 88
+extend-exclude = ["src/probafcst/__init__.py"]
+
+[tool.ruff.lint.extend-per-file-ignores]
+# Also ignore `E402` in all `__init__.py` files.
+"__init__.py" = ["E402"]
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # pydocstyle
+    "D",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+    # pandas related
+    "PD",
+]
+extend-ignore = ["D203", "D213"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
