@@ -2,7 +2,7 @@
 
 ![Tests](https://img.shields.io/github/actions/workflow/status/MoritzM00/proba-forecasting/test_deploy.yaml?style=for-the-badge&label=Test%20and%20Deploy)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge)][pre-commit]
-![License](https://img.shields.io/github/license/MoritzM00/Probabilistic Timeseries Forecasting Challenge?style=for-the-badge)
+![License](https://img.shields.io/github/license/MoritzM00/proba-forecasting?style=for-the-badge)
 
 [pre-commit]: https://github.com/pre-commit/pre-commit
 
