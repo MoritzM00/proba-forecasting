@@ -2228,6 +2228,7 @@ dependencies = [
     { name = "dvc" },
     { name = "marimo" },
     { name = "matplotlib" },
+    { name = "numpy" },
     { name = "pandas", extra = ["excel"] },
     { name = "seaborn" },
 ]
@@ -2244,8 +2245,9 @@ dev = [
 requires-dist = [
     { name = "darts", specifier = ">=0.31.0" },
     { name = "dvc", specifier = ">=3.55.2" },
-    { name = "marimo" },
+    { name = "marimo", specifier = ">=0.9.11" },
     { name = "matplotlib", specifier = ">=3.9.2" },
+    { name = "numpy" },
     { name = "pandas", extras = ["excel"], specifier = ">=2.2.3" },
     { name = "seaborn", specifier = ">=0.13.2" },
 ]

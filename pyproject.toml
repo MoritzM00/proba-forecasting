@@ -15,6 +15,7 @@ dependencies = [
     "dvc>=3.55.2",
     "marimo>=0.9.11",
     "matplotlib>=3.9.2",
+    "numpy>=1.26.4",
     "pandas[excel]>=2.2.3",
     "seaborn>=0.13.2",
 ]
