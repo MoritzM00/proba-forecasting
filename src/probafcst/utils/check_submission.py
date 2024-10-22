@@ -20,10 +20,6 @@ def check_df(df):
     ]
     LEN_EXP_COLS = len(EXPECTED_COLS)
 
-    # if exclude_weather == True:
-    #     print("Excluding weather variables!")
-    #     TARGETS = ["DAX", "energy"]
-    # else:
     TARGETS = ["bikes", "energy", "no2"]
 
     TARGET_VALS = dict(

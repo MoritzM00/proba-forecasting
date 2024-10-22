@@ -25,6 +25,11 @@ def create_submission_frame(
     no2_preds : array-like or None
         Predictions for no2. Must have shape (6, 5).
         If None, it will be filled with NaNs.
+
+    Returns
+    -------
+    pd.DataFrame
+        Submission dataframe.
     """
     if forecast_date is None:
         # use today
