@@ -4,7 +4,8 @@ import numpy as np
 import pandas as pd
 
 
-def create_submission_frame(
+def create_submission(
+    *,
     forecast_date: str | None = None,
     bikes_preds=None,
     energy_preds=None,

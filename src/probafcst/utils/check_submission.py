@@ -6,7 +6,7 @@ from datetime import datetime
 import pandas as pd
 
 
-def check_df(df):
+def check_submission(df):
     """Check the submission file for the correct format."""
     EXPECTED_COLS = [
         "forecast_date",
@@ -200,7 +200,7 @@ def check_df(df):
             print("Something is wrong with your quantiles.")
             print("Stopping early...")
             sys.exit()
-        diffs[0] = 0
+        diffs.iloc[0] = 0
         if (diffs < 0).any():
             print(
                 "Predictive quantiles in row",
