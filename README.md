@@ -6,11 +6,11 @@
 
 [pre-commit]: https://github.com/pre-commit/pre-commit
 
----
+Repository for the Probabilistic Timeseries Forecasting Challenge. This challenge focuses on quantile forecasting for timeseries data. Results can be found [here](https://gitlab.kit.edu/nils.koster/ptsfc24_results).
 
-## Quick Start
+## Development Guide
 
-Below you can find the quick start guide for development.
+This guide shows how to reproduce the results of the challenge.
 
 ### Set up the environment
 
@@ -22,27 +22,13 @@ make setup
 source .venv/bin/activate
 ```
 
-### Additional first-time setup
+### Reproduce the results
 
-1. After setting up the environment, commit the `uv.lock` file to your repository, so that the workflow on github can use it.
-2. Enable [Pre-Commit CI](https://pre-commit.ci/) for your repository.
-3. Enable **Github Pages** for your documentation.
-   To do that, go to the _Settings_ tab of your repository and scroll down to the _GitHub Pages_ section.
-   For the _Source_ option, select _GitHub Action_. Done!
+Run `dvc repro` to reproduce the results. This requires the data to be in the correct format.
 
-### Install new packages
+#### Data Requirements
 
-To install new PyPI packages, run:
-
-```bash
-uv add <package-name>
-```
-
-To add dev-dependencies, run:
-
-```bash
-uv add --dev <package-name>
-```
+TODO
 
 ### Documentation
 
