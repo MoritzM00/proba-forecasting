@@ -100,6 +100,7 @@ def check_predictions(preds, n_rows, n_cols):
 
     Returns
     -------
+    preds
         2D NumPy array of predictions or NaNs.
     """
     if preds is None:
