@@ -68,9 +68,51 @@ def __(TimeSeries, load):
 
 
 @app.cell
-def __(load):
-    load.to_parquet("data/processed/energy_load.parquet", index=True)
+def __():
+    # load.to_parquet("data/processed/energy_load.parquet", index=True)
     return
+
+
+@app.cell
+def __(ts):
+    train, test = ts.split_after(0.8)
+    return test, train
+
+
+@app.cell
+def __(test, train):
+    train.plot()
+    test.plot()
+    return
+
+
+@app.cell
+def __(test, train):
+    from darts.models import NaiveSeasonal
+
+    K = 24 * 7 * 4 * 12
+    naive_model = NaiveSeasonal(K=K)
+    naive_model.fit(train)
+    naive_forecast = naive_model.predict(len(test))
+
+    test.plot(label="actual")
+    naive_forecast.plot(label="naive seasonal)")
+    return K, NaiveSeasonal, naive_forecast, naive_model
+
+
+@app.cell
+def __(test, train):
+    from darts.models import LinearRegressionModel
+
+    regression_model = LinearRegressionModel(
+        lags=[-24, -24 * 7, -24 * 7 * 4, -24 * 7 * 4 * 12]
+    )
+    regression_model.fit(train)
+    regression_forecast = regression_model.predict(len(test))
+
+    test.plot(label="actual")
+    regression_forecast.plot(label="regression")
+    return LinearRegressionModel, regression_forecast, regression_model
 
 
 @app.cell
