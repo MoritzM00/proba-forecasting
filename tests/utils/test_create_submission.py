@@ -5,10 +5,10 @@ from io import StringIO
 import numpy as np
 import pandas as pd
 
-from probafcst.utils.create_submission import create_submission_frame
+from probafcst.utils.create_submission import create_submission
 
 
-def test_create_submission_frame():
+def test_create_submission():
     """Test create_submission_frame function."""
     expected_frame = """
 forecast_date,target,horizon,q0.025,q0.25,q0.5,q0.75,q0.975
@@ -57,7 +57,7 @@ forecast_date,target,horizon,q0.025,q0.25,q0.5,q0.75,q0.975
     )
     no2_preds = None
 
-    actual_frame = create_submission_frame(
+    actual_frame = create_submission(
         forecast_date=forecast_date,
         bikes_preds=bikes_preds,
         energy_preds=energy_preds,
