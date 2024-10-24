@@ -12,12 +12,15 @@ license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = [
     "dvc>=3.55.2",
+    "jupyter>=1.1.1",
     "marimo>=0.9.11",
     "matplotlib>=3.9.2",
-    "numpy>=1.26.4",
+    "numpy>=2.0.2",
     "pandas[excel]>=2.2.3",
+    "pyarrow>=17.0.0",
     "seaborn>=0.13.2",
     "sktime>=0.34.0",
+    "statsforecast>=1.7.8",
 ]
 
 
