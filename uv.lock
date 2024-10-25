@@ -2668,6 +2668,7 @@ dependencies = [
     { name = "seaborn" },
     { name = "sktime" },
     { name = "statsforecast" },
+    { name = "tqdm" },
 ]
 
 [package.dev-dependencies]
@@ -2690,6 +2691,7 @@ requires-dist = [
     { name = "seaborn", specifier = ">=0.13.2" },
     { name = "sktime", specifier = ">=0.34.0" },
     { name = "statsforecast", specifier = ">=1.7.8" },
+    { name = "tqdm" },
 ]
 
 [package.metadata.requires-dev]

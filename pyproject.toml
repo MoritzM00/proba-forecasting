@@ -21,6 +21,7 @@ dependencies = [
     "seaborn>=0.13.2",
     "sktime>=0.34.0",
     "statsforecast>=1.7.8",
+    "tqdm>=4.66.5",
 ]
 
 
