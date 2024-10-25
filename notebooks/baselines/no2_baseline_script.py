@@ -1,3 +1,4 @@
+# ruff: noqa
 # %%
 from datetime import date
 
