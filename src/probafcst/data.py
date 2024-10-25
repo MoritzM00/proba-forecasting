@@ -1,7 +1,6 @@
 """Data module for probafcst package."""
 
-import datetime
-from datetime import date
+from datetime import date, datetime
 
 import pandas as pd
 import requests
@@ -32,11 +31,12 @@ def get_no2_data(start_date: str = "2020-01-01") -> pd.DataFrame:
     no2["datetime"] = pd.to_datetime(
         no2["Date"] + " " + no2["hour"].astype(str) + ":00"
     )
+    no2 = no2.drop_duplicates(subset=["datetime"])
     no2 = no2.set_index("datetime")
 
-    # no2 = no2.dropna(axis=0)
+    no2 = no2.resample("h").bfill()
 
-    return no2
+    return no2["Measure value"]
 
 
 def get_bikes_data(start_date: str = "01/01/2019") -> pd.DataFrame:
@@ -113,7 +113,10 @@ def get_energy_data(ignore_years: int = 6) -> pd.DataFrame:
     energy_data["date_time"] = pd.to_datetime(energy_data.date_time) + pd.DateOffset(
         hours=1
     )
-
+    # handle DST
+    energy_data = energy_data.drop_duplicates(subset=["date_time"])
     energy_data = energy_data.set_index("date_time")
+
+    energy_data = energy_data.resample("h").bfill()
 
     return energy_data
