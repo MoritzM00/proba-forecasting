@@ -1,4 +1,11 @@
-"""Data Preparation Stage."""
+"""Data Preparation Stage.
+
+This script prepares the data for the models. It loads each target into
+a pandas dataframe and saves it as a parquet file. Each target data is
+loaded using a specific function from the data module, which uses GET requests
+to download the data from the web. Those requests are cached by default to avoid
+unnecessary duplicated requests.
+"""
 
 from datetime import timedelta
 from pathlib import Path
@@ -23,7 +30,18 @@ simplefilter("ignore", category=FutureWarning)
     help="The target data to prepare.",
 )
 def prepare(target: str) -> None:
-    """Prepare data for the models."""
+    """Prepare data for the models.
+
+    Parameters
+    ----------
+    target : str
+        The target data to prepare.
+
+    Raises
+    ------
+    ValueError
+        If the target is invalid. Must be one of "energy", "bikes" or "no2".
+    """
     params = dvc.api.params_show()
     params = OmegaConf.create(params)
 
@@ -31,6 +49,7 @@ def prepare(target: str) -> None:
         days_expire_after = params.cache.days_expire_after
         requests_cache.install_cache(
             "probafcst_cache",
+            backend="sqlite",
             expire_after=timedelta(days=days_expire_after),
         )
 
