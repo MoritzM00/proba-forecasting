@@ -25,8 +25,8 @@ stages:
       size: 3719
     - path: src/probafcst/pipeline/prepare.py
       hash: md5
-      md5: 40821c8deac8c878b1fda7bfafd398c0
-      size: 1618
+      md5: f20cd18f8be68c83eedac1d6ae19b108
+      size: 1682
     params:
       params.yaml:
         data.energy:
@@ -45,8 +45,8 @@ stages:
       size: 3719
     - path: src/probafcst/pipeline/prepare.py
       hash: md5
-      md5: 40821c8deac8c878b1fda7bfafd398c0
-      size: 1618
+      md5: f20cd18f8be68c83eedac1d6ae19b108
+      size: 1682
     params:
       params.yaml:
         data.bikes:
@@ -65,8 +65,8 @@ stages:
       size: 3719
     - path: src/probafcst/pipeline/prepare.py
       hash: md5
-      md5: 40821c8deac8c878b1fda7bfafd398c0
-      size: 1618
+      md5: f20cd18f8be68c83eedac1d6ae19b108
+      size: 1682
     params:
       params.yaml:
         data.no2:
