@@ -112,8 +112,8 @@ stages:
     outs:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: 374764cf121c907c7110dbaceb6a69ff
-      size: 1021468
+      md5: a9c351b8f392e8f58738707f468bea34
+      size: 1021457
   train@no2:
     cmd: uv run python src/probafcst/pipeline/train.py --target no2
     deps:
@@ -130,23 +130,23 @@ stages:
     outs:
     - path: models/no2_model.pkl
       hash: md5
-      md5: 374764cf121c907c7110dbaceb6a69ff
-      size: 1021468
+      md5: a9c351b8f392e8f58738707f468bea34
+      size: 1021457
   submit:
     cmd: uv run python src/probafcst/pipeline/submit.py
     deps:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: 374764cf121c907c7110dbaceb6a69ff
-      size: 1021468
+      md5: a9c351b8f392e8f58738707f468bea34
+      size: 1021457
     - path: models/energy_model.pkl
       hash: md5
       md5: a9c351b8f392e8f58738707f468bea34
       size: 1021457
     - path: models/no2_model.pkl
       hash: md5
-      md5: 374764cf121c907c7110dbaceb6a69ff
-      size: 1021468
+      md5: a9c351b8f392e8f58738707f468bea34
+      size: 1021457
     - path: src/probafcst//utils/check_submission.py
       hash: md5
       md5: 530b84a138112ef7d679344ed60ac5cc

@@ -20,8 +20,8 @@ stages:
   train:
     foreach:
       - energy
-      # - bikes
-      # - no2
+      - bikes
+      - no2
     do:
       cmd: uv run python ${pipe_dir}/train.py --target ${item}
       params:

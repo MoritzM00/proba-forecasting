@@ -132,4 +132,3 @@ docs/
 .idea/
 
 probafcst_cache.sqlite
-**/*.pkl
