@@ -10,6 +10,8 @@ stages:
       - no2
     do:
       cmd: uv run python ${pipe_dir}/prepare.py --target ${item}
+      params:
+        - data.${item}
       deps:
         - ${pipe_dir}/prepare.py
         - ${code_dir}/data.py

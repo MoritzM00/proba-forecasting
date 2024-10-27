@@ -39,14 +39,18 @@ def prepare(target: str) -> None:
 
     match target:
         case "energy":
-            energy_data = get_energy_data()
+            energy_data = get_energy_data(ignore_years=params.data.energy.ignore_years)
             energy_data.to_parquet(data_dir / "energy.parquet")
         case "bikes":
-            bikes_data = get_bikes_data()
+            bikes_data = get_bikes_data(start_date=params.data.bikes.start_date)
             bikes_data.to_parquet(data_dir / "bikes.parquet")
         case "no2":
-            no2_data = get_no2_data()
+            no2_data = get_no2_data(
+                start_date=params.data.no2.start_date, end_date=params.data.no2.end_date
+            )
             no2_data.to_parquet(data_dir / "no2.parquet")
+        case _:
+            raise ValueError("Invalid target.")
 
 
 if __name__ == "__main__":

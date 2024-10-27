@@ -3,3 +3,13 @@ cache:
   days_expire_after: 5
 
 data_dir: data/
+
+
+data:
+  bikes:
+    start_date: "2012-04-25"
+  no2:
+    start_date: "2016-01-01"
+    end_date: "2024-10-26"
+  energy:
+    ignore_years: 5

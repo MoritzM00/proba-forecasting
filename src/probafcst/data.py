@@ -7,9 +7,12 @@ import requests
 from tqdm import tqdm
 
 
-def get_no2_data(start_date: str = "2020-01-01") -> pd.DataFrame:
+def get_no2_data(
+    start_date: str = "2020-01-01", end_date: str | None = "2024-10-24"
+) -> pd.DataFrame:
     """Get NO2 data."""
-    end_date = date.today()
+    if end_date is None:
+        end_date = date.today()
 
     url = (
         f"https://www.umweltbundesamt.de/api/air_data/v3/measures/csv?date_from={start_date}"

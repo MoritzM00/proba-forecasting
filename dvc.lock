@@ -21,46 +21,59 @@ stages:
     deps:
     - path: src/probafcst//data.py
       hash: md5
-      md5: c486e2e42f4e99569925b4414a09bec7
-      size: 3647
+      md5: bf77f16042d267350d0cad253c127db8
+      size: 3719
     - path: src/probafcst/pipeline/prepare.py
       hash: md5
-      md5: 4a10769d280f0d261a5c2ec241080c40
-      size: 1433
+      md5: 40821c8deac8c878b1fda7bfafd398c0
+      size: 1618
+    params:
+      params.yaml:
+        data.energy:
+          ignore_years: 5
     outs:
     - path: data/energy.parquet
       hash: md5
-      md5: ad440470ca62eaef0beb641f52577331
-      size: 523826
+      md5: 7e6e21bab84a625fd4d26a264074519d
+      size: 658468
   prepare@bikes:
     cmd: uv run python src/probafcst/pipeline/prepare.py --target bikes
     deps:
     - path: src/probafcst//data.py
       hash: md5
-      md5: c486e2e42f4e99569925b4414a09bec7
-      size: 3647
+      md5: bf77f16042d267350d0cad253c127db8
+      size: 3719
     - path: src/probafcst/pipeline/prepare.py
       hash: md5
-      md5: 4a10769d280f0d261a5c2ec241080c40
-      size: 1433
+      md5: 40821c8deac8c878b1fda7bfafd398c0
+      size: 1618
+    params:
+      params.yaml:
+        data.bikes:
+          start_date: '2012-04-25'
     outs:
     - path: data/bikes.parquet
       hash: md5
-      md5: cd4922dc92155dd8d2600e7fd8bcb69d
-      size: 31197
+      md5: 26b62c099c644ff7320544e81ba1b311
+      size: 63452
   prepare@no2:
     cmd: uv run python src/probafcst/pipeline/prepare.py --target no2
     deps:
     - path: src/probafcst//data.py
       hash: md5
-      md5: c486e2e42f4e99569925b4414a09bec7
-      size: 3647
+      md5: bf77f16042d267350d0cad253c127db8
+      size: 3719
     - path: src/probafcst/pipeline/prepare.py
       hash: md5
-      md5: 4a10769d280f0d261a5c2ec241080c40
-      size: 1433
+      md5: 40821c8deac8c878b1fda7bfafd398c0
+      size: 1618
+    params:
+      params.yaml:
+        data.no2:
+          start_date: '2016-01-01'
+          end_date: '2024-10-26'
     outs:
     - path: data/no2.parquet
       hash: md5
-      md5: e37bad5501d2f81ec244b3d2c79ae0f3
-      size: 434482
+      md5: c0f37fa6ec1865b682bb3add8ed17c39
+      size: 801854
