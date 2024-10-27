@@ -149,8 +149,8 @@ stages:
       size: 1021457
     - path: src/probafcst//utils/check_submission.py
       hash: md5
-      md5: 530b84a138112ef7d679344ed60ac5cc
-      size: 6838
+      md5: 777d5c8be0feeef6039c4816e278812a
+      size: 7118
     - path: src/probafcst//utils/create_submission.py
       hash: md5
       md5: 109940c2584602851ca4d331128ee595
