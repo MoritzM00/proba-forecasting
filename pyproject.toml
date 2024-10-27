@@ -13,8 +13,6 @@ requires-python = ">=3.10"
 dependencies = [
     "click>=8.1.7",
     "dvc>=3.55.2",
-    "jupyter>=1.1.1",
-    "marimo>=0.9.11",
     "matplotlib>=3.9.2",
     "numpy>=2.0.2",
     "omegaconf>=2.3.0",
@@ -30,6 +28,7 @@ dependencies = [
 
 [tool.uv]
 dev-dependencies = [
+    "jupyter>=1.1.1",
     "pdoc>=14.7.0",
     "pre-commit>=3.8.0",
     "pytest>=8.3.3",
