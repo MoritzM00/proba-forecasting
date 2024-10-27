@@ -55,7 +55,7 @@ forecast_date,target,horizon,q0.025,q0.25,q0.5,q0.75,q0.975
             [43070, 45698, 48347, 52965, 56667],
         ]
     )
-    no2_preds = None
+    no2_preds = np.full((6, 5), np.nan)
 
     actual_frame = create_submission(
         forecast_date=forecast_date,
