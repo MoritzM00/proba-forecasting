@@ -1,0 +1,5 @@
+cache:
+  enable: true
+  days_expire_after: 5
+
+data_dir: data/

@@ -24,11 +24,7 @@ source .venv/bin/activate
 
 ### Reproduce the results
 
-Run `dvc repro` to reproduce the results. This requires the data to be in the correct format.
-
-#### Data Requirements
-
-TODO
+Run `dvc repro` to reproduce the results.
 
 ### Documentation
 

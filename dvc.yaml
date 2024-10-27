@@ -1,0 +1,17 @@
+vars:
+  - code_dir: src/probafcst/
+  - pipe_dir: src/probafcst/pipeline
+
+stages:
+  prepare:
+    foreach:
+      - energy
+      - bikes
+      - no2
+    do:
+      cmd: uv run python ${pipe_dir}/prepare.py --target ${item}
+      deps:
+        - ${pipe_dir}/prepare.py
+        - ${code_dir}/data.py
+      outs:
+        - data/${item}.parquet

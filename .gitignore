@@ -131,3 +131,5 @@ dmypy.json
 docs/
 .idea/
 output/
+
+probafcst_cache.sqlite

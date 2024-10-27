@@ -17,6 +17,7 @@ dependencies = [
     "marimo>=0.9.11",
     "matplotlib>=3.9.2",
     "numpy>=2.0.2",
+    "omegaconf>=2.3.0",
     "pandas[excel]>=2.2.3",
     "pyarrow>=17.0.0",
     "requests-cache>=1.2.1",

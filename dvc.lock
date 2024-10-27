@@ -1,0 +1,66 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: uv run python src/probafcst/pipeline/prepare.py
+    deps:
+    - path: src/probafcst//data.py
+      hash: md5
+      md5: 6d59fa3c8a1c02fca7f10e251db64a2a
+      size: 3645
+    - path: src/probafcst/pipeline/prepare.py
+      hash: md5
+      md5: 4a10769d280f0d261a5c2ec241080c40
+      size: 1433
+    outs:
+    - path: data/energy.parquet
+      hash: md5
+      md5: ad440470ca62eaef0beb641f52577331
+      size: 523826
+  prepare@energy:
+    cmd: uv run python src/probafcst/pipeline/prepare.py --target energy
+    deps:
+    - path: src/probafcst//data.py
+      hash: md5
+      md5: c486e2e42f4e99569925b4414a09bec7
+      size: 3647
+    - path: src/probafcst/pipeline/prepare.py
+      hash: md5
+      md5: 4a10769d280f0d261a5c2ec241080c40
+      size: 1433
+    outs:
+    - path: data/energy.parquet
+      hash: md5
+      md5: ad440470ca62eaef0beb641f52577331
+      size: 523826
+  prepare@bikes:
+    cmd: uv run python src/probafcst/pipeline/prepare.py --target bikes
+    deps:
+    - path: src/probafcst//data.py
+      hash: md5
+      md5: c486e2e42f4e99569925b4414a09bec7
+      size: 3647
+    - path: src/probafcst/pipeline/prepare.py
+      hash: md5
+      md5: 4a10769d280f0d261a5c2ec241080c40
+      size: 1433
+    outs:
+    - path: data/bikes.parquet
+      hash: md5
+      md5: cd4922dc92155dd8d2600e7fd8bcb69d
+      size: 31197
+  prepare@no2:
+    cmd: uv run python src/probafcst/pipeline/prepare.py --target no2
+    deps:
+    - path: src/probafcst//data.py
+      hash: md5
+      md5: c486e2e42f4e99569925b4414a09bec7
+      size: 3647
+    - path: src/probafcst/pipeline/prepare.py
+      hash: md5
+      md5: 4a10769d280f0d261a5c2ec241080c40
+      size: 1433
+    outs:
+    - path: data/no2.parquet
+      hash: md5
+      md5: e37bad5501d2f81ec244b3d2c79ae0f3
+      size: 434482

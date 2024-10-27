@@ -36,7 +36,7 @@ def get_no2_data(start_date: str = "2020-01-01") -> pd.DataFrame:
 
     no2 = no2.resample("h").bfill()
 
-    return no2["Measure value"]
+    return no2[["Measure value"]]
 
 
 def get_bikes_data(start_date: str = "01/01/2019") -> pd.DataFrame:

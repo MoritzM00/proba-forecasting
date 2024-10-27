@@ -1,2 +1,3 @@
-/raw
-/processed
+/energy.parquet
+/bikes.parquet
+/no2.parquet
