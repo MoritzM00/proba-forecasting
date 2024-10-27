@@ -17,3 +17,29 @@ stages:
         - ${code_dir}/data.py
       outs:
         - data/${item}.parquet
+  train:
+    foreach:
+      - energy
+      # - bikes
+      # - no2
+    do:
+      cmd: uv run python ${pipe_dir}/train.py --target ${item}
+      params:
+        - data.${item}
+      deps:
+        - ${pipe_dir}/train.py
+      outs:
+        - models/${item}_model.pkl
+  submit:
+    cmd: uv run python ${pipe_dir}/submit.py
+    params:
+      - quantiles
+    deps:
+      - ${pipe_dir}/submit.py
+      - ${code_dir}/utils/check_submission.py
+      - ${code_dir}/utils/create_submission.py
+      - models/energy_model.pkl
+      - models/bikes_model.pkl
+      - models/no2_model.pkl
+    outs:
+      - output/submission.csv

@@ -21,55 +21,58 @@ stages:
     deps:
     - path: src/probafcst//data.py
       hash: md5
-      md5: bf77f16042d267350d0cad253c127db8
-      size: 3719
+      md5: 9ebb26cb2d17806d29968a9235425167
+      size: 3798
     - path: src/probafcst/pipeline/prepare.py
       hash: md5
-      md5: f20cd18f8be68c83eedac1d6ae19b108
-      size: 1682
+      md5: 22cbf896e1084dbb13e6006c13f67bb8
+      size: 2254
     params:
       params.yaml:
         data.energy:
+          filename: energy.parquet
           ignore_years: 5
     outs:
     - path: data/energy.parquet
       hash: md5
-      md5: 7e6e21bab84a625fd4d26a264074519d
-      size: 658468
+      md5: 7c0aa2d491fe19e0f019bbefcf15d73d
+      size: 664960
   prepare@bikes:
     cmd: uv run python src/probafcst/pipeline/prepare.py --target bikes
     deps:
     - path: src/probafcst//data.py
       hash: md5
-      md5: bf77f16042d267350d0cad253c127db8
-      size: 3719
+      md5: 9ebb26cb2d17806d29968a9235425167
+      size: 3798
     - path: src/probafcst/pipeline/prepare.py
       hash: md5
-      md5: f20cd18f8be68c83eedac1d6ae19b108
-      size: 1682
+      md5: 22cbf896e1084dbb13e6006c13f67bb8
+      size: 2254
     params:
       params.yaml:
         data.bikes:
+          filename: bikes.parquet
           start_date: '2012-04-25'
     outs:
     - path: data/bikes.parquet
       hash: md5
-      md5: 26b62c099c644ff7320544e81ba1b311
-      size: 63452
+      md5: 862661c5233b2a8676142689872f98db
+      size: 63575
   prepare@no2:
     cmd: uv run python src/probafcst/pipeline/prepare.py --target no2
     deps:
     - path: src/probafcst//data.py
       hash: md5
-      md5: bf77f16042d267350d0cad253c127db8
-      size: 3719
+      md5: 9ebb26cb2d17806d29968a9235425167
+      size: 3798
     - path: src/probafcst/pipeline/prepare.py
       hash: md5
-      md5: f20cd18f8be68c83eedac1d6ae19b108
-      size: 1682
+      md5: 22cbf896e1084dbb13e6006c13f67bb8
+      size: 2254
     params:
       params.yaml:
         data.no2:
+          filename: no2.parquet
           start_date: '2016-01-01'
           end_date: '2024-10-26'
     outs:
@@ -77,3 +80,95 @@ stages:
       hash: md5
       md5: c0f37fa6ec1865b682bb3add8ed17c39
       size: 801854
+  train@energy:
+    cmd: uv run python src/probafcst/pipeline/train.py --target energy
+    deps:
+    - path: src/probafcst/pipeline/train.py
+      hash: md5
+      md5: 666f297790eed4d184513a5725ac203e
+      size: 935
+    params:
+      params.yaml:
+        data.energy:
+          filename: energy.parquet
+          ignore_years: 5
+    outs:
+    - path: models/energy_model.pkl
+      hash: md5
+      md5: a9c351b8f392e8f58738707f468bea34
+      size: 1021457
+  train@bikes:
+    cmd: uv run python src/probafcst/pipeline/train.py --target bikes
+    deps:
+    - path: src/probafcst/pipeline/train.py
+      hash: md5
+      md5: 666f297790eed4d184513a5725ac203e
+      size: 935
+    params:
+      params.yaml:
+        data.bikes:
+          filename: bikes.parquet
+          start_date: '2012-04-25'
+    outs:
+    - path: models/bikes_model.pkl
+      hash: md5
+      md5: 374764cf121c907c7110dbaceb6a69ff
+      size: 1021468
+  train@no2:
+    cmd: uv run python src/probafcst/pipeline/train.py --target no2
+    deps:
+    - path: src/probafcst/pipeline/train.py
+      hash: md5
+      md5: 666f297790eed4d184513a5725ac203e
+      size: 935
+    params:
+      params.yaml:
+        data.no2:
+          filename: no2.parquet
+          start_date: '2016-01-01'
+          end_date: '2024-10-26'
+    outs:
+    - path: models/no2_model.pkl
+      hash: md5
+      md5: 374764cf121c907c7110dbaceb6a69ff
+      size: 1021468
+  submit:
+    cmd: uv run python src/probafcst/pipeline/submit.py
+    deps:
+    - path: models/bikes_model.pkl
+      hash: md5
+      md5: 374764cf121c907c7110dbaceb6a69ff
+      size: 1021468
+    - path: models/energy_model.pkl
+      hash: md5
+      md5: a9c351b8f392e8f58738707f468bea34
+      size: 1021457
+    - path: models/no2_model.pkl
+      hash: md5
+      md5: 374764cf121c907c7110dbaceb6a69ff
+      size: 1021468
+    - path: src/probafcst//utils/check_submission.py
+      hash: md5
+      md5: 530b84a138112ef7d679344ed60ac5cc
+      size: 6838
+    - path: src/probafcst//utils/create_submission.py
+      hash: md5
+      md5: 109940c2584602851ca4d331128ee595
+      size: 3196
+    - path: src/probafcst/pipeline/submit.py
+      hash: md5
+      md5: f96467947373c93c32a43b504b9d73f3
+      size: 1101
+    params:
+      params.yaml:
+        quantiles:
+        - 0.025
+        - 0.25
+        - 0.5
+        - 0.75
+        - 0.975
+    outs:
+    - path: output/submission.csv
+      hash: md5
+      md5: 274e4ba0fa5e845b293f2e69863263a4
+      size: 1268

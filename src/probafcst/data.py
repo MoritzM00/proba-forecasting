@@ -66,6 +66,7 @@ def get_bikes_data(start_date: str = "01/01/2019") -> pd.DataFrame:
     bikes_df["date"] = pd.to_datetime(bikes_df["date"])
     bikes_df = bikes_df.set_index("date")
     bikes_df = bikes_df.astype({"bike_count": float})
+    bikes_df = bikes_df.asfreq("D")
     return bikes_df
 
 
@@ -89,7 +90,7 @@ def get_energy_data(ignore_years: int = 6) -> pd.DataFrame:
     # ignore first x years
     timestamps = list(response.json()["timestamps"])[ignore_years * 52 :]
 
-    col_names = ["date_time", "Netzlast_Gesamt"]
+    col_names = ["date_time", "load"]
     energy_data = pd.DataFrame(columns=col_names)
 
     # loop over all available timestamps
@@ -121,5 +122,8 @@ def get_energy_data(ignore_years: int = 6) -> pd.DataFrame:
     energy_data = energy_data.set_index("date_time")
 
     energy_data = energy_data.resample("h").bfill()
+
+    # convert to MWh
+    energy_data["load"] /= 1000
 
     return energy_data

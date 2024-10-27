@@ -105,6 +105,6 @@ def check_predictions(preds, n_rows, n_cols):
         2D NumPy array of predictions or NaNs.
     """
     if preds is None:
-        return np.full((n_rows, n_cols), np.nan)
+        return np.full((n_rows, n_cols), 0.0)
     assert preds.shape == (n_rows, n_cols), "Invalid shape for predictions."
     return preds

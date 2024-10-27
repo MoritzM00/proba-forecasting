@@ -26,7 +26,9 @@ def get_hours_until_midnight(start: pd.Timestamp | None = None) -> int:
     return int(hours_until_midnight)
 
 
-def get_forecast_dates(start_date: pd.Timestamp):
+def get_forecast_dates(
+    start_date: pd.Timestamp | None = None,
+) -> tuple[pd.DatetimeIndex, np.ndarray]:
     """Get the forecast dates for a submission.
 
     This function generates the forecast dates for the submission dataframe.
@@ -41,6 +43,8 @@ def get_forecast_dates(start_date: pd.Timestamp):
     tuple of pd.DateTimeIndex, np.ndarray
         The forecast dates and the relative forecast hours.
     """
+    if start_date is None:
+        start_date = pd.Timestamp.now()
     relative_hours = np.array([36, 40, 44, 60, 64, 68])
 
     # relative hours are based on midnight of the start date

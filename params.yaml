@@ -3,13 +3,24 @@ cache:
   days_expire_after: 5
 
 data_dir: data
+model_dir: models
+output_dir: output
 
+quantiles:
+  - 0.025
+  - 0.25
+  - 0.5
+  - 0.75
+  - 0.975
 
 data:
   bikes:
+    filename: bikes.parquet
     start_date: "2012-04-25"
   no2:
+    filename: no2.parquet
     start_date: "2016-01-01"
     end_date: "2024-10-26"
   energy:
+    filename: energy.parquet
     ignore_years: 5
