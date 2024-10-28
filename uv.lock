@@ -1322,6 +1322,18 @@ wheels = [
 ]
 
 [[package]]
+name = "holidays"
+version = "0.59"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "python-dateutil" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/1b/cf/0c8883a9d5e1bcd8b56ba53265995bd08c679109e331e96699661dfafd55/holidays-0.59.tar.gz", hash = "sha256:c5cd2e1c0c27a64217b10faf2e8fcc224f5bb64087b56b70c6aff21f6379e6e4", size = 564201 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/98/42/5238e5a623381a51574e3f8d4710a31bff7fe0a580e265c04e82cdc5eb22/holidays-0.59-py3-none-any.whl", hash = "sha256:4576ec7aaad7cd66463236c110bcbd533ac7e739e0e9d3cbeccf8107384a8a92", size = 1118663 },
+]
+
+[[package]]
 name = "httpcore"
 version = "1.0.6"
 source = { registry = "https://pypi.org/simple" }
@@ -2623,6 +2635,7 @@ source = { editable = "." }
 dependencies = [
     { name = "click" },
     { name = "dvc" },
+    { name = "holidays" },
     { name = "loguru" },
     { name = "matplotlib" },
     { name = "numpy" },
@@ -2649,6 +2662,7 @@ dev = [
 requires-dist = [
     { name = "click", specifier = ">=8.1.7" },
     { name = "dvc", specifier = ">=3.55.2" },
+    { name = "holidays", specifier = ">=0.59" },
     { name = "loguru", specifier = ">=0.7.2" },
     { name = "matplotlib", specifier = ">=3.9.2" },
     { name = "numpy", specifier = ">=2.0.2" },
