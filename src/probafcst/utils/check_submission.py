@@ -153,9 +153,8 @@ def check_submission(df):
             axis=None
         ):
             logger.warning(
-                "Implausible values for",
-                target,
-                "detected. You may want to re-check.",
+                f"Implausible values for {target} "
+                + "detected. You may want to re-check.",
             )
             logger.info("")
             # warnings.warn("Implausible values for "+str(target)+" detected.

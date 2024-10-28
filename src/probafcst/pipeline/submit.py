@@ -5,6 +5,7 @@ from datetime import date
 from pathlib import Path
 
 import dvc.api
+import numpy as np
 from omegaconf import OmegaConf
 from sktime.forecasting.base import ForecastingHorizon
 
@@ -20,16 +21,26 @@ def submit():
 
     _, forecast_hours = get_forecast_dates()
 
-    model_path = get_model_path(params.model_dir, target="energy")
+    pred_quantiles = {}
+    for target in ["energy", "bikes", "no2"]:
+        model_path = get_model_path(params.model_dir, target=target)
 
-    with open(model_path, "rb") as f:
-        forecaster = pickle.load(f)
+        with open(model_path, "rb") as f:
+            forecaster = pickle.load(f)
 
-    fh = ForecastingHorizon(forecast_hours, is_relative=True)
-    y_pred = forecaster.predict_quantiles(fh, alpha=params.quantiles)
+        if target == "no2":
+            fh = ForecastingHorizon(np.arange(1, 7), is_relative=True)
+        else:
+            fh = ForecastingHorizon(forecast_hours, is_relative=True)
+
+        y_pred = forecaster.predict_quantiles(fh, alpha=params.quantiles)
+        pred_quantiles[target] = y_pred.to_numpy()
 
     submission = create_submission(
-        forecast_date=date.today(), energy_preds=y_pred.values
+        forecast_date=date.today(),
+        energy_preds=pred_quantiles["energy"],
+        bikes_preds=pred_quantiles["bikes"],
+        no2_preds=pred_quantiles["no2"],
     )
     check_submission(submission)
 
