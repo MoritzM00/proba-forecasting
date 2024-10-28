@@ -27,6 +27,7 @@ stages:
       params:
         - data.${item}
       deps:
+        - data/${item}.parquet
         - ${pipe_dir}/train.py
       outs:
         - models/${item}_model.pkl
