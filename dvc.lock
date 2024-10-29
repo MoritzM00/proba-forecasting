@@ -31,12 +31,12 @@ stages:
       params.yaml:
         data.energy:
           filename: energy.parquet
-          ignore_years: 5
+          ignore_years: 0
     outs:
     - path: data/energy.parquet
       hash: md5
-      md5: 7c0aa2d491fe19e0f019bbefcf15d73d
-      size: 664960
+      md5: 17054b00d8f836d42989ebf6c26e88a9
+      size: 1308355
   prepare@bikes:
     cmd: uv run python src/probafcst/pipeline/prepare.py --target bikes
     deps:
@@ -85,22 +85,22 @@ stages:
     deps:
     - path: data/energy.parquet
       hash: md5
-      md5: 7c0aa2d491fe19e0f019bbefcf15d73d
-      size: 664960
+      md5: 17054b00d8f836d42989ebf6c26e88a9
+      size: 1308355
     - path: src/probafcst/pipeline/train.py
       hash: md5
-      md5: 3631ef222e56b6d5e1e4fba18b88e536
-      size: 1002
+      md5: b986f3cb2605277a0930bd3c713b38d8
+      size: 965
     params:
       params.yaml:
         data.energy:
           filename: energy.parquet
-          ignore_years: 5
+          ignore_years: 0
     outs:
     - path: models/energy_model.pkl
       hash: md5
-      md5: a9c351b8f392e8f58738707f468bea34
-      size: 1021457
+      md5: 9a97e44d9dce794e37548a1f57cbd5b3
+      size: 2068059
   train@bikes:
     cmd: uv run python src/probafcst/pipeline/train.py --target bikes
     deps:
@@ -110,8 +110,8 @@ stages:
       size: 63575
     - path: src/probafcst/pipeline/train.py
       hash: md5
-      md5: 3631ef222e56b6d5e1e4fba18b88e536
-      size: 1002
+      md5: b986f3cb2605277a0930bd3c713b38d8
+      size: 965
     params:
       params.yaml:
         data.bikes:
@@ -120,7 +120,7 @@ stages:
     outs:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: 9371ad89f556ba494dde23b34d6f5f51
+      md5: e25d363175cc9681b26870ed82b30176
       size: 111503
   train@no2:
     cmd: uv run python src/probafcst/pipeline/train.py --target no2
@@ -131,8 +131,8 @@ stages:
       size: 801854
     - path: src/probafcst/pipeline/train.py
       hash: md5
-      md5: 3631ef222e56b6d5e1e4fba18b88e536
-      size: 1002
+      md5: b986f3cb2605277a0930bd3c713b38d8
+      size: 965
     params:
       params.yaml:
         data.no2:
@@ -142,7 +142,7 @@ stages:
     outs:
     - path: models/no2_model.pkl
       hash: md5
-      md5: 03590144edd1847ea456c527eb361f0e
+      md5: ae97b7c132b660aacc13eb0bf3c76ac5
       size: 1857779
   submit:
     cmd: uv run python src/probafcst/pipeline/submit.py

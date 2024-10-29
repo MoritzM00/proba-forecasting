@@ -28,7 +28,8 @@ def submit():
         with open(model_path, "rb") as f:
             forecaster = pickle.load(f)
 
-        if target == "no2":
+        # TODO: put that into the params.yaml file
+        if target == "bikes":
             fh = ForecastingHorizon(np.arange(1, 7), is_relative=True)
         else:
             fh = ForecastingHorizon(forecast_hours, is_relative=True)
