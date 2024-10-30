@@ -40,6 +40,8 @@ def submit():
             fh = ForecastingHorizon(forecast_hours, is_relative=True)
 
         y_pred = forecaster.predict_quantiles(fh, alpha=params.quantiles)
+
+        # TODO: clean this up
         last_date = forecaster._y.index[-1]
         to_plot = forecaster._y.loc[last_date - pd.Timedelta(days=14) :]
         fig, _ = plot_quantiles(to_plot, y_pred)

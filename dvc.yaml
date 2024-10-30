@@ -11,6 +11,7 @@ stages:
       cmd: uv run python ${pipe_dir}/prepare.py --target ${item}
       params:
         - data.${item}
+        - cache
       deps:
         - ${pipe_dir}/prepare.py
         - ${code_dir}/data.py
@@ -24,6 +25,7 @@ stages:
       cmd: uv run python ${pipe_dir}/train.py --target ${item}
       params:
         - data.${item}
+        - quantiles
       deps:
         - data/${item}.parquet
         - ${pipe_dir}/train.py
