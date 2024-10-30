@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from loguru import logger
 
 
 def create_submission(
@@ -105,6 +106,11 @@ def check_predictions(preds, n_rows, n_cols):
         2D NumPy array of predictions or NaNs.
     """
     if preds is None:
-        return np.full((n_rows, n_cols), 0.0)
+        return np.full((n_rows, n_cols), np.nan)
     assert preds.shape == (n_rows, n_cols), "Invalid shape for predictions."
+
+    # cut off negative values
+    if np.any(preds < 0):
+        preds = np.where(preds < 0, 0, preds)
+        logger.warning("Negative values in predictions were replaced with 0.")
     return preds
