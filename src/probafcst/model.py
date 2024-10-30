@@ -19,7 +19,7 @@ def get_model(target: str, params: dict | None = None) -> BaseForecaster:
 
 def get_energy_model(**params) -> BaseForecaster:
     """Return the energy model."""
-    return NaiveForecaster(strategy="mean", window_length=24 * 365, sp=24)
+    return NaiveForecaster(strategy="mean", window_length=24 * 7 * 3, sp=24)
 
 
 def get_bikes_model(**params) -> BaseForecaster:
