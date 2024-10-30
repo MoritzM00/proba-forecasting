@@ -87,6 +87,10 @@ stages:
       hash: md5
       md5: 17054b00d8f836d42989ebf6c26e88a9
       size: 1308355
+    - path: src/probafcst//model.py
+      hash: md5
+      md5: 80435b1da320fc3d38314f532826420d
+      size: 881
     - path: src/probafcst/pipeline/train.py
       hash: md5
       md5: b986f3cb2605277a0930bd3c713b38d8
@@ -108,6 +112,10 @@ stages:
       hash: md5
       md5: 862661c5233b2a8676142689872f98db
       size: 63575
+    - path: src/probafcst//model.py
+      hash: md5
+      md5: 80435b1da320fc3d38314f532826420d
+      size: 881
     - path: src/probafcst/pipeline/train.py
       hash: md5
       md5: b986f3cb2605277a0930bd3c713b38d8
@@ -120,7 +128,7 @@ stages:
     outs:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: e25d363175cc9681b26870ed82b30176
+      md5: ff1e5c15f64bfb99f6504ea6c2023ad6
       size: 111503
   train@no2:
     cmd: uv run python src/probafcst/pipeline/train.py --target no2
@@ -129,6 +137,10 @@ stages:
       hash: md5
       md5: c0f37fa6ec1865b682bb3add8ed17c39
       size: 801854
+    - path: src/probafcst//model.py
+      hash: md5
+      md5: 80435b1da320fc3d38314f532826420d
+      size: 881
     - path: src/probafcst/pipeline/train.py
       hash: md5
       md5: b986f3cb2605277a0930bd3c713b38d8
@@ -149,28 +161,28 @@ stages:
     deps:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: 9371ad89f556ba494dde23b34d6f5f51
+      md5: ff1e5c15f64bfb99f6504ea6c2023ad6
       size: 111503
     - path: models/energy_model.pkl
       hash: md5
-      md5: a9c351b8f392e8f58738707f468bea34
-      size: 1021457
+      md5: 9a97e44d9dce794e37548a1f57cbd5b3
+      size: 2068059
     - path: models/no2_model.pkl
       hash: md5
-      md5: 03590144edd1847ea456c527eb361f0e
+      md5: ae97b7c132b660aacc13eb0bf3c76ac5
       size: 1857779
     - path: src/probafcst//utils/check_submission.py
       hash: md5
-      md5: 31088cd701effe9e7394a851033d2599
-      size: 7106
+      md5: dd10d8a4ebe199cde30396f60c6ffb00
+      size: 7131
     - path: src/probafcst//utils/create_submission.py
       hash: md5
       md5: 109940c2584602851ca4d331128ee595
       size: 3196
     - path: src/probafcst/pipeline/submit.py
       hash: md5
-      md5: daf1544bf1560eb86b9fdc47c2c570be
-      size: 1483
+      md5: 20e69c7766caaa661f395363e820a05b
+      size: 1538
     params:
       params.yaml:
         quantiles:
@@ -182,5 +194,5 @@ stages:
     outs:
     - path: output/submission.csv
       hash: md5
-      md5: add3292186673234eca82d21d4c28902
-      size: 2147
+      md5: 902998c3eb7de3d20d1330a01a6f1a7e
+      size: 1036

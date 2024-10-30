@@ -24,4 +24,4 @@ def get_energy_model(**params) -> BaseForecaster:
 
 def get_bikes_model(**params) -> BaseForecaster:
     """Return the bikes model."""
-    return NaiveForecaster(strategy="mean", window_length=100, sp=7)
+    return NaiveForecaster(strategy="mean", window_length=90, sp=7)

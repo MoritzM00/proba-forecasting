@@ -6,6 +6,8 @@ from datetime import datetime
 import pandas as pd
 from loguru import logger
 
+# TODO: replace sys.exit with return
+
 
 def check_submission(df):
     """Check the submission file for the correct format."""
@@ -96,9 +98,8 @@ def check_submission(df):
     for cq in COLS_QUANTILES:
         if pd.to_numeric(df[cq], errors="coerce").isna().any():
             logger.warning(
-                "Some elements in",
-                cq,
-                "column are not numeric. This may be fine if you only submit 2 out of 3 targets.",  # noqa: E501
+                f"Some elements in {cq}"
+                + "column are not numeric. This may be fine if you only submit 2 out of 3 targets.",  # noqa: E501
             )
             logger.info("")
             # logger.info("Stopping early...")
