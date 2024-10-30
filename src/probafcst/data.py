@@ -66,7 +66,7 @@ def get_bikes_data(start_date: str = "01/01/2019") -> pd.DataFrame:
     bikes_df["date"] = pd.to_datetime(bikes_df["date"])
     bikes_df = bikes_df.set_index("date")
     bikes_df = bikes_df.astype({"bike_count": float})
-    bikes_df = bikes_df.asfreq("D")
+    bikes_df = bikes_df.asfreq("D").interpolate()
     return bikes_df
 
 

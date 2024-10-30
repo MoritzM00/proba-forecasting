@@ -38,7 +38,10 @@ stages:
       - ${pipe_dir}/submit.py
       - ${code_dir}/utils/check_submission.py
       - ${code_dir}/utils/create_submission.py
+      - ${code_dir}/plotting.py
       - models/energy_model.pkl
       - models/bikes_model.pkl
     outs:
       - output/submission.csv
+      - output/energy_forecast.png
+      - output/bikes_forecast.png
