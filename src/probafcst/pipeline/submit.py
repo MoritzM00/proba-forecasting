@@ -22,7 +22,7 @@ def submit():
     _, forecast_hours = get_forecast_dates()
 
     pred_quantiles = {}
-    for target in ["energy", "bikes", "no2"]:
+    for target in ["energy", "bikes"]:
         model_path = get_model_path(params.model_dir, target=target)
 
         with open(model_path, "rb") as f:
@@ -41,7 +41,7 @@ def submit():
         forecast_date=date.today(),
         energy_preds=pred_quantiles["energy"],
         bikes_preds=pred_quantiles["bikes"],
-        no2_preds=pred_quantiles["no2"],
+        no2_preds=None,
     )
     check_submission(submission)
 

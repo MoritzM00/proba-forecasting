@@ -17,7 +17,7 @@ from probafcst.utils.paths import get_data_path, get_model_path
     "--target",
     "-t",
     default="energy",
-    type=click.Choice(["energy", "bikes", "no2"]),
+    type=click.Choice(["energy", "bikes"]),
     help="The target data to prepare.",
 )
 def train(target):
