@@ -34,19 +34,12 @@ def plot_quantiles(actual_series, pred_quantiles, ax=None):
         markers=["o", "", "", "x", "", ""],
         ax=ax,
     )
-    # rotate x labels
     plt.xticks(rotation=45, ha="center")
-
-    # change marker size
-    for line in ax.lines:
-        line.set_markersize(4)
 
     linestyles = ["dashdot", "dashed", "solid", "dashed", "dashdot"]
     for line, linestyle in zip(ax.lines[1:], linestyles):
         line.set_linestyle(linestyle)
 
-    # make actual line thicker
-    # ax.lines[0].set_linewidth(3)
     ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 
     return fig, ax

@@ -45,7 +45,7 @@ stages:
         - models/${item}_model.pkl
         - ${pipe_dir}/evaluate.py
       outs:
-        - output/eval_results_${item}.csv
+        - output/${item}_eval_results.csv
       plots:
         - output/eval_plots/${item}/
       metrics:

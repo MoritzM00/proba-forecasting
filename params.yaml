@@ -33,4 +33,4 @@ eval:
   energy:
     fh: 168 # 1 week
     initial_window: 26280 # 3 years
-    step_length: 8760
+    step_length: 4320 # 6 months

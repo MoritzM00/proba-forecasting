@@ -7,6 +7,7 @@ import click
 import dvc.api
 import numpy as np
 import pandas as pd
+import seaborn as sns
 from omegaconf import OmegaConf
 from sktime.forecasting.model_evaluation import evaluate
 from sktime.performance_metrics.forecasting.probabilistic import PinballLoss
@@ -27,6 +28,7 @@ from probafcst.utils.paths import get_data_path
 )
 def eval(target: str):
     """Evaluate the model."""
+    sns.set_theme(style="ticks")
     params = dvc.api.params_show()
     params = OmegaConf.create(params)
 
@@ -48,11 +50,10 @@ def eval(target: str):
     results = evaluate(
         forecaster, y=y, cv=cv, strategy="refit", scoring=loss, return_data=True
     )
-    results.iloc[:, :-3].to_csv(f"output/eval_results_{target}.csv", index=False)
+    results.iloc[:, :-3].to_csv(f"output/{target}_eval_results.csv", index=False)
 
     mean_pinball_loss = results["test_PinballLoss"].mean()
 
-    # save to metrics.json
     metrics = {
         "mean_pinball_loss": mean_pinball_loss,
     }
@@ -62,10 +63,11 @@ def eval(target: str):
     plots_dir = Path(params.output_dir, "eval_plots", target)
     plots_dir.mkdir(exist_ok=True)
 
+    # visualize last three forecasts in the backtest
     nrows = min(3, len(results))
     for i, (_, row) in enumerate(results.iloc[-nrows:].iterrows()):
         fig, _ = plot_quantiles(row.y_test, row.y_pred_quantiles)
-        fig.savefig(plots_dir / f"forecast_{i + 1}.png")
+        fig.savefig(plots_dir / f"forecast_{i + 1}.png", bbox_inches="tight")
 
 
 if __name__ == "__main__":
