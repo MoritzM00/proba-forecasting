@@ -6,7 +6,61 @@
 
 [pre-commit]: https://github.com/pre-commit/pre-commit
 
-Repository for the Probabilistic Timeseries Forecasting Challenge. This challenge focuses on quantile forecasting for timeseries data. Results can be found [here](https://gitlab.kit.edu/nils.koster/ptsfc24_results).
+Repository for the Probabilistic Timeseries Forecasting Challenge. This challenge focuses on quantile forecasting for timeseries data in Germany and Karlsruhe. Results can be found [here](https://gitlab.kit.edu/nils.koster/ptsfc24_results).
+
+Forecasts are inherently uncertain, and it is important to quantify this uncertainty. The goal is to predict some kind of distribution of future values, rather than just a single point estimate. Quantiles are a relatively straightforward way to quantify such an uncertainty.
+The challenge is based on two datasets: `bikes` and `energy`. A third dataset `no2` is also available, but was not selected for forecast submissions.
+
+## Quickstart
+
+First, clone the repository:
+
+```shell
+git clone https://github.com/MoritzM00/proba-forecasting
+cd proba-forecasting
+```
+
+Then follow the instructions [here](#set-up-the-environment) to set up a dev environment.
+
+Finally, reproduce the results by running:
+
+```shell
+dvc pull
+dvc repro
+```
+
+## Data Pipeline
+
+The data pipeline is fully automated using [DVC](https://dvc.org/)'s data and experiment versioning, as well as caching and remote storage capabilities.
+The pipeline can be visualized using `dvc dag`, or via the web using the [project's DagsHub location](https://dagshub.com/MoritzM00/proba-forecasting):
+
+```mermaid
+flowchart TD
+        node1["eval@bikes"]
+        node2["eval@energy"]
+        node3["prepare@bikes"]
+        node4["prepare@energy"]
+        node5["submit"]
+        node6["train@bikes"]
+        node7["train@energy"]
+        node3-->node1
+        node3-->node6
+        node4-->node2
+        node4-->node7
+        node6-->node1
+        node6-->node5
+        node7-->node2
+        node7-->node5
+```
+
+The pipeline consists of four stages:
+
+1. `prepare`: Downloads and preprocesses the data.
+2. `train`: Train and save the models.
+3. `eval`: Evaluate the models using Timeseries Cross-validation with expanding time windows.
+4. `submit`: Create out-of-sample forecasts in the required format for this forecasting challenge.
+
+Stages 1-3 are run for two datasets: `bikes` and `energy`.
 
 ## Development Guide
 
@@ -24,7 +78,24 @@ source .venv/bin/activate
 
 ### Reproduce the results
 
-Run `dvc repro` to reproduce the results.
+Run
+
+```shell
+dvc pull
+dvc repro
+```
+
+to reproduce the results,
+or equivalently
+
+```shell
+uv run dvc pull
+uv run dvc repro
+```
+
+if you did not activate the virtual environment.
+
+`dvc pull` first pulls all the data (including experiments) from the remote storage, and `dvc repro` then runs the pipeline to reproduce the results.
 
 ### Documentation
 
