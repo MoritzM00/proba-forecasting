@@ -45,5 +45,6 @@ stages:
       - models/bikes_model.pkl
     outs:
       - output/submission.csv
+    plots:
       - output/energy_forecast.png
       - output/bikes_forecast.png
