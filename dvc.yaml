@@ -32,6 +32,24 @@ stages:
         - ${code_dir}/model.py
       outs:
         - models/${item}_model.pkl
+  eval:
+    foreach:
+      - energy
+      - bikes
+    do:
+      cmd: uv run python ${pipe_dir}/evaluate.py --target ${item}
+      params:
+        - eval
+      deps:
+        - data/${item}.parquet
+        - models/${item}_model.pkl
+        - ${pipe_dir}/evaluate.py
+      outs:
+        - output/eval_results_${item}.csv
+      plots:
+        - output/eval_plots/${item}/
+      metrics:
+        - output/${item}_metrics.json
   submit:
     cmd: uv run python ${pipe_dir}/submit.py
     params:

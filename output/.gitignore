@@ -1,3 +1,7 @@
 /submission.csv
 /energy_forecast.png
 /bikes_forecast.png
+/eval_results_energy.csv
+/eval_results_bikes.csv
+/energy_metrics.json
+/bikes_metrics.json

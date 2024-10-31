@@ -28,9 +28,9 @@ data:
 eval:
   bikes:
     fh: 31 # 1 month
-    window_length: 100
+    initial_window: 730 # 365 * 2
     step_length: 150
   energy:
     fh: 168 # 1 week
-    window_length: 8760 # 1 year
+    initial_window: 26280 # 3 years
     step_length: 8760
