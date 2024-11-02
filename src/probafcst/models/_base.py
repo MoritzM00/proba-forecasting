@@ -12,22 +12,24 @@ def get_model(target: str, params: dict | None = None) -> BaseForecaster:
     if params is None:
         params = {}
     match target:
-        case "energy" | "no2":
+        case "energy":
             return get_energy_model(**params)
         case "bikes":
             return get_bikes_model(**params)
+        case "no2":
+            raise NotImplementedError("Model for 'no2' is not implemented")
         case _:
             raise ValueError(f"Unknown target: {target}")
 
 
 def get_energy_model(**params) -> BaseForecaster:
     """Return the energy model."""
-    return BenchmarkForecaster()
+    return BenchmarkForecaster(n_weeks=params["n_weeks"])
 
 
 def get_bikes_model(**params) -> BaseForecaster:
     """Return the bikes model."""
-    return BenchmarkForecaster()
+    return BenchmarkForecaster(n_weeks=params["n_weeks"])
 
 
 class BenchmarkForecaster(BaseForecaster):

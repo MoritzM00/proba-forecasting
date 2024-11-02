@@ -7,12 +7,11 @@ model_dir: models
 output_dir: output
 
 quantiles:
-  - 0.025
-  - 0.25
-  - 0.5
-  - 0.75
-  - 0.975
-
+- 0.025
+- 0.25
+- 0.5
+- 0.75
+- 0.975
 data:
   bikes:
     filename: bikes.parquet
@@ -25,10 +24,18 @@ data:
     filename: energy.parquet
     ignore_years: 0
 
+train:
+  bikes:
+    benchmark:
+      n_weeks: 100
+  energy:
+    benchmark:
+      n_weeks: 25
+
 eval:
   bikes:
     fh: 31 # 1 month
-    initial_window: 730 # 365 * 2
+    initial_window: 730 # 2 years
     step_length: 150
   energy:
     fh: 168 # 1 week

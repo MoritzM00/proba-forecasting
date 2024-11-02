@@ -1,6 +1,7 @@
 """Evaluation Stage."""
 
 import json
+import pickle
 from pathlib import Path
 
 import click
@@ -13,9 +14,8 @@ from sktime.forecasting.model_evaluation import evaluate
 from sktime.performance_metrics.forecasting.probabilistic import PinballLoss
 from sktime.split import ExpandingWindowSplitter
 
-from probafcst.models import get_model
 from probafcst.plotting import plot_quantiles
-from probafcst.utils.paths import get_data_path
+from probafcst.utils.paths import get_data_path, get_model_path
 
 
 @click.command()
@@ -36,7 +36,9 @@ def eval(target: str):
 
     y = pd.read_parquet(data_path)
 
-    forecaster = get_model(target)
+    model_path = get_model_path(params.model_dir, target)
+    with open(model_path, "rb") as f:
+        forecaster = pickle.load(f)
 
     eval_params = params.eval[target]
     fh = np.arange(1, eval_params.fh)
