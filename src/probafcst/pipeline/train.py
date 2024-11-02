@@ -29,7 +29,6 @@ def train(target):
 
     y = pd.read_parquet(data_path)
 
-    print(params.train[target].benchmark)
     forecaster = get_model(target, params=params.train[target].benchmark)
     forecaster.fit(y)
 

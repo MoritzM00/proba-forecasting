@@ -100,8 +100,8 @@ stages:
       nfiles: 4
     - path: src/probafcst/pipeline/train.py
       hash: md5
-      md5: 9352d049e8f35b653df2e50db3434114
-      size: 1040
+      md5: 5bd134dca06b246ca2113858bf163ab2
+      size: 998
     params:
       params.yaml:
         data.energy:
@@ -115,11 +115,11 @@ stages:
         - 0.975
         train.energy:
           benchmark:
-            n_weeks: 25
+            n_weeks: 100
     outs:
     - path: models/energy_model.pkl
       hash: md5
-      md5: bacf35cd47dfcf8dfc5bbef8c015f68c
+      md5: c77ebad39a753f64cd9c62d3ef1f24a3
       size: 2070003
   train@bikes:
     cmd: uv run python src/probafcst/pipeline/train.py --target bikes
@@ -135,8 +135,8 @@ stages:
       nfiles: 4
     - path: src/probafcst/pipeline/train.py
       hash: md5
-      md5: 9352d049e8f35b653df2e50db3434114
-      size: 1040
+      md5: 5bd134dca06b246ca2113858bf163ab2
+      size: 998
     params:
       params.yaml:
         data.bikes:
@@ -191,7 +191,7 @@ stages:
       size: 111505
     - path: models/energy_model.pkl
       hash: md5
-      md5: bacf35cd47dfcf8dfc5bbef8c015f68c
+      md5: c77ebad39a753f64cd9c62d3ef1f24a3
       size: 2070003
     - path: src/probafcst//plotting.py
       hash: md5
@@ -224,12 +224,12 @@ stages:
       size: 74439
     - path: output/energy_forecast.png
       hash: md5
-      md5: 907aeb7fe5419cdc645420010f7d0e6f
-      size: 93466
+      md5: 70452a77250a173d81c0a11d4e400a5b
+      size: 89551
     - path: output/submission.csv
       hash: md5
-      md5: c2202c4367a1e79c9cd72c6bc798f5e0
-      size: 1068
+      md5: 3f76fa901aa6dc6dbbc9970d7419840d
+      size: 1194
   eval@energy:
     cmd: uv run python src/probafcst/pipeline/evaluate.py --target energy
     deps:
@@ -239,7 +239,7 @@ stages:
       size: 1309447
     - path: models/energy_model.pkl
       hash: md5
-      md5: bacf35cd47dfcf8dfc5bbef8c015f68c
+      md5: c77ebad39a753f64cd9c62d3ef1f24a3
       size: 2070003
     - path: src/probafcst/pipeline/evaluate.py
       hash: md5
@@ -259,16 +259,16 @@ stages:
     outs:
     - path: output/energy_eval_results.csv
       hash: md5
-      md5: 840750f515433076e216d6d5af03edeb
-      size: 1148
+      md5: 0cae0cf44332c31e0d636fcc9e94155d
+      size: 1157
     - path: output/energy_metrics.json
       hash: md5
-      md5: f3ecb50de88215e3ebf36309425abeb5
-      size: 91
+      md5: 31e2dd622aa0173a4400f7ebbcb11e41
+      size: 90
     - path: output/eval_plots/energy/
       hash: md5
-      md5: 37f295d6345fcea390c83d51c6173a49.dir
-      size: 692583
+      md5: 6e5dce2a473977e487ec18de166b5fd2.dir
+      size: 689182
       nfiles: 3
   eval@bikes:
     cmd: uv run python src/probafcst/pipeline/evaluate.py --target bikes
