@@ -13,7 +13,7 @@ from sktime.forecasting.model_evaluation import evaluate
 from sktime.performance_metrics.forecasting.probabilistic import PinballLoss
 from sktime.split import ExpandingWindowSplitter
 
-from probafcst.model import get_model
+from probafcst.models import get_model
 from probafcst.plotting import plot_quantiles
 from probafcst.utils.paths import get_data_path
 
@@ -48,7 +48,13 @@ def eval(target: str):
     loss = PinballLoss(alpha=params.quantiles)
 
     results = evaluate(
-        forecaster, y=y, cv=cv, strategy="refit", scoring=loss, return_data=True
+        forecaster,
+        y=y,
+        cv=cv,
+        strategy="refit",
+        scoring=loss,
+        return_data=True,
+        error_score="raise",
     )
     results.iloc[:, :-3].to_csv(f"output/{target}_eval_results.csv", index=False)
 

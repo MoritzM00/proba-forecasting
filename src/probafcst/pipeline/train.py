@@ -8,7 +8,7 @@ import dvc.api
 import pandas as pd
 from omegaconf import OmegaConf
 
-from probafcst.model import get_model
+from probafcst.models import get_model
 from probafcst.utils.paths import get_data_path, get_model_path
 
 

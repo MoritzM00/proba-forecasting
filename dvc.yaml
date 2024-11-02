@@ -29,7 +29,7 @@ stages:
       deps:
         - data/${item}.parquet
         - ${pipe_dir}/train.py
-        - ${code_dir}/model.py
+        - ${code_dir}/models/
       outs:
         - models/${item}_model.pkl
   eval:

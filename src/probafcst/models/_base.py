@@ -5,7 +5,6 @@ from typing import Literal
 import numpy as np
 import pandas as pd
 from sktime.forecasting.base import BaseForecaster
-from sktime.utils.validation.forecasting import check_y
 
 
 def get_model(target: str, params: dict | None = None) -> BaseForecaster:
@@ -68,7 +67,7 @@ class BenchmarkForecaster(BaseForecaster):
         super().__init__()
 
     def _fit(self, y, X=None, fh=None):
-        self._y = check_y(y).copy()
+        self._y = y.copy()
 
         if self.freq is None:
             freq = pd.infer_freq(self._y.index)
