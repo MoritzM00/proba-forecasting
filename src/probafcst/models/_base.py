@@ -1,11 +1,10 @@
-"""Implementation of the models used for forecasting."""
+"""Base implementations for probabilistic forecasting models."""
 
 from typing import Literal
 
 import numpy as np
 import pandas as pd
 from sktime.forecasting.base import BaseForecaster
-from sktime.forecasting.naive import NaiveForecaster
 from sktime.utils.validation.forecasting import check_y
 
 
@@ -24,12 +23,12 @@ def get_model(target: str, params: dict | None = None) -> BaseForecaster:
 
 def get_energy_model(**params) -> BaseForecaster:
     """Return the energy model."""
-    return NaiveForecaster(strategy="mean", window_length=24 * 7 * 3, sp=24)
+    return BenchmarkForecaster()
 
 
 def get_bikes_model(**params) -> BaseForecaster:
     """Return the bikes model."""
-    return NaiveForecaster(strategy="mean", window_length=90, sp=7)
+    return BenchmarkForecaster()
 
 
 class BenchmarkForecaster(BaseForecaster):
