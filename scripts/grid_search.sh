@@ -11,4 +11,5 @@ for n_weeks in "${n_weeks_values[@]}"; do
             --set-param "train.bikes.benchmark.n_weeks=$n_weeks"
 done
 
-echo "All experiments have been queued. Run 'dvc queue start' to begin processing."
+source .venv/bin/activate
+dvc queue start -v

@@ -8,7 +8,7 @@ stages:
       - energy
       - bikes
     do:
-      cmd: uv run python ${pipe_dir}/prepare.py --target ${item}
+      cmd: python ${pipe_dir}/prepare.py --target ${item}
       params:
         - data.${item}
         - cache
@@ -22,7 +22,7 @@ stages:
       - energy
       - bikes
     do:
-      cmd: uv run python ${pipe_dir}/train.py --target ${item}
+      cmd: python ${pipe_dir}/train.py --target ${item}
       params:
         - data.${item}
         - train.${item}
@@ -38,7 +38,7 @@ stages:
       - energy
       - bikes
     do:
-      cmd: uv run python ${pipe_dir}/evaluate.py --target ${item}
+      cmd: python ${pipe_dir}/evaluate.py --target ${item}
       params:
         - eval
       deps:
@@ -52,7 +52,7 @@ stages:
       metrics:
         - output/${item}_metrics.json
   submit:
-    cmd: uv run python ${pipe_dir}/submit.py
+    cmd: python ${pipe_dir}/submit.py
     params:
       - quantiles
     deps:

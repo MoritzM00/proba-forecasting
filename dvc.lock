@@ -87,7 +87,7 @@ stages:
       md5: c0f37fa6ec1865b682bb3add8ed17c39
       size: 801854
   train@energy:
-    cmd: uv run python src/probafcst/pipeline/train.py --target energy
+    cmd: python src/probafcst/pipeline/train.py --target energy
     deps:
     - path: data/energy.parquet
       hash: md5
@@ -122,7 +122,7 @@ stages:
       md5: c77ebad39a753f64cd9c62d3ef1f24a3
       size: 2070003
   train@bikes:
-    cmd: uv run python src/probafcst/pipeline/train.py --target bikes
+    cmd: python src/probafcst/pipeline/train.py --target bikes
     deps:
     - path: data/bikes.parquet
       hash: md5
