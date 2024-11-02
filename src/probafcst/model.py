@@ -42,7 +42,7 @@ class BenchmarkForecaster(BaseForecaster):
     ----------
     n_weeks : int, default=100
         Number of recent weeks to consider for computing quantiles.
-    freq : {"D", "h"}, default=None
+    freq : Literal {"D", "h"}, default=None
         Frequency of the time series index. If None, the frequency is inferred
         from the time series index.
     """
@@ -63,7 +63,9 @@ class BenchmarkForecaster(BaseForecaster):
     def __init__(self, n_weeks=5, freq: Literal["D", "h"] | None = None):
         # n_weeks: number of recent weeks to consider for computing quantiles
         self.n_weeks = n_weeks
+        """The number of recent weeks to consider for computing quantiles."""
         self.freq = freq
+        """Frequency of the time series index."""
         super().__init__()
 
     def _fit(self, y, X=None, fh=None):
