@@ -12,10 +12,10 @@ test:
 	uv run pytest
 
 docs_view:
-	uv run pdoc probafcst --docformat numpy
+	uv run pdoc probafcst --docformat numpy --mermaid
 
 docs_save:
-	uv run pdoc probafcst -o docs --docformat numpy
+	uv run pdoc probafcst -o docs --docformat numpy --mermaid
 
 ## Delete all compiled Python files
 clean:
