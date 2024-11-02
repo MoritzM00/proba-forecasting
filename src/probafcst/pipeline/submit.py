@@ -45,7 +45,9 @@ def submit():
         last_date = forecaster._y.index[-1]
         to_plot = forecaster._y.loc[last_date - pd.Timedelta(days=14) :]
         fig, _ = plot_quantiles(to_plot, y_pred)
-        fig.savefig(Path(params.output_dir) / f"{target}_forecast.png")
+        fig.savefig(
+            Path(params.output_dir) / f"{target}_forecast.png", bbox_inches="tight"
+        )
 
         pred_quantiles[target] = y_pred.to_numpy()
 

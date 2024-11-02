@@ -59,9 +59,11 @@ def eval(target: str):
     results.iloc[:, :-3].to_csv(f"output/{target}_eval_results.csv", index=False)
 
     mean_pinball_loss = results["test_PinballLoss"].mean()
+    std_pinball_loss = results["test_PinballLoss"].std()
 
     metrics = {
         "mean_pinball_loss": mean_pinball_loss,
+        "std_pinball_loss": std_pinball_loss,
     }
     with open(f"output/{target}_metrics.json", "w") as f:
         json.dump(metrics, f, indent=4)
@@ -69,9 +71,9 @@ def eval(target: str):
     plots_dir = Path(params.output_dir, "eval_plots", target)
     plots_dir.mkdir(exist_ok=True)
 
-    # visualize last three forecasts in the backtest
-    nrows = min(3, len(results))
-    for i, (_, row) in enumerate(results.iloc[-nrows:].iterrows()):
+    # visualize some forecasts
+    idx = [0, len(results) // 2, -1]
+    for i, (_, row) in enumerate(results.iloc[idx].iterrows()):
         fig, _ = plot_quantiles(row.y_test, row.y_pred_quantiles)
         fig.savefig(plots_dir / f"forecast_{i + 1}.png", bbox_inches="tight")
 
