@@ -195,8 +195,8 @@ stages:
       size: 2071731
     - path: src/probafcst//plotting.py
       hash: md5
-      md5: c90b73d9cc7c851550b5c56ff34224a8
-      size: 1489
+      md5: 1e20c7ae6c0b77f2ec043e5e4cfb315d
+      size: 2241
     - path: src/probafcst//utils/check_submission.py
       hash: md5
       md5: 34b7c6453e8c63b3a0963426a3fc29bf
@@ -224,12 +224,12 @@ stages:
       size: 67973
     - path: output/energy_forecast.png
       hash: md5
-      md5: cd6085baeda104be87a5d80d3cd101e4
-      size: 85632
+      md5: bcd67265d4fbb23d79b0b3a54f51e904
+      size: 91677
     - path: output/submission.csv
       hash: md5
-      md5: 4e17ae4b24fdd4bd33f2c07d342bdff1
-      size: 1168
+      md5: 8ffcaf49bf9ae4fd2a0291cc2ffb085b
+      size: 1134
   eval@energy:
     cmd: python src/probafcst/pipeline/evaluate.py --target energy
     deps:
@@ -243,8 +243,8 @@ stages:
       size: 2071731
     - path: src/probafcst/pipeline/evaluate.py
       hash: md5
-      md5: bc0213d6c908a395e9a9695c48bf0f2d
-      size: 2344
+      md5: 6a4cbbb9628e26ee5ec180fb7ff230e6
+      size: 3326
     params:
       params.yaml:
         eval:
@@ -259,16 +259,16 @@ stages:
     outs:
     - path: output/energy_eval_results.csv
       hash: md5
-      md5: b14ecfb6b555639ae9bbadf9b63dd1e0
-      size: 1147
+      md5: b5bd80227b92c8999abba209a9983836
+      size: 986
     - path: output/energy_metrics.json
       hash: md5
-      md5: 31e2dd622aa0173a4400f7ebbcb11e41
-      size: 90
+      md5: 9e5b0c4fe97a66df0d7070892623d823
+      size: 351
     - path: output/eval_plots/energy/
       hash: md5
-      md5: 6e5dce2a473977e487ec18de166b5fd2.dir
-      size: 689182
+      md5: 75907d002e0b40d95150c82d98cb69c0.dir
+      size: 455473
       nfiles: 3
   eval@bikes:
     cmd: python src/probafcst/pipeline/evaluate.py --target bikes
@@ -283,8 +283,8 @@ stages:
       size: 111577
     - path: src/probafcst/pipeline/evaluate.py
       hash: md5
-      md5: bc0213d6c908a395e9a9695c48bf0f2d
-      size: 2344
+      md5: 6a4cbbb9628e26ee5ec180fb7ff230e6
+      size: 3326
     params:
       params.yaml:
         eval:
@@ -299,14 +299,14 @@ stages:
     outs:
     - path: output/bikes_eval_results.csv
       hash: md5
-      md5: db7a43911fc5f2c9d40b6852590d7b53
-      size: 2056
+      md5: c193a409576200d07d12fba50cd854d4
+      size: 1586
     - path: output/bikes_metrics.json
       hash: md5
-      md5: 55a298d83ece604014fa84aa2d3b0749
-      size: 91
+      md5: b720124b46db74c2aed90ac36913210d
+      size: 354
     - path: output/eval_plots/bikes/
       hash: md5
-      md5: 9a12ef30d26ee69bd284438384c83ef7.dir
-      size: 494746
+      md5: 59ae01193e3019dd189e52e239f7e5ca.dir
+      size: 333393
       nfiles: 3

@@ -4,6 +4,8 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from sktime.utils.plotting import plot_series
 
+from probafcst.utils.sktime import quantiles_to_interval_df
+
 
 def plot_quantiles(actual_series, pred_quantiles, ax=None):
     """Plot actual series and forecasted quantiles.
@@ -43,3 +45,25 @@ def plot_quantiles(actual_series, pred_quantiles, ax=None):
     ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 
     return fig, ax
+
+
+def plot_interval(actual, median, pred_interval, ax=None):
+    """Plot actual series and forecasted interval."""
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(15, 6))
+
+    fig, ax = plot_series(
+        actual,
+        median,
+        pred_interval=pred_interval,
+        labels=["actual", "median"],
+    )
+    # set legend outside
+    ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+    return fig, ax
+
+
+def plot_interval_from_quantiles(actual, pred_quantiles, ax=None):
+    """Plot actual series and forecasted interval from quantiles."""
+    pred_interval, median = quantiles_to_interval_df(pred_quantiles)
+    return plot_interval(actual, median, pred_interval, ax=ax)
