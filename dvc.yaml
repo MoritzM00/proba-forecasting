@@ -45,6 +45,7 @@ stages:
         - data/${item}.parquet
         - models/${item}_model.pkl
         - ${pipe_dir}/evaluate.py
+        - ${code_dir}/plotting.py
       outs:
         - output/${item}_eval_results.csv
       plots:

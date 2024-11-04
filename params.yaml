@@ -38,6 +38,6 @@ eval:
     initial_window: 730 # 2 years
     step_length: 150
   energy:
-    fh: 168 # 1 week
+    fh: 336 # 168 # 1 week
     initial_window: 26280 # 3 years
-    step_length: 4320 # 6 months
+    step_length: 2016 # 3 months

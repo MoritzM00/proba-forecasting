@@ -1,6 +1,5 @@
 """Plotting functions for probabilistic forecasting."""
 
-import seaborn as sns
 from matplotlib import pyplot as plt
 from sktime.utils.plotting import plot_series
 
@@ -23,47 +22,38 @@ def plot_quantiles(actual_series, pred_quantiles, ax=None):
     assert (
         pred_quantiles.shape[1] == 5
     ), "Pred quantiles must have exactly five quantiles, including median."
-    columns = [pred_quantiles[i] for i in pred_quantiles.columns]
-    quantiles = [rf"$\alpha={q}$" for _, q in pred_quantiles.columns]
-    colors = sns.color_palette("icefire", n_colors=len(quantiles))
     if ax is None:
-        fig, ax = plt.subplots(figsize=(15, 6))
-    plot_series(
+        fig, ax = plt.subplots(figsize=(12, 5))
+
+    interval_df, median = quantiles_to_interval_df(pred_quantiles)
+    ax = plot_series(
         actual_series,
-        *columns,
-        labels=["actual", *quantiles],
-        colors=["black"] + colors,
-        markers=["o", "", "", "x", "", ""],
+        median,
+        labels=["actual", "median"],
         ax=ax,
+        colors=["black", "#1f78b4"],
+        markers=["o", ""],
     )
+    _plot_interval(ax, interval_df)
+    ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
     plt.xticks(rotation=45, ha="center")
 
-    linestyles = ["dashdot", "dashed", "solid", "dashed", "dashdot"]
-    for line, linestyle in zip(ax.lines[1:], linestyles):
-        line.set_linestyle(linestyle)
-
-    ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
-
     return fig, ax
 
 
-def plot_interval(actual, median, pred_interval, ax=None):
-    """Plot actual series and forecasted interval."""
-    if ax is None:
-        fig, ax = plt.subplots(figsize=(15, 6))
+def _plot_interval(ax, interval_df):
+    var_name = interval_df.columns.levels[0][0]
 
-    fig, ax = plot_series(
-        actual,
-        median,
-        pred_interval=pred_interval,
-        labels=["actual", "median"],
-    )
-    # set legend outside
-    ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
-    return fig, ax
+    colors = ["#1f78b4", "#a6cee3"]
 
-
-def plot_interval_from_quantiles(actual, pred_quantiles, ax=None):
-    """Plot actual series and forecasted interval from quantiles."""
-    pred_interval, median = quantiles_to_interval_df(pred_quantiles)
-    return plot_interval(actual, median, pred_interval, ax=ax)
+    for i, cov in enumerate(interval_df.columns.levels[1]):
+        ax.fill_between(
+            interval_df.index,
+            interval_df[var_name][cov]["lower"].astype("float64").to_numpy(),
+            interval_df[var_name][cov]["upper"].astype("float64").to_numpy(),
+            alpha=0.4,
+            color=colors[i],
+            label=f"{int(cov * 100)}% PI",
+        )
+    ax.legend()
+    return ax
