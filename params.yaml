@@ -27,10 +27,10 @@ data:
 train:
   bikes:
     benchmark:
-      n_weeks: 100
+      n_weeks: 125
   energy:
     benchmark:
-      n_weeks: 100
+      n_weeks: 75
 
 eval:
   bikes:
