@@ -95,9 +95,9 @@ stages:
       size: 1310583
     - path: src/probafcst//models/
       hash: md5
-      md5: c12b3263cfb4ee09ac5f4185c53a3024.dir
-      size: 8364
-      nfiles: 4
+      md5: c620c4e25ca7677545d64077f62554e6.dir
+      size: 4237
+      nfiles: 2
     - path: src/probafcst/pipeline/train.py
       hash: md5
       md5: 5bd134dca06b246ca2113858bf163ab2
@@ -115,11 +115,11 @@ stages:
         - 0.975
         train.energy:
           benchmark:
-            n_weeks: 100
+            n_weeks: 200
     outs:
     - path: models/energy_model.pkl
       hash: md5
-      md5: 468c8b725f19abca7f000790206dd7f2
+      md5: 1d055cbac93631653a99b3b40a00b8e4
       size: 2071731
   train@bikes:
     cmd: python src/probafcst/pipeline/train.py --target bikes
@@ -130,9 +130,9 @@ stages:
       size: 63695
     - path: src/probafcst//models/
       hash: md5
-      md5: c12b3263cfb4ee09ac5f4185c53a3024.dir
-      size: 8364
-      nfiles: 4
+      md5: c620c4e25ca7677545d64077f62554e6.dir
+      size: 4237
+      nfiles: 2
     - path: src/probafcst/pipeline/train.py
       hash: md5
       md5: 5bd134dca06b246ca2113858bf163ab2
@@ -150,11 +150,11 @@ stages:
         - 0.975
         train.bikes:
           benchmark:
-            n_weeks: 100
+            n_weeks: 200
     outs:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: 4dfc33747f39f8c2a1014cc07fefb245
+      md5: d3897acf6d98e6343ed4d10e8bf6c770
       size: 111577
   train@no2:
     cmd: uv run python src/probafcst/pipeline/train.py --target no2
@@ -187,11 +187,11 @@ stages:
     deps:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: 4dfc33747f39f8c2a1014cc07fefb245
+      md5: d3897acf6d98e6343ed4d10e8bf6c770
       size: 111577
     - path: models/energy_model.pkl
       hash: md5
-      md5: 468c8b725f19abca7f000790206dd7f2
+      md5: 1d055cbac93631653a99b3b40a00b8e4
       size: 2071731
     - path: src/probafcst//plotting.py
       hash: md5
@@ -220,16 +220,16 @@ stages:
     outs:
     - path: output/bikes_forecast.png
       hash: md5
-      md5: ba3fee0300788fe417ee55722e4ee090
-      size: 50981
+      md5: 43f444153bcdfef42b34a241ba8aeb89
+      size: 50896
     - path: output/energy_forecast.png
       hash: md5
-      md5: 2aa18f7fa6338608a7e0c4667073c18d
-      size: 74305
+      md5: 69d89f191d1b910f0a03ae4185cd1674
+      size: 72334
     - path: output/submission.csv
       hash: md5
-      md5: 616c48d1740cc2fdf237ee83db80912c
-      size: 1168
+      md5: a12f1398b0a3817026c3eb3e71795dc6
+      size: 1164
   eval@energy:
     cmd: python src/probafcst/pipeline/evaluate.py --target energy
     deps:
@@ -239,7 +239,7 @@ stages:
       size: 1310583
     - path: models/energy_model.pkl
       hash: md5
-      md5: 468c8b725f19abca7f000790206dd7f2
+      md5: 1d055cbac93631653a99b3b40a00b8e4
       size: 2071731
     - path: src/probafcst//plotting.py
       hash: md5
@@ -263,16 +263,16 @@ stages:
     outs:
     - path: output/energy_eval_results.csv
       hash: md5
-      md5: 920716b3a0bb0f4bd76d6ac7636d6132
-      size: 2372
+      md5: 730b8561df45d18ad70bf57939d3f39b
+      size: 2290
     - path: output/energy_metrics.json
       hash: md5
-      md5: 72541d42241e05677280c21409d3a34f
-      size: 182
+      md5: aaa1509693797afb3621eaaa8eb59f2f
+      size: 184
     - path: output/eval_plots/energy/
       hash: md5
-      md5: dc7f4c9310f551b1ad44ebcf9ca68dc2.dir
-      size: 564277
+      md5: 59818b1eea44da98443cd61e9546b0e9.dir
+      size: 424623
       nfiles: 3
   eval@bikes:
     cmd: python src/probafcst/pipeline/evaluate.py --target bikes
@@ -283,7 +283,7 @@ stages:
       size: 63695
     - path: models/bikes_model.pkl
       hash: md5
-      md5: 4dfc33747f39f8c2a1014cc07fefb245
+      md5: d3897acf6d98e6343ed4d10e8bf6c770
       size: 111577
     - path: src/probafcst//plotting.py
       hash: md5
@@ -307,14 +307,14 @@ stages:
     outs:
     - path: output/bikes_eval_results.csv
       hash: md5
-      md5: 3103a25c69eb194454e429986f48609c
-      size: 2057
+      md5: 4e689fa121605f9847af1941ac1ea288
+      size: 1947
     - path: output/bikes_metrics.json
       hash: md5
-      md5: 2f314b0ba31248c727e34b1ad828bbf1
-      size: 186
+      md5: eccc5291c97790d850e17d6b57d1435a
+      size: 182
     - path: output/eval_plots/bikes/
       hash: md5
-      md5: 50d32ff340308810332c5e5ffc4e3035.dir
-      size: 325853
+      md5: 10479a92872b20ec81fb798a3fab8719.dir
+      size: 261935
       nfiles: 3
