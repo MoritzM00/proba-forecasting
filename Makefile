@@ -5,7 +5,7 @@ initialize_git:
 
 install:
 	uv sync --all-extras --dev
-	uv run pre-commit install
+	uv run pre-commit install --hook-type pre-push --hook-type post-checkout --hook-type pre-commit
 	uv pip install -e .
 
 test:
