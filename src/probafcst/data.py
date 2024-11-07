@@ -66,6 +66,9 @@ def get_bikes_data(start_date: str = "01/01/2019") -> pd.DataFrame:
     bikes_df["date"] = pd.to_datetime(bikes_df["date"])
     bikes_df = bikes_df.set_index("date")
     bikes_df = bikes_df.astype({"bike_count": float})
+
+    # cutoff outliers at over 10 000 bikes a day
+    bikes_df = bikes_df[bikes_df["bike_count"] <= 10000]
     bikes_df = bikes_df.asfreq("D").interpolate()
     return bikes_df
 
