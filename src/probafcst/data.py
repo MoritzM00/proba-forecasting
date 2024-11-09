@@ -124,7 +124,7 @@ def get_energy_data(ignore_years: int = 6) -> pd.DataFrame:
     energy_data = energy_data.drop_duplicates(subset=["date_time"])
     energy_data = energy_data.set_index("date_time")
 
-    energy_data = energy_data.resample("h").bfill()
+    energy_data = energy_data.asfreq("h").bfill()
 
     # convert to MWh
     energy_data["load"] /= 1000

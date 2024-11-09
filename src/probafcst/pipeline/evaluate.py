@@ -6,16 +6,11 @@ from pathlib import Path
 
 import click
 import dvc.api
-import numpy as np
 import pandas as pd
 import seaborn as sns
 from omegaconf import OmegaConf
-from sktime.forecasting.model_evaluation import evaluate
-from sktime.performance_metrics.forecasting.probabilistic import (
-    PinballLoss,
-)
-from sktime.split import ExpandingWindowSplitter
 
+from probafcst.backtest import backtest
 from probafcst.plotting import plot_quantiles
 from probafcst.utils.paths import get_data_path, get_model_path
 
@@ -28,7 +23,7 @@ from probafcst.utils.paths import get_data_path, get_model_path
     type=click.Choice(["energy", "bikes", "no2"]),
     help="The target data to prepare.",
 )
-def eval(target: str):
+def evaluate_forecaster(target: str):
     """Evaluate the model."""
     sns.set_theme(style="ticks")
     params = dvc.api.params_show()
@@ -43,33 +38,16 @@ def eval(target: str):
         forecaster = pickle.load(f)
 
     eval_params = params.eval[target]
-    fh = np.arange(1, eval_params.fh)
-    cv = ExpandingWindowSplitter(
-        fh=fh,
+    results, metrics, predictions = backtest(
+        forecaster,
+        y,
+        forecast_steps=eval_params.fh,
         initial_window=eval_params.initial_window,
         step_length=eval_params.step_length,
+        quantiles=params.quantiles,
     )
-    scoring = PinballLoss(alpha=params.quantiles)
+    results.to_csv(f"output/{target}_eval_results.csv", index=False)
 
-    results = evaluate(
-        forecaster,
-        y=y,
-        cv=cv,
-        strategy="refit",
-        scoring=scoring,
-        return_data=True,
-        error_score="raise",
-    )
-    results.iloc[:, :-3].to_csv(f"output/{target}_eval_results.csv", index=False)
-
-    mean_pinball_loss = results["test_PinballLoss"].mean()
-    std_pinball_loss = results["test_PinballLoss"].std()
-
-    metrics = {
-        "pinball_loss": {"mean": mean_pinball_loss, "std": std_pinball_loss},
-        "avg_fit_time": results["fit_time"].mean(),
-        "avg_pred_time": results["pred_quantiles_time"].mean(),
-    }
     with open(f"output/{target}_metrics.json", "w") as f:
         json.dump(metrics, f, indent=4)
 
@@ -78,10 +56,10 @@ def eval(target: str):
 
     # visualize some forecasts
     idx = [0, len(results) // 2, -1]
-    for i, (_, row) in enumerate(results.iloc[idx].iterrows()):
+    for i, (_, row) in enumerate(predictions.iloc[idx].iterrows()):
         fig, _ = plot_quantiles(row.y_test, row.y_pred_quantiles)
         fig.savefig(plots_dir / f"forecast_{i + 1}.png", bbox_inches="tight")
 
 
 if __name__ == "__main__":
-    eval()
+    evaluate_forecaster()
