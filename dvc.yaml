@@ -46,6 +46,8 @@ stages:
         - models/${item}_model.pkl
         - ${pipe_dir}/evaluate.py
         - ${code_dir}/plotting.py
+        - ${code_dir}/backtest.py
+
       outs:
         - output/${item}_eval_results.csv
       plots:

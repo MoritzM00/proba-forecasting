@@ -40,7 +40,7 @@ def evaluate_forecaster(target: str):
         forecaster = pickle.load(f)
 
     eval_params = params.eval[target]
-    results, metrics, predictions = backtest(
+    results, metrics, predictions, _ = backtest(
         forecaster,
         y,
         forecast_steps=eval_params.fh,

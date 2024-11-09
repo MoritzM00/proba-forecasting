@@ -89,17 +89,18 @@ def backtest(
             "mean": eval_results["test_PinballLoss"].mean(),
             "std": eval_results["test_PinballLoss"].std(),
         },
-        **{
-            f"pinball_loss_q{q}": {
-                "mean": eval_results[q].mean(),
-                "std": eval_results[q].std(),
-            }
-            for q in quantiles
-        },
     }
+    additional_metrics = {
+        f"pinball_loss_q{q}": {
+            "mean": eval_results[q].mean(),
+            "std": eval_results[q].std(),
+        }
+        for q in quantiles
+    }
+
     logger.info(f"Backtesting finished in {(end - start).total_seconds():.2f} seconds.")
     logger.info(
         f"Pinball Loss: {metrics['pinball_loss']['mean']:.3f} ± {metrics['pinball_loss']['std']:.3f}"
     )
 
-    return eval_results, metrics, predictions
+    return eval_results, metrics, predictions, additional_metrics

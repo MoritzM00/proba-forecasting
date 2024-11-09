@@ -241,14 +241,18 @@ stages:
       hash: md5
       md5: 50aa9827f3cc62cfe633ab25ebc2250f
       size: 2074035
+    - path: src/probafcst//backtest.py
+      hash: md5
+      md5: a688aa8ed5a4c4a0b26a42864bf41146
+      size: 3185
     - path: src/probafcst//plotting.py
       hash: md5
       md5: 482a42cf8b0b9196d98b0d8e772d83d2
       size: 1780
     - path: src/probafcst/pipeline/evaluate.py
       hash: md5
-      md5: 7027d2c081616b028efa27649a5f3a04
-      size: 2317
+      md5: ae71fabe1a97a0d5cc2f19cdf75f432d
+      size: 2320
     params:
       params.yaml:
         eval:
@@ -263,12 +267,12 @@ stages:
     outs:
     - path: output/energy_eval_results.csv
       hash: md5
-      md5: f50cf115139f7e48b6c01e01f21eac49
-      size: 5258
+      md5: 45666c0fd2e127309fbcbd9ec48d36b8
+      size: 5263
     - path: output/energy_metrics.json
       hash: md5
-      md5: 7eee0b8164cf5f32a2a14ba3d0ce86e8
-      size: 714
+      md5: 10f19832a9e96dc3d01f13adb03bf9a9
+      size: 185
     - path: output/energy_pinball_losses.png
       hash: md5
       md5: ffb6074cc389332b06a93efd05e5bd14
@@ -289,14 +293,18 @@ stages:
       hash: md5
       md5: feed944c921b32b752a51576d27c8cfd
       size: 111673
+    - path: src/probafcst//backtest.py
+      hash: md5
+      md5: a688aa8ed5a4c4a0b26a42864bf41146
+      size: 3185
     - path: src/probafcst//plotting.py
       hash: md5
       md5: 482a42cf8b0b9196d98b0d8e772d83d2
       size: 1780
     - path: src/probafcst/pipeline/evaluate.py
       hash: md5
-      md5: 7027d2c081616b028efa27649a5f3a04
-      size: 2317
+      md5: ae71fabe1a97a0d5cc2f19cdf75f432d
+      size: 2320
     params:
       params.yaml:
         eval:
@@ -311,12 +319,12 @@ stages:
     outs:
     - path: output/bikes_eval_results.csv
       hash: md5
-      md5: f0e7d9984d4908f8cc04ea32834e3dcc
-      size: 3978
+      md5: 3f71c23736f1b488a905325983c73ab8
+      size: 3977
     - path: output/bikes_metrics.json
       hash: md5
-      md5: 0a8d92eedee5d5c614b8dbac34a21899
-      size: 709
+      md5: eeeb8505a239bddf522486468a4add34
+      size: 187
     - path: output/bikes_pinball_losses.png
       hash: md5
       md5: a3ab95c67efc317db0c317513c2d0efd
