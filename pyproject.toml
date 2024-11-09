@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "Probabilistic-Forecasting"
 version = "0.0.0"
-description = "Probabilistic Forecasting Challenge in summer term 24 at KIT"
+description = "Probabilistic Forecasting Challenge in winter term 24/25 at KIT"
 authors = [{ name = "Moritz Mistol", email = "moritz.mistol@gmail.com" }]
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -17,7 +17,7 @@ dependencies = [
     "holidays>=0.59",
     "loguru>=0.7.2",
     "matplotlib>=3.9.2",
-    "numpy>=2.0.2",
+    "numpy<2.0.0",
     "omegaconf>=2.3.0",
     "pandas[excel]>=2.2.3",
     "pyarrow>=17.0.0",
@@ -26,6 +26,8 @@ dependencies = [
     "sktime>=0.34.0",
     "statsforecast>=1.7.8",
     "tqdm>=4.66.5",
+    "u8darts>=0.31.0",
+    "xgboost>=2.1.2",
 ]
 
 
