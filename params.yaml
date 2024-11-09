@@ -16,21 +16,34 @@ data:
   bikes:
     filename: bikes.parquet
     start_date: '2012-04-25'
+    freq: D
   no2:
     filename: no2.parquet
     start_date: '2016-01-01'
     end_date: '2024-10-26'
+    freq: h
   energy:
     filename: energy.parquet
     ignore_years: 0
+    freq: h
 
 train:
   bikes:
+    selected: benchmark
     benchmark:
       n_weeks: 125
+    xgboost:
+      freq: h
+      output_chunk_length: 24
+
+
   energy:
+    selected: benchmark
     benchmark:
       n_weeks: 75
+    xgboost:
+      freq: D
+      output_chunk_length: 7
 
 eval:
   bikes:

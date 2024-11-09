@@ -4,32 +4,20 @@ from typing import Literal
 
 import numpy as np
 import pandas as pd
+from omegaconf import DictConfig
 from sktime.forecasting.base import BaseForecaster
 
-
-def get_model(target: str, params: dict | None = None) -> BaseForecaster:
-    """Return the model for the given target."""
-    if params is None:
-        params = {}
-    match target:
-        case "energy":
-            return get_energy_model(**params)
-        case "bikes":
-            return get_bikes_model(**params)
-        case "no2":
-            raise NotImplementedError("Model for 'no2' is not implemented")
-        case _:
-            raise ValueError(f"Unknown target: {target}")
+from probafcst.models.xgboost import get_xgboost_model
 
 
-def get_energy_model(**params) -> BaseForecaster:
-    """Return the energy model."""
-    return BenchmarkForecaster(n_weeks=params["n_weeks"])
-
-
-def get_bikes_model(**params) -> BaseForecaster:
-    """Return the bikes model."""
-    return BenchmarkForecaster(n_weeks=params["n_weeks"])
+def get_model(params: DictConfig) -> BaseForecaster:
+    """Return the model with the given configuration."""
+    model_parms = params[params.selected]
+    match params.selected:
+        case "benchmark":
+            return BenchmarkForecaster(**model_parms)
+        case "xgboost":
+            return get_xgboost_model(**model_parms)
 
 
 class BenchmarkForecaster(BaseForecaster):
