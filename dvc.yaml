@@ -50,6 +50,7 @@ stages:
         - output/${item}_eval_results.csv
       plots:
         - output/eval_plots/${item}/
+        - output/${item}_pinball_losses.png
       metrics:
         - output/${item}_metrics.json
   submit:

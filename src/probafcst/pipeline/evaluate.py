@@ -8,6 +8,7 @@ import click
 import dvc.api
 import pandas as pd
 import seaborn as sns
+from matplotlib import pyplot as plt
 from omegaconf import OmegaConf
 
 from probafcst.backtest import backtest
@@ -29,6 +30,7 @@ def evaluate_forecaster(target: str):
     params = dvc.api.params_show()
     params = OmegaConf.create(params)
 
+    output_dir = Path(params.output_dir)
     data_path = get_data_path(params.data_dir, target=target)
 
     y = pd.read_parquet(data_path)
@@ -46,12 +48,12 @@ def evaluate_forecaster(target: str):
         step_length=eval_params.step_length,
         quantiles=params.quantiles,
     )
-    results.to_csv(f"output/{target}_eval_results.csv", index=False)
+    results.to_csv(output_dir / f"{target}_eval_results.csv", index=False)
 
-    with open(f"output/{target}_metrics.json", "w") as f:
+    with open(output_dir / f"{target}_metrics.json", "w") as f:
         json.dump(metrics, f, indent=4)
 
-    plots_dir = Path(params.output_dir, "eval_plots", target)
+    plots_dir = output_dir / "eval_plots" / target
     plots_dir.mkdir(exist_ok=True)
 
     # visualize some forecasts
@@ -59,6 +61,15 @@ def evaluate_forecaster(target: str):
     for i, (_, row) in enumerate(predictions.iloc[idx].iterrows()):
         fig, _ = plot_quantiles(row.y_test, row.y_pred_quantiles)
         fig.savefig(plots_dir / f"forecast_{i + 1}.png", bbox_inches="tight")
+
+    # create box plots for each quantile loss using results frame
+    # use melt for this
+    melted = results[params.quantiles].melt(var_name="quantile", value_name="loss")
+    melted["quantile"] = melted["quantile"].apply(lambda x: f"q{x}")
+
+    fig, ax = plt.subplots()
+    sns.boxplot(data=melted, x="quantile", y="loss", hue="quantile", ax=ax)
+    fig.savefig(output_dir / f"{target}_pinball_losses.png", bbox_inches="tight")
 
 
 if __name__ == "__main__":
