@@ -10,7 +10,7 @@ from sktime.forecasting.base import BaseForecaster
 from probafcst.models.xgboost import get_xgboost_model
 
 
-def get_model(params: DictConfig, n_jobs: int = -1) -> BaseForecaster:
+def get_model(params: DictConfig, n_jobs: int | None = None) -> BaseForecaster:
     """Return the model with the given configuration."""
     model_parms = params[params.selected]
     match params.selected:
@@ -18,8 +18,11 @@ def get_model(params: DictConfig, n_jobs: int = -1) -> BaseForecaster:
             return BenchmarkForecaster(**model_parms)
         case "xgboost":
             model = get_xgboost_model(**model_parms)
-            model.set_params(kwargs=dict(n_jobs=n_jobs))
-            print(model)
+            if n_jobs is not None:
+                # override the number of jobs
+                kwargs = model.get_params().get("kwargs", {})
+                kwargs["n_jobs"] = n_jobs
+                model.set_params(kwargs=kwargs)
             return model
 
 
