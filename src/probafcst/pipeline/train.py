@@ -4,11 +4,10 @@ import pickle
 from pathlib import Path
 
 import click
-import dvc.api
 import pandas as pd
-from omegaconf import OmegaConf
 
 from probafcst.models import get_model
+from probafcst.pipeline._base import pipeline_setup
 from probafcst.utils.paths import get_data_path, get_model_path
 
 
@@ -22,8 +21,7 @@ from probafcst.utils.paths import get_data_path, get_model_path
 )
 def train(target):
     """Train the model."""
-    params = dvc.api.params_show()
-    params = OmegaConf.create(params)
+    params = pipeline_setup()
 
     data_path = get_data_path(params.data_dir, target=target)
 

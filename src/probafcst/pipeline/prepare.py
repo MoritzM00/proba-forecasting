@@ -12,11 +12,10 @@ from pathlib import Path
 from warnings import simplefilter
 
 import click
-import dvc.api
 import requests_cache
-from omegaconf import OmegaConf
 
 from probafcst.data import get_bikes_data, get_energy_data, get_no2_data
+from probafcst.pipeline._base import pipeline_setup
 
 simplefilter("ignore", category=FutureWarning)
 
@@ -42,8 +41,7 @@ def prepare(target: str) -> None:
     ValueError
         If the target is invalid. Must be one of "energy", "bikes" or "no2".
     """
-    params = dvc.api.params_show()
-    params = OmegaConf.create(params)
+    params = pipeline_setup()
 
     if params.cache.enable and not requests_cache.is_installed():
         days_expire_after = params.cache.days_expire_after

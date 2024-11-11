@@ -36,7 +36,7 @@ train:
       freq: ${data.bikes.freq}
       output_chunk_length: 7
       xgb_kwargs:
-        n_jobs: 1
+        n_jobs: -1
 
 
   energy:
@@ -47,9 +47,10 @@ train:
       freq: ${data.energy.freq}
       output_chunk_length: 24
       xgb_kwargs:
-        n_jobs: 1
+        n_jobs: -1
 
 eval:
+  backend: loky # null or 'loky' for parallel evaluate
   bikes:
     fh: 31 # 1 month
     initial_window: 730 # 2 years

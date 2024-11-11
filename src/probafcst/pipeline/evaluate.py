@@ -1,18 +1,16 @@
 """Evaluation Stage."""
 
 import json
-import warnings
 from pathlib import Path
 
 import click
-import dvc.api
 import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
-from omegaconf import OmegaConf
 
 from probafcst.backtest import backtest
 from probafcst.models import get_model
+from probafcst.pipeline._base import pipeline_setup
 from probafcst.plotting import plot_quantiles
 from probafcst.utils.paths import get_data_path
 
@@ -27,8 +25,7 @@ from probafcst.utils.paths import get_data_path
 )
 def evaluate_forecaster(target: str):
     """Evaluate the model."""
-    params = dvc.api.params_show()
-    params = OmegaConf.create(params)
+    params = pipeline_setup()
 
     output_dir = Path(params.output_dir)
     data_path = get_data_path(params.data_dir, target=target)
@@ -36,20 +33,18 @@ def evaluate_forecaster(target: str):
     y = pd.read_parquet(data_path)
     y = y.asfreq(params.data[target].freq)
 
-    forecaster = get_model(params=params.train[target])
+    forecaster = get_model(params=params.train[target], n_jobs=1)
 
     eval_params = params.eval[target]
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=UserWarning)
-        results, metrics, predictions, _ = backtest(
-            forecaster,
-            y,
-            forecast_steps=eval_params.fh,
-            initial_window=eval_params.initial_window,
-            step_length=eval_params.step_length,
-            quantiles=params.quantiles,
-            backend="loky",
-        )
+    results, metrics, predictions, _ = backtest(
+        forecaster,
+        y,
+        forecast_steps=eval_params.fh,
+        initial_window=eval_params.initial_window,
+        step_length=eval_params.step_length,
+        quantiles=params.quantiles,
+        backend=params.eval.backend,
+    )
     results.to_csv(output_dir / f"{target}_eval_results.csv", index=False)
 
     with open(output_dir / f"{target}_metrics.json", "w") as f:
@@ -66,10 +61,8 @@ def evaluate_forecaster(target: str):
         fig.savefig(plots_dir / f"forecast_{i + 1}.png", bbox_inches="tight")
 
     # create box plots for each quantile loss using results frame
-    # use melt for this
     melted = results[params.quantiles].melt(var_name="quantile", value_name="loss")
     melted["quantile"] = melted["quantile"].apply(lambda x: f"q{x}")
-
     fig, ax = plt.subplots()
     sns.boxplot(data=melted, x="quantile", y="loss", hue="quantile", ax=ax)
     fig.savefig(output_dir / f"{target}_pinball_losses.png", bbox_inches="tight")

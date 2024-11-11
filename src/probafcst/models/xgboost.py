@@ -18,8 +18,8 @@ def get_xgboost_model(
     """
     match freq:
         case "D":
-            lags = 30
-            lags_future_covariates = [-30, -14, -7, 0, 7, 14, 30]
+            lags = 60
+            lags_future_covariates = list(range(-60, 61))
             additional_encoders = []
         case "h":
             lags = 24 * 7
@@ -47,5 +47,6 @@ def get_xgboost_model(
         multi_models=False,
         kwargs=xgb_kwargs,
     )
-    print(model)
+    # disable user warnings
+    model.set_config(warnings="off")
     return model
