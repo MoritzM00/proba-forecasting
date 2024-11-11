@@ -4,13 +4,12 @@ import pickle
 from datetime import date
 from pathlib import Path
 
-import dvc.api
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from omegaconf import OmegaConf
 from sktime.forecasting.base import ForecastingHorizon
 
+from probafcst.pipeline._base import pipeline_setup
 from probafcst.plotting import plot_quantiles
 from probafcst.utils import check_submission, create_submission
 from probafcst.utils.paths import get_model_path
@@ -19,9 +18,7 @@ from probafcst.utils.time import get_forecast_dates
 
 def submit():
     """Submit the forecasts."""
-    params = dvc.api.params_show()
-    params = OmegaConf.create(params)
-    sns.set_theme(style="ticks")
+    params = pipeline_setup()
 
     _, forecast_hours = get_forecast_dates()
 
@@ -42,6 +39,7 @@ def submit():
         y_pred = forecaster.predict_quantiles(fh, alpha=params.quantiles)
 
         # TODO: clean this up
+        sns.set_theme(style="ticks")
         last_date = forecaster._y.index[-1]
         to_plot = forecaster._y.loc[last_date - pd.Timedelta(days=14) :]
         fig, _ = plot_quantiles(to_plot, y_pred)

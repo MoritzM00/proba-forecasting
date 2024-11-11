@@ -16,28 +16,46 @@ data:
   bikes:
     filename: bikes.parquet
     start_date: '2012-04-25'
+    freq: D
   no2:
     filename: no2.parquet
     start_date: '2016-01-01'
     end_date: '2024-10-26'
+    freq: h
   energy:
     filename: energy.parquet
     ignore_years: 0
+    freq: h
 
 train:
   bikes:
+    selected: xgboost
     benchmark:
       n_weeks: 125
+    xgboost:
+      freq: ${data.bikes.freq}
+      output_chunk_length: 7
+      xgb_kwargs:
+        n_jobs: -1
+
+
   energy:
+    selected: xgboost
     benchmark:
       n_weeks: 75
+    xgboost:
+      freq: ${data.energy.freq}
+      output_chunk_length: 24
+      xgb_kwargs:
+        n_jobs: -1
 
 eval:
+  backend: loky # null or 'loky' for parallel evaluate
   bikes:
     fh: 31 # 1 month
     initial_window: 730 # 2 years
     step_length: 150
   energy:
-    fh: 336 # 168 # 1 week
+    fh: 336 # or 168
     initial_window: 26280 # 3 years
     step_length: 2016 # 3 months
