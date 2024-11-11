@@ -21,7 +21,6 @@ def submit():
     """Submit the forecasts."""
     params = dvc.api.params_show()
     params = OmegaConf.create(params)
-    sns.set_theme(style="ticks")
 
     _, forecast_hours = get_forecast_dates()
 
@@ -42,6 +41,7 @@ def submit():
         y_pred = forecaster.predict_quantiles(fh, alpha=params.quantiles)
 
         # TODO: clean this up
+        sns.set_theme(style="ticks")
         last_date = forecaster._y.index[-1]
         to_plot = forecaster._y.loc[last_date - pd.Timedelta(days=14) :]
         fig, _ = plot_quantiles(to_plot, y_pred)

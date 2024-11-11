@@ -18,11 +18,13 @@ def get_xgboost_model(
     """
     match freq:
         case "D":
-            lags = [-1, -2, -3, -7, -14, -30]
+            lags = 30
             lags_future_covariates = [-30, -14, -7, 0, 7, 14, 30]
+            additional_encoders = []
         case "h":
-            lags = [-1, -2, -3, -24, -24 * 7, -24 * 30]
+            lags = 24 * 7
             lags_future_covariates = [-24 * 30, -24 * 7, -24, 0, 24, 24 * 7, 24 * 30]
+            additional_encoders = ["hour"]
         case _:
             raise ValueError(
                 f"Invalid frequency: {freq}. Only 'D' and 'h' are supported."
@@ -31,7 +33,7 @@ def get_xgboost_model(
         quantiles = [0.025, 0.25, 0.5, 0.75, 0.975]
 
     add_encoders = {
-        "cyclic": {"future": ["day", "month", "day_of_year"]},
+        "cyclic": {"future": ["day", "month", "day_of_year", *additional_encoders]},
     }
 
     model = DartsXGBModel(
@@ -45,4 +47,5 @@ def get_xgboost_model(
         multi_models=False,
         kwargs=xgb_kwargs,
     )
+    print(model)
     return model
