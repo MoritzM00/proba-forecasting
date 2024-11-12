@@ -30,7 +30,7 @@ data:
 
 train:
   bikes:
-    selected: xgboost
+    selected: benchmark
     benchmark:
       n_weeks: 125
     quantreg:
@@ -46,7 +46,7 @@ train:
 
 
   energy:
-    selected: xgboost
+    selected: benchmark
     benchmark:
       n_weeks: 75
     quantreg:
