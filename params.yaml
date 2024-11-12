@@ -30,7 +30,7 @@ data:
 
 train:
   bikes:
-    selected: quantreg
+    selected: xgboost
     benchmark:
       n_weeks: 125
     quantreg:
@@ -39,13 +39,14 @@ train:
       quantiles: ${quantiles}
     xgboost:
       freq: ${data.bikes.freq}
+      quantiles: ${quantiles}
       output_chunk_length: 7
       xgb_kwargs:
         n_jobs: -1
 
 
   energy:
-    selected: benchmark
+    selected: xgboost
     benchmark:
       n_weeks: 75
     quantreg:

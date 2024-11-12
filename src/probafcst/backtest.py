@@ -83,7 +83,10 @@ def backtest(
         ["fit_time", "pred_quantiles_time", "len_train_window", "cutoff", *quantiles]
     ]
     eval_results = eval_results.assign(
-        test_PinballLoss=eval_results[quantiles].mean(axis=1)
+        # TODO: might change the mean to sum instead
+        # because in the submission evaluation it is done like this
+        # might make sense because these scores are quite volatile over quantile levels
+        test_PinballLoss=eval_results[quantiles].sum(axis=1)
     )
 
     metrics = {
