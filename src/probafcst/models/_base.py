@@ -7,7 +7,7 @@ import pandas as pd
 from omegaconf import DictConfig
 from sktime.forecasting.base import BaseForecaster
 
-from probafcst.models.xgboost import get_xgboost_model
+from probafcst.models.darts import get_quantile_regressor, get_xgboost_model
 
 
 def get_model(params: DictConfig, n_jobs: int | None = None) -> BaseForecaster:
@@ -16,6 +16,8 @@ def get_model(params: DictConfig, n_jobs: int | None = None) -> BaseForecaster:
     match params.selected:
         case "benchmark":
             return BenchmarkForecaster(**model_parms)
+        case "quantreg":
+            return get_quantile_regressor(**model_parms)
         case "xgboost":
             model = get_xgboost_model(**model_parms)
             if n_jobs is not None:
