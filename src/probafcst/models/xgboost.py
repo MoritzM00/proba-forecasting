@@ -12,9 +12,27 @@ def get_xgboost_model(
     random_state: int = 0,
     output_chunk_length: int = 1,
 ) -> DartsXGBModel:
-    """Get the DartsXGBModel.
+    """Create and configure a DartsXGBModel for time series forecasting.
 
-    TODO: docstring
+    Parameters
+    ----------
+    quantiles : array_like, optional
+        Array of quantiles to predict.
+    freq : {'D', 'h'}, optional
+        Frequency of the time series, default: 'h'
+        - 'D': daily data
+        - 'h': hourly data
+    xgb_kwargs : dict, optional
+        Additional XGBoost parameters, default: None
+    random_state : int, optional
+        Random seed for reproducibility, default: 0
+    output_chunk_length : int, optional
+        Number of time steps to predict at once, default: 1
+
+    Returns
+    -------
+    DartsXGBModel
+        Configured XGBoost model for time series forecasting
     """
     match freq:
         case "D":
