@@ -18,6 +18,7 @@ def backtest(
     initial_window: int,
     step_length: int,
     quantiles: list[float],
+    X=None,
     backend: str | None = None,
 ):
     """Backtest a probabilistic forecaster using Pinball Loss scoring.
@@ -58,6 +59,7 @@ def backtest(
     results = evaluate(
         forecaster,
         y=y,
+        X=X,
         cv=cv,
         strategy="refit",
         scoring=scoring,
