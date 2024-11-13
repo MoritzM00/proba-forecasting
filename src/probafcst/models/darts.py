@@ -9,12 +9,12 @@ def get_darts_config(freq: Literal["D", "h"]):
     """Return the lag and encoder configuration for Darts Models."""
     match freq:
         case "D":
-            lags = 60
-            lags_future_covariates = list(range(-60, 61))
+            lags = list(range(-7, 0)) + [-14 - (7 * i) for i in range(11)]
+            lags_future_covariates = [lag * -1 for lag in lags] + [0] + lags
             additional_encoders = []
         case "h":
-            lags = 24 * 7
-            lags_future_covariates = [-24 * 30, -24 * 7, -24, 0, 24, 24 * 7, 24 * 30]
+            lags = list(range(-24, 0)) + [-48 - (24 * i) for i in range(7)]
+            lags_future_covariates = [lag * -1 for lag in lags] + [0] + lags
             additional_encoders = ["hour"]
         case _:
             raise ValueError(
@@ -22,7 +22,7 @@ def get_darts_config(freq: Literal["D", "h"]):
             )
     add_encoders = {
         "cyclic": {
-            "future": ["day", "month", "day_of_year", "quarter", *additional_encoders]
+            "future": ["day", "month", "day_of_week", "quarter", *additional_encoders]
         },
     }
     return lags, lags_future_covariates, add_encoders

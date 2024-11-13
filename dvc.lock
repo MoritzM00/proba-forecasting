@@ -97,8 +97,8 @@ stages:
       size: 1325417
     - path: src/probafcst//models/
       hash: md5
-      md5: 50002c1d9a94cc2384a516ddce98a8df.dir
-      size: 16332
+      md5: 4cbbc98b7c210b2bc0ec587e2d5fee92.dir
+      size: 16911
       nfiles: 7
     - path: src/probafcst/pipeline/train.py
       hash: md5
@@ -127,14 +127,14 @@ stages:
           xgboost:
             freq: ${data.energy.freq}
             quantiles: ${quantiles}
-            output_chunk_length: 24
+            output_chunk_length: 1
             xgb_kwargs:
               n_jobs: -1
     outs:
     - path: models/energy_model.pkl
       hash: md5
-      md5: 744caf43f70db06ce6eff5aba2c43ff8
-      size: 13899199
+      md5: 39c11b9baf54166ea4ea36a635764797
+      size: 13914577
   train@bikes:
     cmd: python src/probafcst/pipeline/train.py --target bikes
     deps:
@@ -144,8 +144,8 @@ stages:
       size: 63848
     - path: src/probafcst//models/
       hash: md5
-      md5: 50002c1d9a94cc2384a516ddce98a8df.dir
-      size: 16332
+      md5: 4cbbc98b7c210b2bc0ec587e2d5fee92.dir
+      size: 16911
       nfiles: 7
     - path: src/probafcst/pipeline/train.py
       hash: md5
@@ -174,14 +174,14 @@ stages:
           xgboost:
             freq: ${data.bikes.freq}
             quantiles: ${quantiles}
-            output_chunk_length: 7
+            output_chunk_length: 1
             xgb_kwargs:
               n_jobs: -1
     outs:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: bed6e27de08b08a0fefa5cd8b2c0c487
-      size: 1966402
+      md5: 19d02e6205b0ec75e188eb6f80851fd3
+      size: 2091436
   train@no2:
     cmd: uv run python src/probafcst/pipeline/train.py --target no2
     deps:
@@ -213,12 +213,12 @@ stages:
     deps:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: bed6e27de08b08a0fefa5cd8b2c0c487
-      size: 1966402
+      md5: 19d02e6205b0ec75e188eb6f80851fd3
+      size: 2091436
     - path: models/energy_model.pkl
       hash: md5
-      md5: 744caf43f70db06ce6eff5aba2c43ff8
-      size: 13899199
+      md5: 39c11b9baf54166ea4ea36a635764797
+      size: 13914577
     - path: src/probafcst//plotting.py
       hash: md5
       md5: 482a42cf8b0b9196d98b0d8e772d83d2
@@ -246,16 +246,16 @@ stages:
     outs:
     - path: output/bikes_forecast.png
       hash: md5
-      md5: 27dd7448ab8eb343d054010f263ca91c
-      size: 61704
+      md5: 934a981f421f3b25f9d54c92d1da1776
+      size: 63976
     - path: output/energy_forecast.png
       hash: md5
-      md5: 624aeefeebdafa377fc2688f70186400
-      size: 70083
+      md5: 8f2fc97f93d0cbe884f8922ca0e5db35
+      size: 71632
     - path: output/submission.csv
       hash: md5
-      md5: 0b4d5b42ffcf50b71875dbbfa5859363
-      size: 1599
+      md5: 56722684d7cd0245ea619565cf113172
+      size: 1612
   eval@energy:
     cmd: python src/probafcst/pipeline/evaluate.py --target energy
     deps:
@@ -265,8 +265,8 @@ stages:
       size: 1325417
     - path: models/energy_model.pkl
       hash: md5
-      md5: 744caf43f70db06ce6eff5aba2c43ff8
-      size: 13899199
+      md5: 39c11b9baf54166ea4ea36a635764797
+      size: 13914577
     - path: src/probafcst//backtest.py
       hash: md5
       md5: a4fab4c91b2d30c0d5ce18c9140666c6
@@ -294,20 +294,20 @@ stages:
     outs:
     - path: output/energy_eval_results.csv
       hash: md5
-      md5: 451b6b6df251ad1626e76c21dd0b740b
-      size: 5136
+      md5: c0c1a0500bddbe06ee245a1b9645fa37
+      size: 5132
     - path: output/energy_metrics.json
       hash: md5
-      md5: 0e5f3c831c84c8fa577182c6318eaedb
-      size: 180
+      md5: 9c1be99ffb7dc8defd02745d63374d31
+      size: 181
     - path: output/energy_pinball_losses.png
       hash: md5
-      md5: c82ab7e3d0f63be5edccb856b4bdc175
-      size: 14874
+      md5: 4232f0ebe5ebc9cd26b555f4885cf659
+      size: 16786
     - path: output/eval_plots/energy/
       hash: md5
-      md5: 8d93a24af5351b85d9a7e4e2c07f8800.dir
-      size: 537084
+      md5: 2dc3565f4a5758f232b12529fcc1b79d.dir
+      size: 524504
       nfiles: 3
   eval@bikes:
     cmd: python src/probafcst/pipeline/evaluate.py --target bikes
@@ -318,8 +318,8 @@ stages:
       size: 63848
     - path: models/bikes_model.pkl
       hash: md5
-      md5: bed6e27de08b08a0fefa5cd8b2c0c487
-      size: 1966402
+      md5: 19d02e6205b0ec75e188eb6f80851fd3
+      size: 2091436
     - path: src/probafcst//backtest.py
       hash: md5
       md5: a4fab4c91b2d30c0d5ce18c9140666c6
@@ -347,18 +347,18 @@ stages:
     outs:
     - path: output/bikes_eval_results.csv
       hash: md5
-      md5: 6316a46edfd355c5f2a1d6d51740d964
-      size: 4341
+      md5: fedfaccb188dd20185921c3ddca96c61
+      size: 4348
     - path: output/bikes_metrics.json
       hash: md5
-      md5: ac03ebcf9e56299f5ea664ef7d2af822
-      size: 182
+      md5: 2c2513fc31c740c53d92ed4b011e997f
+      size: 180
     - path: output/bikes_pinball_losses.png
       hash: md5
-      md5: 8a112117ca2b24ce95699538d2fdac27
-      size: 16362
+      md5: 14892bec9e5b47d7cc4886d427a10a06
+      size: 15847
     - path: output/eval_plots/bikes/
       hash: md5
-      md5: 5c81e4a7f97b9a4037c4f203f831124c.dir
-      size: 352124
+      md5: b112c4cd9b1d34305bba4f56c40fa811.dir
+      size: 363057
       nfiles: 3
