@@ -9,12 +9,20 @@ def get_darts_config(freq: Literal["D", "h"]):
     """Return the lag and encoder configuration for Darts Models."""
     match freq:
         case "D":
-            lags = list(range(-7, 0)) + [-14 - (7 * i) for i in range(11)]
-            lags_future_covariates = [lag * -1 for lag in lags] + [0] + lags
+            lags = 30
+            lags_future_covariates = [-7, -14, -21, -28, 0, 7, 14, 21, 28]
             additional_encoders = []
         case "h":
-            lags = list(range(-24, 0)) + [-48 - (24 * i) for i in range(7)]
-            lags_future_covariates = [lag * -1 for lag in lags] + [0] + lags
+            lags = 24 * 7
+            lags_future_covariates = [
+                -24 * 14,
+                -24 * 7,
+                -24,
+                0,
+                24,
+                24 * 7,
+                24 * 14,
+            ]
             additional_encoders = ["hour"]
         case _:
             raise ValueError(
