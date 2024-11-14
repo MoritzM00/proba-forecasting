@@ -33,7 +33,9 @@ def evaluate_forecaster(target: str):
     y = pd.read_parquet(data_path)
     y = y.asfreq(params.data[target].freq)
 
-    forecaster = get_model(params=params.train[target], n_jobs=1)
+    forecaster = get_model(
+        params=params.train[target], n_jobs=1, quantiles=params.quantiles
+    )
 
     eval_params = params.eval[target]
 
@@ -50,6 +52,7 @@ def evaluate_forecaster(target: str):
         **window_params,
         quantiles=params.quantiles,
         backend=params.eval.backend,
+        splitter_type=params.eval.splitter_type,
     )
     results.to_csv(output_dir / f"{target}_eval_results.csv", index=False)
 

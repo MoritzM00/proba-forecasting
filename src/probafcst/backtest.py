@@ -10,7 +10,7 @@ from sktime.forecasting.model_evaluation import evaluate
 from sktime.performance_metrics.forecasting.probabilistic import (
     PinballLoss,
 )
-from sktime.split import ExpandingWindowSplitter
+from sktime.split import ExpandingWindowSplitter, SlidingWindowSplitter
 
 
 class WindowParams(TypedDict):
@@ -57,6 +57,7 @@ def backtest(
     quantiles: list[float],
     X=None,
     backend: str | None = None,
+    splitter_type: Literal["expanding", "sliding"] = "sliding",
 ):
     """Backtest a probabilistic forecaster using Pinball Loss scoring.
 
@@ -74,6 +75,11 @@ def backtest(
         Step length.
     quantiles : list[float]
         List of quantile levels.
+    backend: str, default=None
+        The backend to use. If None, the default backend is used. Use 'loky' for
+        parallel backtest.
+    splitter_type : { 'expanding', 'sliding' }, default='sliding'
+        Type of splitter to use. Either 'expanding' or 'sliding'.
 
     Returns
     -------
@@ -84,12 +90,19 @@ def backtest(
     predictions : pd.DataFrame
         Predictions for each test window, including train and test series.
     """
-    fh = np.arange(1, forecast_steps)
-    cv = ExpandingWindowSplitter(
-        fh=fh,
-        initial_window=initial_window,
-        step_length=step_length,
-    )
+    fh = np.arange(1, forecast_steps + 1)
+    match splitter_type.lower():
+        case "expanding":
+            cv = ExpandingWindowSplitter(
+                fh=fh, initial_window=initial_window, step_length=step_length
+            )
+        case "sliding":
+            cv = SlidingWindowSplitter(
+                fh=fh, window_length=initial_window, step_length=step_length
+            )
+        case _:
+            raise ValueError(f"Unknown splitter type: {splitter_type}")
+
     n_splits = cv.get_n_splits(y)
     scoring = PinballLoss(alpha=quantiles, score_average=False)
 
@@ -140,8 +153,10 @@ def backtest(
         }
         for q in quantiles
     }
+    backtest_time = (end - start).total_seconds()
+    additional_metrics["backtest_time"] = backtest_time
 
-    logger.info(f"Backtesting finished in {(end - start).total_seconds():.2f} seconds.")
+    logger.info(f"Backtest finished in {backtest_time:.2f} seconds.")
     logger.info(
         f"Pinball Loss: {metrics['pinball_loss']['mean']:.3f} ± {metrics['pinball_loss']['std']:.3f}"
     )

@@ -29,7 +29,7 @@ data:
 
 train:
   bikes:
-    selected: benchmark
+    selected: xgboost
     benchmark:
       n_weeks: 125
     quantreg:
@@ -43,7 +43,7 @@ train:
 
 
   energy:
-    selected: benchmark
+    selected: xgboost
     benchmark:
       n_weeks: 75
     quantreg:
@@ -57,8 +57,10 @@ train:
 
 eval:
   backend: loky # null or 'loky' for parallel evaluate
+  splitter_type: sliding # or expanding
   bikes:
     forecast_steps_days: 7
+    # for sliding windows, this determines the window length in years (train size)
     n_years_initial_window: 3
     step_length_days: 30
   energy:
