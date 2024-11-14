@@ -101,7 +101,23 @@ def get_quantile_regressor(
     -------
     DartsLinearRegressionModel
     """
-    lags, lags_future_covariates, add_encoders = get_darts_config(freq)
+    match freq:
+        case "h":
+            DAY_DURATION = 24
+        case "D":
+            DAY_DURATION = 1
+        case _:
+            raise ValueError(
+                f"Invalid frequency: {freq}. Only 'D' and 'h' are supported."
+            )
+
+    lags = [-DAY_DURATION * i for i in [1, 2, 3, 7]]
+    lags_future_covariates = [-DAY_DURATION * i for i in [-7, -2, -1, 0, 1, 2, 7]]
+    add_encoders = {
+        "cyclic": {
+            "future": ["day_of_week", "month"] + (["hour"] if freq == "h" else [])
+        },
+    }
     model = DartsLinearRegressionModel(
         lags=lags,
         lags_future_covariates=lags_future_covariates,
@@ -111,6 +127,7 @@ def get_quantile_regressor(
         quantiles=quantiles,
         multi_models=False,
         random_state=random_state,
+        kwargs=dict(solver="highs-ipm"),
     )
     # disable user warnings
     model.set_config(warnings="off")
