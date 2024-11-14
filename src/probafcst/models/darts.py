@@ -127,6 +127,7 @@ def get_quantile_regressor(
         quantiles=quantiles,
         multi_models=False,
         random_state=random_state,
+        # solver 'highs' leads to 'high-ds' which takes 5x longer
         kwargs=dict(solver="highs-ipm"),
     )
     # disable user warnings
