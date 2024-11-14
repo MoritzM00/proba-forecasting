@@ -20,8 +20,6 @@ def submit():
     """Submit the forecasts."""
     params = pipeline_setup()
 
-    _, forecast_hours = get_forecast_dates()
-
     pred_quantiles = {}
     for target in ["energy", "bikes"]:
         model_path = get_model_path(params.model_dir, target=target)
@@ -29,17 +27,17 @@ def submit():
         with open(model_path, "rb") as f:
             forecaster = pickle.load(f)
 
-        # TODO: put that into the params.yaml file
         if target == "bikes":
             lead_times = np.arange(2, 8)
             fh = ForecastingHorizon(lead_times, is_relative=True)
         else:
+            _, forecast_hours = get_forecast_dates()
             fh = ForecastingHorizon(forecast_hours, is_relative=True)
 
         y_pred = forecaster.predict_quantiles(fh, alpha=params.quantiles)
 
-        # TODO: clean this up
         sns.set_theme(style="ticks")
+        # plot last 14 days of actual series, and Out-of-Sample forecast
         last_date = forecaster._y.index[-1]
         to_plot = forecaster._y.loc[last_date - pd.Timedelta(days=14) :]
         fig, _ = plot_quantiles(to_plot, y_pred)
