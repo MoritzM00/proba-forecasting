@@ -27,7 +27,7 @@ def train(target):
 
     y = pd.read_parquet(data_path).asfreq(params.data[target].freq)
 
-    forecaster = get_model(params=params.train[target])
+    forecaster = get_model(params=params.train[target], quantiles=params.quantiles)
     forecaster.fit(y)
 
     # Save the model

@@ -7,12 +7,11 @@ model_dir: models
 output_dir: output
 
 quantiles:
-  - 0.025
-  - 0.25
-  - 0.5
-  - 0.75
-  - 0.975
-
+- 0.025
+- 0.25
+- 0.5
+- 0.75
+- 0.975
 data:
   bikes:
     filename: bikes.parquet
@@ -30,32 +29,28 @@ data:
 
 train:
   bikes:
-    selected: quantreg
+    selected: benchmark
     benchmark:
       n_weeks: 125
     quantreg:
-      freq: ${data.bikes.freq}
+      freq: D
       output_chunk_length: 7
-      quantiles: ${quantiles}
     xgboost:
-      freq: ${data.bikes.freq}
-      quantiles: ${quantiles}
+      freq: D
       output_chunk_length: 7
       xgb_kwargs:
         n_jobs: -1
 
 
   energy:
-    selected: quantreg
+    selected: benchmark
     benchmark:
       n_weeks: 75
     quantreg:
-      freq: ${data.energy.freq}
+      freq: h
       output_chunk_length: 24
-      quantiles: ${quantiles}
     xgboost:
-      freq: ${data.energy.freq}
-      quantiles: ${quantiles}
+      freq: h
       output_chunk_length: 24
       xgb_kwargs:
         n_jobs: -1

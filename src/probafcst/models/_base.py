@@ -10,16 +10,18 @@ from sktime.forecasting.base import BaseForecaster
 from probafcst.models.darts import get_quantile_regressor, get_xgboost_model
 
 
-def get_model(params: DictConfig, n_jobs: int | None = None) -> BaseForecaster:
+def get_model(
+    params: DictConfig, quantiles, n_jobs: int | None = None
+) -> BaseForecaster:
     """Return the model with the given configuration."""
     model_parms = params[params.selected]
     match params.selected:
         case "benchmark":
             return BenchmarkForecaster(**model_parms)
         case "quantreg":
-            return get_quantile_regressor(**model_parms)
+            return get_quantile_regressor(**model_parms, quantiles=quantiles)
         case "xgboost":
-            model = get_xgboost_model(**model_parms)
+            model = get_xgboost_model(**model_parms, quantiles=quantiles)
             if n_jobs is not None:
                 # override the number of jobs
                 kwargs = model.get_params().get("kwargs", {})
