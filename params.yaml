@@ -29,7 +29,8 @@ data:
 
 train:
   bikes:
-    selected: xgboost
+    selected: quantreg
+    cutoff: '2021-11-14' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 125
     quantreg:
@@ -43,7 +44,8 @@ train:
 
 
   energy:
-    selected: xgboost
+    selected: quantreg
+    cutoff: '2021-11-14'
     benchmark:
       n_weeks: 75
     quantreg:

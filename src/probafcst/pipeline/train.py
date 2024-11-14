@@ -28,7 +28,9 @@ def train(target):
     y = pd.read_parquet(data_path).asfreq(params.data[target].freq)
 
     forecaster = get_model(params=params.train[target], quantiles=params.quantiles)
-    forecaster.fit(y)
+
+    y_subset = y.loc[: params.train[target].cutoff]
+    forecaster.fit(y_subset)
 
     # Save the model
     model_dir = Path(params.model_dir)
