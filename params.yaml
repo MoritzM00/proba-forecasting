@@ -30,7 +30,7 @@ data:
 
 train:
   bikes:
-    selected: xgboost
+    selected: quantreg
     benchmark:
       n_weeks: 125
     quantreg:
@@ -46,7 +46,7 @@ train:
 
 
   energy:
-    selected: xgboost
+    selected: quantreg
     benchmark:
       n_weeks: 75
     quantreg:
@@ -63,10 +63,10 @@ train:
 eval:
   backend: loky # null or 'loky' for parallel evaluate
   bikes:
-    fh: 31 # 1 month
-    initial_window: 730 # 2 years
-    step_length: 150
+    forecast_steps_days: 7
+    n_years_initial_window: 3
+    step_length_days: 30
   energy:
-    fh: 336 # or 168
-    initial_window: 26280 # 3 years
-    step_length: 2016 # 3 months
+    forecast_steps_days: 7
+    n_years_initial_window: 3
+    step_length_days: 90

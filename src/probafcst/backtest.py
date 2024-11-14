@@ -1,5 +1,7 @@
 """Implement a backtesting strategy for probabilistic forecasts."""
 
+from typing import Literal, TypedDict
+
 import numpy as np
 import pandas as pd
 from loguru import logger
@@ -9,6 +11,41 @@ from sktime.performance_metrics.forecasting.probabilistic import (
     PinballLoss,
 )
 from sktime.split import ExpandingWindowSplitter
+
+
+class WindowParams(TypedDict):
+    """NamedTuple to store window parameters for backtesting."""
+
+    initial_window: int
+    step_length: int
+    forecast_steps: int
+
+
+def get_window_params(
+    n_years_initial_window: int,
+    step_length_days: int,
+    forecast_steps_days: int,
+    freq: Literal["D", "h"],
+) -> WindowParams:
+    """Calculate window parameters for backtesting."""
+    match freq:
+        case "D":
+            DAY_DURATION = 1
+        case "h":
+            DAY_DURATION = 24
+        case _:
+            raise ValueError(
+                f"Invalid frequency: {freq}. Only 'D' and 'h' are supported."
+            )
+    initial_window = DAY_DURATION * 365 * n_years_initial_window
+    step_length = DAY_DURATION * step_length_days
+    forecast_steps = DAY_DURATION * forecast_steps_days
+
+    return WindowParams(
+        initial_window=initial_window,
+        step_length=step_length,
+        forecast_steps=forecast_steps,
+    )
 
 
 def backtest(
@@ -53,8 +90,10 @@ def backtest(
         initial_window=initial_window,
         step_length=step_length,
     )
+    n_splits = cv.get_n_splits(y)
     scoring = PinballLoss(alpha=quantiles, score_average=False)
 
+    logger.info(f"Starting Backtest with {n_splits} splits.")
     start = pd.Timestamp.now()
     results = evaluate(
         forecaster,
@@ -83,9 +122,6 @@ def backtest(
         ["fit_time", "pred_quantiles_time", "len_train_window", "cutoff", *quantiles]
     ]
     eval_results = eval_results.assign(
-        # TODO: might change the mean to sum instead
-        # because in the submission evaluation it is done like this
-        # might make sense because these scores are quite volatile over quantile levels
         test_PinballLoss=eval_results[quantiles].sum(axis=1)
     )
 

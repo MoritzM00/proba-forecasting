@@ -8,7 +8,7 @@ import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-from probafcst.backtest import backtest
+from probafcst.backtest import backtest, get_window_params
 from probafcst.models import get_model
 from probafcst.pipeline._base import pipeline_setup
 from probafcst.plotting import plot_quantiles
@@ -36,12 +36,18 @@ def evaluate_forecaster(target: str):
     forecaster = get_model(params=params.train[target], n_jobs=1)
 
     eval_params = params.eval[target]
+
+    window_params = get_window_params(
+        n_years_initial_window=eval_params.n_years_initial_window,
+        step_length_days=eval_params.step_length_days,
+        forecast_steps_days=eval_params.forecast_steps_days,
+        freq=params.data[target].freq,
+    )
+
     results, metrics, predictions, _ = backtest(
         forecaster,
         y,
-        forecast_steps=eval_params.fh,
-        initial_window=eval_params.initial_window,
-        step_length=eval_params.step_length,
+        **window_params,
         quantiles=params.quantiles,
         backend=params.eval.backend,
     )
