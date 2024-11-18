@@ -1,5 +1,6 @@
 """Forecast Pipeline functions for probabilistic forecasting."""
 
+import warnings
 from typing import Literal
 
 import holidays
@@ -11,6 +12,8 @@ from sktime.transformations.series.fourier import FourierFeatures
 from sktime.transformations.series.holiday import (
     HolidayFeatures,
 )
+
+warnings.simplefilter("ignore", category=FutureWarning)
 
 
 def get_fourier_kwargs(

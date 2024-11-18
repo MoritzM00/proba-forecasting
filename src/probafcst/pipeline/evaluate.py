@@ -1,6 +1,7 @@
 """Evaluation Stage."""
 
 import json
+import os
 from pathlib import Path
 
 import click
@@ -13,6 +14,8 @@ from probafcst.models import get_model
 from probafcst.pipeline._base import pipeline_setup
 from probafcst.plotting import plot_quantiles
 from probafcst.utils.paths import get_data_path
+
+os.environ["PYTHONWARNINGS"] = "ignore"
 
 
 @click.command()

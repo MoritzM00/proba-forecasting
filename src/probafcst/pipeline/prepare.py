@@ -69,6 +69,8 @@ def prepare(target: str) -> None:
     filepath = data_dir / f"{target}.parquet"
     data.to_parquet(filepath)
 
+    # TODO: prepare holiday data
+
 
 if __name__ == "__main__":
     prepare()
