@@ -1,6 +1,6 @@
 """Implement a backtesting strategy for probabilistic forecasts."""
 
-from typing import Literal, TypedDict
+from typing import Literal, NamedTuple, TypedDict
 
 import numpy as np
 import pandas as pd
@@ -19,6 +19,15 @@ class WindowParams(TypedDict):
     initial_window: int
     step_length: int
     forecast_steps: int
+
+
+class BacktestResults(NamedTuple):
+    """NamedTuple to store backtest results."""
+
+    eval_results: pd.DataFrame
+    metrics: dict
+    predictions: pd.DataFrame
+    additional_metrics: dict
 
 
 def get_window_params(
@@ -58,7 +67,7 @@ def backtest(
     X=None,
     backend: str | None = None,
     splitter_type: Literal["expanding", "sliding"] = "sliding",
-):
+) -> BacktestResults:
     """Backtest a probabilistic forecaster using Pinball Loss scoring.
 
     Parameters
@@ -161,4 +170,4 @@ def backtest(
         f"Pinball Loss: {metrics['pinball_loss']['mean']:.3f} ± {metrics['pinball_loss']['std']:.3f}"
     )
 
-    return eval_results, metrics, predictions, additional_metrics
+    return BacktestResults(eval_results, metrics, predictions, additional_metrics)
