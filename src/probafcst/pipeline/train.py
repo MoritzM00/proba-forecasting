@@ -25,9 +25,15 @@ def train(target):
 
     data_path = get_data_path(params.data_dir, target=target)
 
-    y = pd.read_parquet(data_path).asfreq(params.data[target].freq)
+    freq = params.data[target].freq
 
-    forecaster = get_model(params=params.train[target], quantiles=params.quantiles)
+    y = pd.read_parquet(data_path).asfreq(freq)
+
+    forecaster = get_model(
+        params=params.train[target],
+        quantiles=params.quantiles,
+        freq=freq,
+    )
 
     y_subset = y.loc[: params.train[target].cutoff]
     forecaster.fit(y_subset)

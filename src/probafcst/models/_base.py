@@ -7,27 +7,38 @@ import pandas as pd
 from omegaconf import DictConfig
 from sktime.forecasting.base import BaseForecaster
 
+from probafcst.forecast import get_featurizer, get_fourier_kwargs, get_pipeline
 from probafcst.models.darts import get_quantile_regressor, get_xgboost_model
 
 
 def get_model(
-    params: DictConfig, quantiles, n_jobs: int | None = None
+    params: DictConfig,
+    quantiles,
+    n_jobs: int | None = None,
+    freq: Literal["D", "h"] = "h",
 ) -> BaseForecaster:
     """Return the model with the given configuration."""
-    model_parms = params[params.selected]
+    model_params = params[params.selected]
     match params.selected:
         case "benchmark":
-            return BenchmarkForecaster(**model_parms)
+            model = BenchmarkForecaster(**model_params)
         case "quantreg":
-            return get_quantile_regressor(**model_parms, quantiles=quantiles)
+            model = get_quantile_regressor(**model_params, quantiles=quantiles)
         case "xgboost":
-            model = get_xgboost_model(**model_parms, quantiles=quantiles)
+            model = get_xgboost_model(**model_params, quantiles=quantiles)
             if n_jobs is not None:
                 # override the number of jobs
                 kwargs = model.get_params().get("kwargs", {})
                 kwargs["n_jobs"] = n_jobs
                 model.set_params(kwargs=kwargs)
-            return model
+
+    featurize_params = dict(
+        fourier_kwargs=get_fourier_kwargs(freq=freq),
+        datetime_features=["is_weekend"],
+        include_holidays=False,
+    )
+    featurizer = get_featurizer(**featurize_params)
+    return get_pipeline(model, featurizer)
 
 
 class BenchmarkForecaster(BaseForecaster):

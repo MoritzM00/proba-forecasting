@@ -1,5 +1,6 @@
 """Some base functions for pipeline stages."""
 
+import os
 import sys
 
 import dvc.api
@@ -19,6 +20,9 @@ def pipeline_setup(log_level: str = "INFO") -> None:
             }
         ],
     )
+    # because of joblib parallellism (loky), need to set this environment variable
+    # instead of using warnings.filterwarnings because subprocesses don't inherit from them
+    os.environ["PYTHONWARNINGS"] = "ignore"
     params = dvc.api.params_show()
     params = OmegaConf.create(params)
     return params

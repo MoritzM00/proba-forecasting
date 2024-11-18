@@ -12,6 +12,7 @@ quantiles:
 - 0.5
 - 0.75
 - 0.975
+
 data:
   bikes:
     filename: bikes.parquet
@@ -37,7 +38,7 @@ train:
       freq: D
       output_chunk_length: 7
     xgboost:
-      freq: D
+      lags: 30
       output_chunk_length: 7
       xgb_kwargs:
         n_jobs: -1
@@ -52,7 +53,7 @@ train:
       freq: h
       output_chunk_length: 24
     xgboost:
-      freq: h
+      lags: 168 # 1 week
       output_chunk_length: 24
       xgb_kwargs:
         n_jobs: -1

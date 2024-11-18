@@ -37,11 +37,12 @@ def get_darts_config(freq: Literal["D", "h"]):
 
 
 def get_xgboost_model(
+    lags: int | list[int],
     quantiles: list[float],
-    freq: Literal["D", "h"] = "h",
     xgb_kwargs: dict | None = None,
     random_state: int = 0,
     output_chunk_length: int = 1,
+    multi_models: bool = False,
 ) -> DartsXGBModel:
     """Create and configure a DartsXGBModel for time series forecasting.
 
@@ -49,10 +50,6 @@ def get_xgboost_model(
     ----------
     quantiles : array_like
         Array of quantiles to predict.
-    freq : {'D', 'h'}, optional
-        Frequency of the time series, default: 'h'
-        - 'D': daily data
-        - 'h': hourly data
     xgb_kwargs : dict, optional
         Additional XGBoost parameters, default: None
     random_state : int, optional
@@ -65,16 +62,13 @@ def get_xgboost_model(
     DartsXGBModel
         Configured XGBoost model for time series forecasting
     """
-    lags, lags_future_covariates, add_encoders = get_darts_config(freq)
     model = DartsXGBModel(
         lags=lags,
-        lags_future_covariates=lags_future_covariates,
-        add_encoders=add_encoders,
         random_state=random_state,
         likelihood="quantile",
         quantiles=quantiles,
         output_chunk_length=output_chunk_length,
-        multi_models=False,
+        multi_models=multi_models,
         kwargs=xgb_kwargs,
     )
     # disable user warnings
