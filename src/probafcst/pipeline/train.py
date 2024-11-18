@@ -1,5 +1,6 @@
 """Training Stage."""
 
+import os
 import pickle
 from pathlib import Path
 
@@ -9,6 +10,8 @@ import pandas as pd
 from probafcst.models import get_model
 from probafcst.pipeline._base import pipeline_setup
 from probafcst.utils.paths import get_data_path, get_model_path
+
+os.environ["PYTHONWARNINGS"] = "ignore"
 
 
 @click.command()
@@ -35,7 +38,7 @@ def train(target):
         freq=freq,
     )
 
-    y_subset = y.loc[: params.train[target].cutoff]
+    y_subset = y.loc[params.train[target].cutoff :]
     forecaster.fit(y_subset)
 
     # Save the model
