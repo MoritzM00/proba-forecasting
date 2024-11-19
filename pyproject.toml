@@ -24,6 +24,7 @@ dependencies = [
     "pyarrow>=17.0.0",
     "requests-cache>=1.2.1",
     "seaborn>=0.13.2",
+    "skpro>=2.8.0",
     "sktime>=0.34.0",
     "statsforecast>=1.7.8",
     "tqdm>=4.66.5",

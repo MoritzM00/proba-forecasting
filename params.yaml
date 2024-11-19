@@ -38,7 +38,7 @@ train:
       freq: D
       output_chunk_length: 7
     xgboost:
-      lags: 30
+      freq: D
       output_chunk_length: 7
       xgb_kwargs:
         n_jobs: -1
@@ -53,7 +53,7 @@ train:
       freq: h
       output_chunk_length: 24
     xgboost:
-      lags: 168 # 1 week
+      freq: h
       output_chunk_length: 24
       xgb_kwargs:
         n_jobs: -1

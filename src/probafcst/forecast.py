@@ -55,7 +55,6 @@ def get_featurizer(
         datetime_features = ["is_weekend"]
 
     transformers = [
-        ("fourier", FourierFeatures(**fourier_kwargs)),
         ("datetime", DateTimeFeatures(manual_selection=datetime_features)),
     ]
 

@@ -11,6 +11,7 @@ def get_darts_config(freq: Literal["D", "h"]):
         case "D":
             lags = 30
             lags_future_covariates = [-7, -14, -21, -28, 0, 7, 14, 21, 28]
+            lags_past_covariates = 14
             additional_encoders = []
         case "h":
             lags = 24 * 7
@@ -23,6 +24,7 @@ def get_darts_config(freq: Literal["D", "h"]):
                 24 * 7,
                 24 * 14,
             ]
+            lags_past_covariates = [-24 * 14, -24 * 7, -24]
             additional_encoders = ["hour"]
         case _:
             raise ValueError(
@@ -33,11 +35,11 @@ def get_darts_config(freq: Literal["D", "h"]):
             "future": ["day", "month", "day_of_week", "quarter", *additional_encoders]
         },
     }
-    return lags, lags_future_covariates, add_encoders
+    return lags, lags_future_covariates, lags_past_covariates, add_encoders
 
 
 def get_xgboost_model(
-    lags: int | list[int],
+    freq: Literal["D", "h"],
     quantiles: list[float],
     xgb_kwargs: dict | None = None,
     random_state: int = 0,
@@ -62,8 +64,14 @@ def get_xgboost_model(
     DartsXGBModel
         Configured XGBoost model for time series forecasting
     """
+    lags, lags_future_covariates, lags_past_covariates, add_encoders = get_darts_config(
+        freq
+    )
     model = DartsXGBModel(
         lags=lags,
+        lags_future_covariates=lags_future_covariates,
+        # lags_past_covariates=lags_past_covariates,
+        add_encoders=add_encoders,
         random_state=random_state,
         likelihood="quantile",
         quantiles=quantiles,

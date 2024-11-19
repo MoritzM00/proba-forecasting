@@ -7,7 +7,6 @@ import pandas as pd
 from omegaconf import DictConfig
 from sktime.forecasting.base import BaseForecaster
 
-from probafcst.forecast import get_featurizer, get_fourier_kwargs, get_pipeline
 from probafcst.models.darts import get_quantile_regressor, get_xgboost_model
 
 
@@ -32,13 +31,7 @@ def get_model(
                 kwargs["n_jobs"] = n_jobs
                 model.set_params(kwargs=kwargs)
 
-    featurize_params = dict(
-        fourier_kwargs=get_fourier_kwargs(freq=freq),
-        datetime_features=["is_weekend"],
-        include_holidays=False,
-    )
-    featurizer = get_featurizer(**featurize_params)
-    return get_pipeline(model, featurizer)
+    return model
 
 
 class BenchmarkForecaster(BaseForecaster):

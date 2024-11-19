@@ -2987,6 +2987,7 @@ dependencies = [
     { name = "pyarrow" },
     { name = "requests-cache" },
     { name = "seaborn" },
+    { name = "skpro" },
     { name = "sktime" },
     { name = "statsforecast" },
     { name = "tqdm" },
@@ -3018,6 +3019,7 @@ requires-dist = [
     { name = "pyarrow", specifier = ">=17.0.0" },
     { name = "requests-cache", specifier = ">=1.2.1" },
     { name = "seaborn", specifier = ">=0.13.2" },
+    { name = "skpro", specifier = ">=2.8.0" },
     { name = "sktime", specifier = ">=0.34.0" },
     { name = "statsforecast", specifier = ">=1.7.8" },
     { name = "tqdm", specifier = ">=4.66.5" },
@@ -4153,6 +4155,23 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e/six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926", size = 34041 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254", size = 11053 },
+]
+
+[[package]]
+name = "skpro"
+version = "2.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+    { name = "packaging" },
+    { name = "pandas" },
+    { name = "scikit-base" },
+    { name = "scikit-learn" },
+    { name = "scipy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/43/6b/c76748ce2499550fa5c2fde7337c0aad81bdeefe3897a9b37c71325dff75/skpro-2.8.0.tar.gz", hash = "sha256:a5f03905a2ae75c403332d7ec8f08ff37314f76ffdad3cc902d062fcb9fa83d2", size = 272242 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/80/aa/898d29f1f55b4e1051d4ace17cbba93fe38f0f7c238108344c739ec43aae/skpro-2.8.0-py3-none-any.whl", hash = "sha256:957acd39b674e4c49d06b5da17344e195591946b306a49583fa93fb65c7cf307", size = 397339 },
 ]
 
 [[package]]
