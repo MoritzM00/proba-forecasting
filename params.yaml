@@ -30,10 +30,10 @@ data:
 
 train:
   bikes:
-    selected: xgboost
+    selected: benchmark
     cutoff: '2021-11-14' # use only data onwards this date for training the final model
     benchmark:
-      n_weeks: 125
+      n_weeks: 100
     quantreg:
       freq: D
       output_chunk_length: 7
@@ -45,10 +45,10 @@ train:
 
 
   energy:
-    selected: xgboost
+    selected: benchmark
     cutoff: '2021-11-14'
     benchmark:
-      n_weeks: 75
+      n_weeks: 100
     quantreg:
       freq: h
       output_chunk_length: 24

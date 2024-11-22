@@ -98,17 +98,14 @@ class BenchmarkForecaster(BaseForecaster):
         quantile_preds = []
         y_index = self._y.index
 
+        quantile_preds = []
         for time_point in fh.to_absolute(self.cutoff):
             condition = y_index.weekday == time_point.weekday()
             if self.freq == "h":
                 condition &= y_index.hour == time_point.hour
 
             relevant_data = self._y[condition][-self.n_weeks :]
-            if len(relevant_data) >= self.n_weeks:
-                quantiles = np.nanquantile(relevant_data, alpha)
-                quantile_preds.append(quantiles)
-            else:
-                quantile_preds.append([np.nan] * len(alpha))
+            quantile_preds.append(np.nanquantile(relevant_data, alpha))
 
         var_names = self._get_varnames()
         columns = pd.MultiIndex.from_product([var_names, alpha])
