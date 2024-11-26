@@ -97,8 +97,8 @@ stages:
       size: 1327886
     - path: src/probafcst//models/
       hash: md5
-      md5: f963575a67eae0b1a04abeeb8de0aa2b.dir
-      size: 17638
+      md5: a4a32b2515e91f7b60b44ab47539475f.dir
+      size: 19854
       nfiles: 7
     - path: src/probafcst/pipeline/train.py
       hash: md5
@@ -143,8 +143,8 @@ stages:
       size: 63907
     - path: src/probafcst//models/
       hash: md5
-      md5: f963575a67eae0b1a04abeeb8de0aa2b.dir
-      size: 17638
+      md5: a4a32b2515e91f7b60b44ab47539475f.dir
+      size: 19854
       nfiles: 7
     - path: src/probafcst/pipeline/train.py
       hash: md5
