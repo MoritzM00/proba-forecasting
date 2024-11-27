@@ -7,9 +7,25 @@ import pandas as pd
 
 
 def create_seasonal_features(
-    X: pd.DataFrame, freq: Literal["h", "D"] | None = None, cyclical=True
+    X: pd.DataFrame,
+    freq: Literal["h", "D"] | None = None,
+    cyclical=True,
+    is_weekend=True,
 ):
-    """Create seasonal features for daily or hourly data."""
+    """Create seasonal features for daily or hourly data.
+
+    Parameters
+    ----------
+    X : pd.DataFrame
+        Input data with datetime index.
+    freq : Literal["h", "D"], optional
+        Frequency of the data, by default it is inferred from the index.
+    cyclical : bool, optional
+        Whether to create cyclical features for periodic patterns, by default True.
+        Creates sin and cos features for dayofweek, month and hour.
+    is_weekend : bool, optional
+        Whether to create a binary feature for weekend, by default True.
+    """
     if freq is None:
         freq = pd.infer_freq(X.index)
     assert freq in ["h", "D"], "Only daily and hourly data supported"
@@ -37,6 +53,10 @@ def create_seasonal_features(
             )
     else:
         seasonal_features = datetime_features
+
+    if is_weekend:
+        seasonal_features["is_weekend"] = X.index.dayofweek > 4
+
     return seasonal_features
 
 
@@ -48,7 +68,24 @@ def create_lagged_features(
     cyclical_encodings=True,
     is_training=True,
 ):
-    """Create lagged features X, y for time series forecasting."""
+    """Create lagged features X, y for time series forecasting.
+
+    Parameters
+    ----------
+    X : pd.DataFrame
+        Exogeneous features (like rain) with datetime index.
+    y : pd.Series
+        Target variable with datetime index. Must have a name, otherwise
+        the lagged column names make no sense.
+    lags : list[int]
+        List of lags to create features for.
+    include_seasonal_dummies : bool, default=True
+        Whether to include seasonal features, by default True.
+    cyclical_encodings : bool, default=True
+        Whether to create cyclical features for periodic patterns.
+    is_training : bool, default=True
+        Whether to return y in the output, by default True.
+    """
     if np.max(lags) > len(y):
         raise ValueError(
             "Max Lag cannot be greater than the length of the time series."
