@@ -30,6 +30,7 @@ dependencies = [
     "tqdm>=4.66.5",
     "u8darts>=0.31.0",
     "xgboost>=2.1.2",
+    "shap>=0.46.0",
 ]
 
 
@@ -79,3 +80,4 @@ convention = "numpy"
 [tool.pytest.ini_options]
 addopts = "-ra"
 testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
