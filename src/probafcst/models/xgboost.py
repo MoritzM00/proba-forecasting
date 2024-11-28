@@ -20,7 +20,7 @@ class XGBQuantileForecaster(BaseForecaster):
         "enforce_index_type": pd.DatetimeIndex,
         "X-y-must-have-same-index": True,
         "handles-missing-data": False,
-        "capability:insample": True,
+        "capability:insample": False,
         "capability:pred_int": True,
     }
 

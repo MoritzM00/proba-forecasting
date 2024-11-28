@@ -64,6 +64,7 @@ def create_lagged_features(
     X: pd.DataFrame,
     y: pd.Series,
     lags: list[int],
+    X_lag_cols: list[str] | None = None,
     include_seasonal_dummies=True,
     cyclical_encodings=True,
     is_training=True,
@@ -79,12 +80,29 @@ def create_lagged_features(
         the lagged column names make no sense.
     lags : list[int]
         List of lags to create features for.
+    X_lag_cols : list[str], optional
+        List of columns to create lags for, by default uses all columns in X for lags,
+        including seasonal dummies.
+        Explicitly specify columns to avoid creating lags for all columns or pass
+        an empty list to only lag the target values.
     include_seasonal_dummies : bool, default=True
         Whether to include seasonal features, by default True.
     cyclical_encodings : bool, default=True
         Whether to create cyclical features for periodic patterns.
     is_training : bool, default=True
         Whether to return y in the output, by default True.
+
+    Returns
+    -------
+    features : pd.DataFrame
+        Lagged features for training or prediction.
+    labels : pd.Series or None
+        Labels for training, None if is_training=False.
+
+    Raises
+    ------
+    ValueError
+        If max lag is greater than the length of the time series.
     """
     if np.max(lags) > len(y):
         raise ValueError(
@@ -99,7 +117,10 @@ def create_lagged_features(
         seasonal_features = create_seasonal_features(X, cyclical=cyclical_encodings)
         X = pd.concat([X, seasonal_features], axis=1)
 
-    X_lags = X.shift(lags, suffix="_lag")
+    if X_lag_cols is None:
+        X_lag_cols = X.columns
+
+    X_lags = X[X_lag_cols].shift(lags, suffix="_lag")
 
     for lag in lags:
         X_lags[f"{varname}_lag_{lag}"] = y.shift(lag)
