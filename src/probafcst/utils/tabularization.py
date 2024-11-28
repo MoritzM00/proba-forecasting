@@ -55,7 +55,7 @@ def create_seasonal_features(
         seasonal_features = datetime_features
 
     if is_weekend:
-        seasonal_features["is_weekend"] = X.index.dayofweek > 4
+        seasonal_features["is_weekend"] = (X.index.dayofweek > 4).astype(int)
 
     return seasonal_features
 
