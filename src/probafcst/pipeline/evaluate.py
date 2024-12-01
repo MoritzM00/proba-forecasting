@@ -70,14 +70,14 @@ def evaluate_forecaster(target: str):
     idx = [0, len(results) // 2, -1]
     for i, (_, row) in enumerate(predictions.iloc[idx].iterrows()):
         fig, _ = plot_quantiles(row.y_test, row.y_pred_quantiles)
-        fig.savefig(plots_dir / f"forecast_{i + 1}.png", bbox_inches="tight")
+        fig.savefig(plots_dir / f"forecast_{i + 1}.svg", bbox_inches="tight")
 
     # create box plots for each quantile loss using results frame
     melted = results[params.quantiles].melt(var_name="quantile", value_name="loss")
     melted["quantile"] = melted["quantile"].apply(lambda x: f"q{x}")
     fig, ax = plt.subplots()
     sns.boxplot(data=melted, x="quantile", y="loss", hue="quantile", ax=ax)
-    fig.savefig(output_dir / f"{target}_pinball_losses.png", bbox_inches="tight")
+    fig.savefig(output_dir / f"{target}_pinball_losses.svg", bbox_inches="tight")
 
 
 if __name__ == "__main__":
