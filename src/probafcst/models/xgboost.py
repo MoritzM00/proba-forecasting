@@ -30,16 +30,20 @@ class XGBQuantileForecaster(BaseForecaster):
         quantiles: list[int],
         include_seasonal_dummies=True,
         cyclical_encodings=True,
+        X_lag_cols=None,
+        xgb_kwargs=None,
     ):
         self.lags = lags
         self.quantiles = quantiles
         self.include_seasonal_dummies = include_seasonal_dummies
         self.cyclical_encodings = cyclical_encodings
+        self.xgb_kwargs = xgb_kwargs or {}
+        self.X_lag_cols = X_lag_cols
+
         self.model = XGBRegressor(
             objective="reg:quantileerror",
             quantile_alpha=quantiles,
-            n_estimators=100,
-            learning_rate=0.1,
+            **self.xgb_kwargs,
         )
         super().__init__()
 
@@ -57,7 +61,9 @@ class XGBQuantileForecaster(BaseForecaster):
             lags=self.lags,
             include_seasonal_dummies=self.include_seasonal_dummies,
             cyclical_encodings=self.cyclical_encodings,
+            X_lag_cols=self.X_lag_cols,
             is_training=True,
+            freq=self.freq_,
         )
         self.model.fit(X_lagged, y_lagged)
         self.feature_names_in_ = X_lagged.columns
@@ -69,6 +75,12 @@ class XGBQuantileForecaster(BaseForecaster):
         return quantile_predictions[(self._target_name, 0.5)]
 
     def _predict_quantiles(self, fh, X, alpha):
+        if X is None:
+            X = pd.DataFrame(index=fh.to_absolute_index(self.cutoff))
+            X_train = pd.DataFrame(index=self._y.index)
+        else:
+            X_train = self._X.copy()
+
         if X.shape[0] < len(fh):
             raise ValueError(f"X must contain at least {self.max_lag_} rows")
         elif X.shape[0] > len(fh):
@@ -77,7 +89,6 @@ class XGBQuantileForecaster(BaseForecaster):
 
         assert alpha == self.quantiles, "alpha must be equal to quantiles used in fit"
 
-        X_train = self._X.copy()
         y_train = self._y.copy()
 
         X_test = X.copy()
@@ -99,7 +110,9 @@ class XGBQuantileForecaster(BaseForecaster):
                 lags=self.lags,
                 include_seasonal_dummies=self.include_seasonal_dummies,
                 cyclical_encodings=self.cyclical_encodings,
+                X_lag_cols=self.X_lag_cols,
                 is_training=False,
+                freq=self.freq_,
             )
 
             X_step = X_lagged.loc[[timestamp]]
@@ -110,6 +123,14 @@ class XGBQuantileForecaster(BaseForecaster):
             median_pred = results.loc[timestamp, 0.5]
             y_full.loc[timestamp] = median_pred
 
-        columns = pd.MultiIndex.from_product([[self._target_name], alpha])
+        columns = pd.MultiIndex.from_product(
+            [[self._target_name], alpha], names=["variable", "quantiles"]
+        )
         results.columns = columns
+        results = results.astype(float)
+
+        # sort each row in dataframe y_pred ascending over the columns
+        predictions = results.to_numpy()
+        predictions.sort(axis=1)
+        results.iloc[:, :] = predictions
         return results

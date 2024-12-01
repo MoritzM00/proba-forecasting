@@ -28,7 +28,8 @@ def create_seasonal_features(
     """
     if freq is None:
         freq = pd.infer_freq(X.index)
-    assert freq in ["h", "D"], "Only daily and hourly data supported"
+    assert freq is not None, "Could not infer frequency from the index."
+    assert freq in ["h", "D"], f"Only daily and hourly data supported, but got {freq}"
 
     encodings = [("dayofweek", 7), ("month", 12)]
     datetime_features = pd.DataFrame(index=X.index)
@@ -61,13 +62,14 @@ def create_seasonal_features(
 
 
 def create_lagged_features(
-    X: pd.DataFrame,
+    X: pd.DataFrame | None,
     y: pd.Series,
     lags: list[int],
     X_lag_cols: list[str] | None = None,
     include_seasonal_dummies=True,
     cyclical_encodings=True,
     is_training=True,
+    freq: Literal["h", "D"] | None = None,
 ):
     """Create lagged features X, y for time series forecasting.
 
@@ -114,7 +116,9 @@ def create_lagged_features(
     X = pd.DataFrame(index=y.index) if X is None else X.copy()
 
     if include_seasonal_dummies:
-        seasonal_features = create_seasonal_features(X, cyclical=cyclical_encodings)
+        seasonal_features = create_seasonal_features(
+            X, cyclical=cyclical_encodings, freq=freq
+        )
         X = pd.concat([X, seasonal_features], axis=1)
 
     if X_lag_cols is None:

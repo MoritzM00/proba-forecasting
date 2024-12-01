@@ -30,7 +30,7 @@ data:
 
 train:
   bikes:
-    selected: xgboost
+    selected: xgb-custom
     cutoff: '2021-11-14' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 100
@@ -42,10 +42,24 @@ train:
       output_chunk_length: 7
       xgb_kwargs:
         n_jobs: -1
+    xgb-custom:
+      lags:
+        - 1
+        - 2
+        - 3
+        - 7
+        - 14
+        - 21
+        - 28
+      include_seasonal_dummies: true
+      cyclical_encodings: true
+      X_lag_cols: null
+      xgb_kwargs:
+        n_jobs: -1
 
 
   energy:
-    selected: xgboost
+    selected: xgb-custom
     cutoff: '2021-11-14'
     benchmark:
       n_weeks: 100
@@ -55,6 +69,20 @@ train:
     xgboost:
       freq: h
       output_chunk_length: 24
+      xgb_kwargs:
+        n_jobs: -1
+    xgb-custom:
+      lags:
+        - 24
+        - 48
+        - 72
+        - 96
+        - 120
+        - 144
+        - 168
+      include_seasonal_dummies: true
+      cyclical_encodings: true
+      X_lag_cols: null
       xgb_kwargs:
         n_jobs: -1
 

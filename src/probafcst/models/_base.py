@@ -8,6 +8,14 @@ from omegaconf import DictConfig
 from sktime.forecasting.base import BaseForecaster
 
 from probafcst.models.darts import get_quantile_regressor, get_xgboost_model
+from probafcst.models.xgboost import XGBQuantileForecaster
+
+
+def override_n_jobs(model, n_jobs):
+    """Override the number of jobs in the model."""
+    kwargs = model.get_params().get("kwargs", {})
+    kwargs["n_jobs"] = n_jobs
+    model.set_params(kwargs=kwargs)
 
 
 def get_model(
@@ -30,6 +38,10 @@ def get_model(
                 kwargs = model.get_params().get("kwargs", {})
                 kwargs["n_jobs"] = n_jobs
                 model.set_params(kwargs=kwargs)
+        case "xgb-custom":
+            if n_jobs is not None:
+                model_params["xgb_kwargs"]["n_jobs"] = n_jobs
+            model = XGBQuantileForecaster(**model_params, quantiles=quantiles)
 
     return model
 
