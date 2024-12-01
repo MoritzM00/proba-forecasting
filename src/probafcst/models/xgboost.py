@@ -30,8 +30,8 @@ class XGBQuantileForecaster(BaseForecaster):
         quantiles: list[int],
         include_seasonal_dummies=True,
         cyclical_encodings=True,
-        X_lag_cols=None,
-        xgb_kwargs=None,
+        X_lag_cols: list[str] | None = None,
+        xgb_kwargs: dict | None = None,
     ):
         self.lags = lags
         self.quantiles = quantiles
