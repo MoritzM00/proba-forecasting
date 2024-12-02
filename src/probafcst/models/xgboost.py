@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from loguru import logger
 from sktime.forecasting.base import BaseForecaster
 from xgboost import XGBRegressor
 
@@ -86,6 +87,10 @@ class XGBQuantileForecaster(BaseForecaster):
         elif X.shape[0] > len(fh):
             max_needed_timestamp = fh.to_absolute_index(self.cutoff).max()
             X = X.loc[:max_needed_timestamp]
+            logger.debug(f"X truncated to {X.index[0]} - {X.index[-1]}")
+
+        logger.debug(f"Predicting {len(fh)} steps ahead.")
+        logger.debug(f"Future X shape: {X.shape}")
 
         assert alpha == self.quantiles, "alpha must be equal to quantiles used in fit"
 
@@ -93,12 +98,14 @@ class XGBQuantileForecaster(BaseForecaster):
 
         X_test = X.copy()
         X_full = pd.concat([X_train, X_test])
+        logger.debug(f"X values available from {X_full.index[0]} to {X_full.index[-1]}")
 
         y_pred = pd.Series(np.nan, index=X_test.index)
         y_full = pd.concat([y_train, y_pred])
         y_full.name = self._target_name
 
         forecast_index = fh.to_absolute_index(self.cutoff)
+        logger.debug(f"Forecast index: {forecast_index[0]} - {forecast_index[-1]}")
 
         # Initialize results DataFrame
         results = pd.DataFrame(index=forecast_index, columns=[q for q in alpha])
