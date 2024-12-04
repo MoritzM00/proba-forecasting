@@ -3,10 +3,80 @@
 import openmeteo_requests
 import pandas as pd
 import requests_cache
+from loguru import logger
 from retry_requests import retry
 
 KARLSRUHE_LONGITUDE = 8.4044
 KARLSRUHE_LATITUDE = 49.0094
+
+
+def generate_weather_features(
+    y: pd.Series, openmeteo_client=None, forecast_days: int = 7, past_days: int = 60
+):
+    """Generate weather futures for timeseries y.
+
+    If y contains hourly data, the function will return hourly weather features.
+    If y contains daily data, the function will return daily weather features.
+    Other frequencies are not supported.
+
+    It will use both historical and forecast weather data to generate the features.
+    Historical data is used for data that is older than 60 days of the current date.
+    Forecast data is used otherwise and is limited to 16 days in the future. By Default,
+    7-day forecasts are included.
+
+    Parameters
+    ----------
+    y : pd.Series
+        The target timeseries.
+    openmeteo_client : OpenMeteoClient
+        An instance of OpenMeteoClient. If None, a new instance will be created.
+    forecast_days : int
+        The number of days to forecast. Default is 7.
+    """
+    if openmeteo_client is None:
+        openmeteo_client = get_openmeteo_client(expire_after=-1)
+
+    freq = pd.infer_freq(y.index)
+    if freq is None:
+        raise ValueError("Could not infer frequency of the timeseries.")
+    elif freq == "h":
+        historical_weather_func = get_hourly_historical_weather
+        forecast_weather_func = get_hourly_forecast_weather
+    elif freq == "D":
+        raise NotImplementedError("Daily frequency is not supported yet.")
+    else:
+        raise ValueError(f"Frequency must be in [h, D], but got {freq}.")
+
+    start_date = y.index[0]
+    end_date = y.index[-1] - pd.Timedelta(days=past_days)
+    assert (
+        start_date < end_date
+    ), "The timeseries is too short to generate weather features."
+
+    start_date = start_date.strftime("%Y-%m-%d")
+    end_date = end_date.strftime("%Y-%m-%d")
+
+    logger.debug(f"Requesting historical weather data from {start_date} to {end_date}.")
+    historical_weather = historical_weather_func(
+        start_date, end_date, client=openmeteo_client
+    )
+    forecast_weather = forecast_weather_func(
+        forecast_days=forecast_days, past_days=past_days + 1, client=openmeteo_client
+    )
+
+    historical_weather = historical_weather.loc[
+        : forecast_weather.index[0] - pd.Timedelta(hours=1)
+    ]
+    logger.debug(
+        f"Using historical weather data from {historical_weather.index[0]} to {historical_weather.index[-1]}."
+    )
+    logger.debug(
+        f"Using forecast weather data from {forecast_weather.index[0]} to {forecast_weather.index[-1]}."
+    )
+
+    weather_features = pd.concat([historical_weather, forecast_weather], axis=0)
+    weather_features.index = weather_features.index.tz_convert("Europe/Berlin")
+    return weather_features
 
 
 def get_openmeteo_client(expire_after=-1):
