@@ -10,6 +10,7 @@ from omegaconf import OmegaConf
 
 def pipeline_setup(log_level: str = "INFO") -> None:
     """Run setup for the pipeline."""
+    logger.enable("probafcst")
     logger.configure(
         handlers=[
             {
