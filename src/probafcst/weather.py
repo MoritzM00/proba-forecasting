@@ -42,8 +42,12 @@ def generate_weather_features(
     elif freq == "h":
         historical_weather_func = get_hourly_historical_weather
         forecast_weather_func = get_hourly_forecast_weather
+        offset = pd.Timedelta(hours=1)
     elif freq == "D":
-        raise NotImplementedError("Daily frequency is not supported yet.")
+        historical_weather_func = get_daily_historical_weather
+        forecast_weather_func = get_daily_forecast_weather
+        offset = pd.Timedelta(days=1)
+
     else:
         raise ValueError(f"Frequency must be in [h, D], but got {freq}.")
 
@@ -64,9 +68,7 @@ def generate_weather_features(
         forecast_days=forecast_days, past_days=past_days + 1, client=openmeteo_client
     )
 
-    historical_weather = historical_weather.loc[
-        : forecast_weather.index[0] - pd.Timedelta(hours=1)
-    ]
+    historical_weather = historical_weather.loc[: forecast_weather.index[0] - offset]
     logger.debug(
         f"Using historical weather data from {historical_weather.index[0]} to {historical_weather.index[-1]}."
     )
@@ -76,6 +78,14 @@ def generate_weather_features(
 
     weather_features = pd.concat([historical_weather, forecast_weather], axis=0)
     weather_features.index = weather_features.index.tz_convert("Europe/Berlin")
+
+    if freq == "D":
+        # adjust the index to match the target timeseries
+        periods = len(y) + forecast_days + 1
+        weather_features.index = pd.date_range(
+            start=y.index[0], periods=periods, freq=freq
+        )
+
     return weather_features
 
 
@@ -95,73 +105,6 @@ def get_openmeteo_client(expire_after=-1):
     cache_session = requests_cache.CachedSession(".cache", expire_after=expire_after)
     retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
     return openmeteo_requests.Client(session=retry_session)
-
-
-def get_hourly_weather_features(
-    start_date: str = "2015-01-01",
-    end_date: str = "2024-10-31",
-    forecast_days=7,
-    past_days=61,
-    expire_after=-1,
-    localize=True,
-):
-    """Get weather features for the training and forecast horizon.
-
-    Parameters
-    ----------
-    start_date : str, optional
-        Start date for historical weather data, by default "2015-01-01".
-    end_date : str, optional
-        End date for historical weather data, by default "2024-10-31".
-    forecast_days : int, optional
-        Number of days to forecast from today, by default 7.
-    past_days : int, optional
-        Number of days of past forecasts to use (instead of historical data).
-    expire_after : int, optional
-        Cache expiration time in seconds, by default indefinitely.
-    localize : bool, optional
-        Localize the weather data to Europe/Berlin timezone, by default True.
-
-    Returns
-    -------
-    pd.DataFrame
-        Hourly weather features.
-    """
-    # Setup the Open-Meteo API client with cache and retry on error
-    client = get_openmeteo_client(expire_after=expire_after)
-
-    # end_date must be within past_days from today
-    end_date = pd.Timestamp(end_date)
-    start_date = pd.Timestamp(start_date)
-    if end_date < pd.Timestamp("today") - pd.Timedelta(days=past_days):
-        raise ValueError(f"{end_date=} must be within {past_days=} from today.")
-
-    hourly_historical_weather = get_hourly_historical_weather(
-        start_date=start_date,
-        end_date=end_date,
-        expire_after=expire_after,
-        client=client,
-    )
-    hourly_forecast_weather = get_hourly_forecast_weather(
-        forecast_days=forecast_days,
-        past_days=past_days,
-        expire_after=expire_after,
-        client=client,
-    )
-
-    first_forecast_date = hourly_forecast_weather.index[0]
-    hourly_historical_weather = hourly_historical_weather.loc[
-        : first_forecast_date - pd.Timedelta(hours=1)
-    ]
-
-    weather_features = pd.concat(
-        [hourly_historical_weather, hourly_forecast_weather], axis=0
-    )
-
-    if localize:
-        # localize to Europe/Berlin timezone
-        weather_features.index = weather_features.index.tz_convert("Europe/Berlin")
-    return weather_features
 
 
 def get_hourly_historical_weather(
@@ -285,3 +228,121 @@ def get_hourly_forecast_weather(
 
     hourly_dataframe = pd.DataFrame(data=hourly_data)
     return hourly_dataframe.set_index("date")
+
+
+def get_daily_forecast_weather(
+    forecast_days: 7, past_days: 31, expire_after=3600, client=None
+):
+    """Get daily forecast weather data from the Open-Meteo API."""
+    if client is None:
+        # Setup the Open-Meteo API client with cache and retry on error
+        client = get_openmeteo_client(expire_after=expire_after)
+
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": KARLSRUHE_LATITUDE,
+        "longitude": KARLSRUHE_LONGITUDE,
+        "daily": [
+            "temperature_2m_max",
+            "temperature_2m_min",
+            "daylight_duration",
+            "sunshine_duration",
+            "uv_index_max",
+            "precipitation_sum",
+            "precipitation_hours",
+            "wind_speed_10m_max",
+        ],
+        "timezone": "Europe/Berlin",
+        "past_days": past_days,
+        "forecast_days": forecast_days,
+    }
+    responses = client.weather_api(url, params=params)
+
+    # Process first location. Add a for-loop for multiple locations or weather models
+    response = responses[0]
+
+    # Process daily data. The order of variables needs to be the same as requested.
+    daily = response.Daily()
+    daily_temperature_2m_max = daily.Variables(0).ValuesAsNumpy()
+    daily_temperature_2m_min = daily.Variables(1).ValuesAsNumpy()
+    daily_daylight_duration = daily.Variables(2).ValuesAsNumpy()
+    daily_sunshine_duration = daily.Variables(3).ValuesAsNumpy()
+    daily_precipitation_sum = daily.Variables(4).ValuesAsNumpy()
+    daily_wind_speed_10m_max = daily.Variables(5).ValuesAsNumpy()
+
+    daily_data = {
+        "date": pd.date_range(
+            start=pd.to_datetime(daily.Time(), unit="s", utc=True),
+            end=pd.to_datetime(daily.TimeEnd(), unit="s", utc=True),
+            freq=pd.Timedelta(seconds=daily.Interval()),
+            inclusive="left",
+        )
+    }
+    daily_data["temperature_2m_max"] = daily_temperature_2m_max
+    daily_data["temperature_2m_min"] = daily_temperature_2m_min
+    daily_data["daylight_duration"] = daily_daylight_duration
+    daily_data["sunshine_duration"] = daily_sunshine_duration
+    daily_data["precipitation_sum"] = daily_precipitation_sum
+    daily_data["wind_speed_10m_max"] = daily_wind_speed_10m_max
+
+    daily_dataframe = pd.DataFrame(data=daily_data)
+    return daily_dataframe.set_index("date")
+
+
+def get_daily_historical_weather(
+    start_date: str = "2015-01-01",
+    end_date: str = "2024-10-31",
+    expire_after=-1,
+    client=None,
+):
+    """Get daily forecast weather data from the Open-Meteo API."""
+    if client is None:
+        # Setup the Open-Meteo API client with cache and retry on error
+        client = get_openmeteo_client(expire_after=expire_after)
+    url = "https://archive-api.open-meteo.com/v1/archive"
+    params = {
+        "latitude": KARLSRUHE_LATITUDE,
+        "longitude": KARLSRUHE_LONGITUDE,
+        "start_date": start_date,
+        "end_date": end_date,
+        "daily": [
+            "temperature_2m_max",
+            "temperature_2m_min",
+            "daylight_duration",
+            "sunshine_duration",
+            "precipitation_sum",
+            "wind_speed_10m_max",
+        ],
+        "timezone": "Europe/Berlin",
+    }
+    responses = client.weather_api(url, params=params)
+
+    # Process first location. Add a for-loop for multiple locations or weather models
+    response = responses[0]
+
+    # Process daily data. The order of variables needs to be the same as requested.
+    daily = response.Daily()
+    daily_temperature_2m_max = daily.Variables(0).ValuesAsNumpy()
+    daily_temperature_2m_min = daily.Variables(1).ValuesAsNumpy()
+    daily_daylight_duration = daily.Variables(2).ValuesAsNumpy()
+    daily_sunshine_duration = daily.Variables(3).ValuesAsNumpy()
+    daily_precipitation_sum = daily.Variables(4).ValuesAsNumpy()
+    daily_wind_speed_10m_max = daily.Variables(5).ValuesAsNumpy()
+
+    daily_data = {
+        "date": pd.date_range(
+            start=pd.to_datetime(daily.Time(), unit="s", utc=True),
+            end=pd.to_datetime(daily.TimeEnd(), unit="s", utc=True),
+            freq=pd.Timedelta(seconds=daily.Interval()),
+            inclusive="left",
+        )
+    }
+    daily_data["temperature_2m_max"] = daily_temperature_2m_max
+    daily_data["temperature_2m_min"] = daily_temperature_2m_min
+    daily_data["daylight_duration"] = daily_daylight_duration
+    daily_data["sunshine_duration"] = daily_sunshine_duration
+    daily_data["precipitation_sum"] = daily_precipitation_sum
+    daily_data["wind_speed_10m_max"] = daily_wind_speed_10m_max
+
+    daily_dataframe = pd.DataFrame(data=daily_data)
+    return daily_dataframe.set_index("date")
