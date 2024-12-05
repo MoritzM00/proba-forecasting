@@ -63,12 +63,15 @@ def get_bikes_data(start_date: str = "01/01/2019") -> pd.DataFrame:
     rawdata = response.json()
 
     bikes_df = pd.DataFrame(rawdata, columns=["date", "bike_count"])
-    bikes_df["date"] = pd.to_datetime(bikes_df["date"]).dt.tz_localize("Europe/Berlin")
-    bikes_df = bikes_df.set_index("date").astype({"bike_count": float}).asfreq("D")
+    bikes_df["date"] = pd.to_datetime(bikes_df["date"]).dt.tz_localize(
+        "Europe/Berlin", ambiguous="infer", nonexistent="shift_backward"
+    )
+    bikes_df = bikes_df.set_index("date").astype({"bike_count": float})
 
     # cutoff outliers at over 10 000 bikes a day
     bikes_df = bikes_df[bikes_df["bike_count"] <= 10000]
 
+    bikes_df = bikes_df.asfreq("D").interpolate()
     return bikes_df
 
 
@@ -120,7 +123,9 @@ def get_energy_data(ignore_years: int = 6) -> pd.DataFrame:
     date_local = date.dt.tz_localize(
         "Europe/Berlin", ambiguous="infer", nonexistent="shift_backward"
     )
-    energy_data = energy_data.set_index(date_local).drop(columns="date").asfreq("h")
+    energy_data = (
+        energy_data.set_index(date_local).drop(columns="date").asfreq("h").interpolate()
+    )
 
     # convert to GWh
     energy_data["load"] /= 1000

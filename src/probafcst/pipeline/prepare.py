@@ -66,10 +66,16 @@ def prepare(target: str) -> None:
         case _:
             raise ValueError("Invalid target.")
 
+    # remove timezone information and interpolate missing dates
+    date_col = data.index.name
+    y = data.reset_index()
+    y[date_col] = y[date_col].dt.tz_localize(None)
+    y = y.drop_duplicates(subset=[date_col])
+    y = y.set_index(date_col)
+    data = y.asfreq(params.data[target].freq).interpolate()
+
     filepath = data_dir / f"{target}.parquet"
     data.to_parquet(filepath)
-
-    # TODO: prepare holiday data
 
 
 if __name__ == "__main__":
