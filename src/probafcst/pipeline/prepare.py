@@ -16,6 +16,7 @@ import requests_cache
 
 from probafcst.data import get_bikes_data, get_energy_data, get_no2_data
 from probafcst.pipeline._base import pipeline_setup
+from probafcst.utils.sktime import get_holiday_features
 from probafcst.weather import generate_weather_features
 
 simplefilter("ignore", category=FutureWarning)
@@ -89,6 +90,10 @@ def prepare(target: str) -> None:
     y = y.set_index(date_col)
     data = y.asfreq(params.data[target].freq)
     data.loc[:last_idx_data] = data.loc[:last_idx_data].interpolate()
+
+    # add holidays
+    holidays = get_holiday_features(data)
+    data = data.join(holidays)
 
     filepath = data_dir / f"{target}.parquet"
     data.to_parquet(filepath)
