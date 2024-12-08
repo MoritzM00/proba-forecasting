@@ -40,7 +40,7 @@ def quantiles_to_interval_df(
     return y_pred_interval, pred_quantiles[(name, 0.5)]
 
 
-def get_holiday_features(data: pd.DataFrame):
+def get_holiday_indicator(data: pd.DataFrame) -> pd.Series:
     """Get holiday features from a DataFrame with a datetime index.
 
     Parameters
@@ -50,12 +50,12 @@ def get_holiday_features(data: pd.DataFrame):
 
     Returns
     -------
-    pd.DataFrame
-        DataFrame with holiday features.
+    is_holiday : pd.Series
+        A boolean series indicating whether each date is a holiday.
     """
     calender = holidays.country_holidays("DE", subdiv="BW")
     holiday_features = HolidayFeatures(
         calender, return_indicator=True, return_dummies=False
     )
-    is_holiday = holiday_features.fit_transform(data)
-    return is_holiday
+    is_holiday_df = holiday_features.fit_transform(data)
+    return is_holiday_df["is_holiday"]
