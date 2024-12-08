@@ -11,7 +11,10 @@ KARLSRUHE_LATITUDE = 49.0094
 
 
 def generate_weather_features(
-    y: pd.Series, openmeteo_client=None, forecast_days: int = 7, past_days: int = 60
+    y_index: pd.DatetimeIndex,
+    openmeteo_client=None,
+    forecast_days: int = 7,
+    past_days: int = 60,
 ):
     """Generate weather futures for timeseries y.
 
@@ -26,8 +29,8 @@ def generate_weather_features(
 
     Parameters
     ----------
-    y : pd.Series
-        The target timeseries.
+    y : pd.DateTimeIndex
+        The date time index of the timeseries.
     openmeteo_client : OpenMeteoClient
         An instance of OpenMeteoClient. If None, a new instance will be created.
     forecast_days : int
@@ -36,7 +39,7 @@ def generate_weather_features(
     if openmeteo_client is None:
         openmeteo_client = get_openmeteo_client(expire_after=-1)
 
-    freq = pd.infer_freq(y.index)
+    freq = pd.infer_freq(y_index)
     if freq is None:
         raise ValueError("Could not infer frequency of the timeseries.")
     elif freq == "h":
@@ -51,8 +54,8 @@ def generate_weather_features(
     else:
         raise ValueError(f"Frequency must be in [h, D], but got {freq}.")
 
-    start_date = y.index[0]
-    end_date = y.index[-1] - pd.Timedelta(days=past_days)
+    start_date = y_index[0]
+    end_date = y_index[-1] - pd.Timedelta(days=past_days)
     assert (
         start_date < end_date
     ), "The timeseries is too short to generate weather features."
@@ -81,9 +84,9 @@ def generate_weather_features(
 
     if freq == "D":
         # adjust the index to match the target timeseries
-        periods = len(y) + forecast_days + 1
+        periods = len(y_index) + forecast_days + 1
         weather_features.index = pd.date_range(
-            start=y.index[0], periods=periods, freq=freq
+            start=y_index[0], periods=periods, freq=freq, name=y_index.name
         )
 
     return weather_features

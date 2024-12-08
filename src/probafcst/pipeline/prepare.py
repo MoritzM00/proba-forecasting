@@ -16,6 +16,7 @@ import requests_cache
 
 from probafcst.data import get_bikes_data, get_energy_data, get_no2_data
 from probafcst.pipeline._base import pipeline_setup
+from probafcst.weather import generate_weather_features
 
 simplefilter("ignore", category=FutureWarning)
 
@@ -66,13 +67,28 @@ def prepare(target: str) -> None:
         case _:
             raise ValueError("Invalid target.")
 
+    data = data.astype("float32")
+
+    # generate whether features
+    weather_features = generate_weather_features(
+        data.index, forecast_days=7, past_days=60
+    )
+
+    # weather features are generated for the next 7 days,
+    # but interpolate will fill the missing values after timezone conversion
+    # therefore we save the last date of the data
+    last_idx_data = data.index[-1].tz_localize(None)
+
+    data = data.join(weather_features, how="right", validate="1:1")
+
     # remove timezone information and interpolate missing dates
     date_col = data.index.name
     y = data.reset_index()
     y[date_col] = y[date_col].dt.tz_localize(None)
     y = y.drop_duplicates(subset=[date_col])
     y = y.set_index(date_col)
-    data = y.asfreq(params.data[target].freq).interpolate()
+    data = y.asfreq(params.data[target].freq)
+    data.loc[:last_idx_data] = data.loc[:last_idx_data].interpolate()
 
     filepath = data_dir / f"{target}.parquet"
     data.to_parquet(filepath)
