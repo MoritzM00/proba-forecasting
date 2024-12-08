@@ -18,6 +18,7 @@ data:
     filename: bikes.parquet
     start_date: '2012-04-25'
     freq: D
+    target_col: bike_count
   no2:
     filename: no2.parquet
     start_date: '2016-01-01'
@@ -27,6 +28,7 @@ data:
     filename: energy.parquet
     ignore_years: 0
     freq: h
+    target_col: load
 
 train:
   bikes:

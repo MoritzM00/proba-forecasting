@@ -12,7 +12,7 @@ from sktime.forecasting.base import ForecastingHorizon
 from probafcst.pipeline._base import pipeline_setup
 from probafcst.plotting import plot_quantiles
 from probafcst.utils import check_submission, create_submission
-from probafcst.utils.paths import get_model_path
+from probafcst.utils.paths import get_data_path, get_model_path
 from probafcst.utils.time import get_forecast_dates
 
 
@@ -23,6 +23,9 @@ def submit():
     pred_quantiles = {}
     for target in ["energy", "bikes"]:
         model_path = get_model_path(params.model_dir, target=target)
+        data_path = get_data_path(params.data_dir, target=target)
+        target_col = params.data[target].target_col
+        X = pd.read_parquet(data_path).drop(columns=target_col)
 
         with open(model_path, "rb") as f:
             forecaster = pickle.load(f)
@@ -34,7 +37,7 @@ def submit():
             _, forecast_hours = get_forecast_dates()
             fh = ForecastingHorizon(forecast_hours, is_relative=True)
 
-        y_pred = forecaster.predict_quantiles(fh, alpha=params.quantiles)
+        y_pred = forecaster.predict_quantiles(fh, X=X, alpha=params.quantiles)
 
         sns.set_theme(style="ticks")
         # plot last 14 days of actual series, and Out-of-Sample forecast

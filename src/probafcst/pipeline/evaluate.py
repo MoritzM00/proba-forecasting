@@ -33,8 +33,12 @@ def evaluate_forecaster(target: str):
     output_dir = Path(params.output_dir)
     data_path = get_data_path(params.data_dir, target=target)
 
-    y = pd.read_parquet(data_path)
-    y = y.asfreq(params.data[target].freq)
+    freq = params.data[target].freq
+    target_col = params.data[target].target_col
+    data = pd.read_parquet(data_path).asfreq(freq).dropna()
+
+    y = data[target_col]
+    X = data.drop(columns=target_col)
 
     forecaster = get_model(
         params=params.train[target], n_jobs=1, quantiles=params.quantiles
@@ -53,6 +57,7 @@ def evaluate_forecaster(target: str):
         forecaster,
         y,
         **window_params,
+        X=X,
         quantiles=params.quantiles,
         backend=params.eval.backend,
         splitter_type=params.eval.splitter_type,

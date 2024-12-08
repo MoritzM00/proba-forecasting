@@ -30,7 +30,12 @@ def train(target):
 
     freq = params.data[target].freq
 
-    y = pd.read_parquet(data_path).asfreq(freq)
+    data = pd.read_parquet(data_path).asfreq(freq).dropna()
+    data_subset = data.loc[params.train[target].cutoff :]
+
+    target_col = params.data[target].target_col
+    y = data_subset[target_col]
+    X = data_subset.drop(columns=target_col)
 
     forecaster = get_model(
         params=params.train[target],
@@ -38,8 +43,7 @@ def train(target):
         freq=freq,
     )
 
-    y_subset = y.loc[params.train[target].cutoff :]
-    forecaster.fit(y_subset)
+    forecaster.fit(y, X=X)
 
     # Save the model
     model_dir = Path(params.model_dir)
