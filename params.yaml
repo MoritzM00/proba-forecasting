@@ -49,12 +49,13 @@ train:
         - 1
         - 2
         - 3
+        - 4
+        - 5
+        - 6
         - 7
         - 14
-        - 21
-        - 28
       include_seasonal_dummies: true
-      cyclical_encodings: true
+      cyclical_encodings: false
       X_lag_cols: null
       xgb_kwargs:
         n_jobs: -1
@@ -82,8 +83,11 @@ train:
         - 120
         - 144
         - 168
+        - 336 # 2 weeks
+        - 504 # 3 weeks
+        - 672
       include_seasonal_dummies: true
-      cyclical_encodings: true
+      cyclical_encodings: false
       X_lag_cols: null
       xgb_kwargs:
         n_jobs: -1
