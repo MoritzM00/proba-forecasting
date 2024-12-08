@@ -1,7 +1,9 @@
 """Utility functions for sktime models."""
 
+import holidays
 import numpy as np
 import pandas as pd
+from sktime.transformations.series.holiday import HolidayFeatures
 
 
 def quantiles_to_interval_df(
@@ -36,3 +38,24 @@ def quantiles_to_interval_df(
         data=data,
     )
     return y_pred_interval, pred_quantiles[(name, 0.5)]
+
+
+def get_holiday_indicator(data: pd.DataFrame) -> pd.Series:
+    """Get holiday features from a DataFrame with a datetime index.
+
+    Parameters
+    ----------
+    data : pd.DataFrame
+        DataFrame with a datetime index.
+
+    Returns
+    -------
+    is_holiday : pd.Series
+        A boolean series indicating whether each date is a holiday.
+    """
+    calender = holidays.country_holidays("DE", subdiv="BW")
+    holiday_features = HolidayFeatures(
+        calender, return_indicator=True, return_dummies=False
+    )
+    is_holiday_df = holiday_features.fit_transform(data)
+    return is_holiday_df["is_holiday"]

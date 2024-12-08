@@ -1,5 +1,6 @@
 """Implement a backtesting strategy for probabilistic forecasts."""
 
+import math
 from typing import Literal, NamedTuple, TypedDict
 
 import numpy as np
@@ -31,7 +32,7 @@ class BacktestResults(NamedTuple):
 
 
 def get_window_params(
-    n_years_initial_window: int,
+    n_years_initial_window: float,
     step_length_days: int,
     forecast_steps_days: int,
     freq: Literal["D", "h"],
@@ -46,7 +47,7 @@ def get_window_params(
             raise ValueError(
                 f"Invalid frequency: {freq}. Only 'D' and 'h' are supported."
             )
-    initial_window = DAY_DURATION * 365 * n_years_initial_window
+    initial_window = math.floor(DAY_DURATION * 365 * n_years_initial_window)
     step_length = DAY_DURATION * step_length_days
     forecast_steps = DAY_DURATION * forecast_steps_days
 

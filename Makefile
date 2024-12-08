@@ -25,4 +25,5 @@ clean:
 
 submit:
 	@rm probafcst_cache.sqlite
+	@rm .cache.sqlite
 	@dvc repro -f
