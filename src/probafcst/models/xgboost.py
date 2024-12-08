@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from loguru import logger
 from sktime.forecasting.base import BaseForecaster
 from xgboost import XGBRegressor
 
@@ -76,29 +77,33 @@ class XGBQuantileForecaster(BaseForecaster):
 
     def _predict_quantiles(self, fh, X, alpha):
         if X is None:
-            X = pd.DataFrame(index=fh.to_absolute_index(self.cutoff))
-            X_train = pd.DataFrame(index=self._y.index)
-        else:
-            X_train = self._X.copy()
+            # index must be the one in _y plus the forecast horizon
+            index = self._y.index.union(fh.to_absolute_index(self.cutoff))
+            X = pd.DataFrame(index=index)
 
         if X.shape[0] < len(fh):
             raise ValueError(f"X must contain at least {self.max_lag_} rows")
         elif X.shape[0] > len(fh):
             max_needed_timestamp = fh.to_absolute_index(self.cutoff).max()
             X = X.loc[:max_needed_timestamp]
+            logger.debug(f"X truncated to {X.index[0]} - {X.index[-1]}")
+
+        logger.debug(f"Predicting {len(fh)} steps ahead.")
+        logger.debug(f"Future X shape: {X.shape}")
 
         assert alpha == self.quantiles, "alpha must be equal to quantiles used in fit"
 
         y_train = self._y.copy()
 
-        X_test = X.copy()
-        X_full = pd.concat([X_train, X_test])
+        X_full = X.copy()
+        logger.debug(f"X values available from {X_full.index[0]} to {X_full.index[-1]}")
 
-        y_pred = pd.Series(np.nan, index=X_test.index)
+        forecast_index = fh.to_absolute_index(self.cutoff)
+        y_pred = pd.Series(np.nan, index=forecast_index)
         y_full = pd.concat([y_train, y_pred])
         y_full.name = self._target_name
 
-        forecast_index = fh.to_absolute_index(self.cutoff)
+        logger.debug(f"Forecast index: {forecast_index[0]} - {forecast_index[-1]}")
 
         # Initialize results DataFrame
         results = pd.DataFrame(index=forecast_index, columns=[q for q in alpha])

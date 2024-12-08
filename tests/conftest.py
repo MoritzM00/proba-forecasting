@@ -1,8 +1,12 @@
 """Configuration and fixtures for testing."""
 
+from pathlib import Path
+
 import pandas as pd
 import pytest
 from sklearn.model_selection import train_test_split
+
+DATA_PATH = Path(__file__).parent / "data"
 
 
 @pytest.fixture()
@@ -31,3 +35,10 @@ def test_data():
         X, y, test_size=3, shuffle=False
     )
     return X_train, X_test, y_train, y_test
+
+
+@pytest.fixture()
+def energy_sample():
+    """Return energy sample data."""
+    y = pd.read_parquet(DATA_PATH / "energy_2023.parquet")
+    return y

@@ -63,12 +63,14 @@ def get_bikes_data(start_date: str = "01/01/2019") -> pd.DataFrame:
     rawdata = response.json()
 
     bikes_df = pd.DataFrame(rawdata, columns=["date", "bike_count"])
-    bikes_df["date"] = pd.to_datetime(bikes_df["date"])
-    bikes_df = bikes_df.set_index("date")
-    bikes_df = bikes_df.astype({"bike_count": float})
+    bikes_df["date"] = pd.to_datetime(bikes_df["date"]).dt.tz_localize(
+        "Europe/Berlin", ambiguous="infer", nonexistent="shift_backward"
+    )
+    bikes_df = bikes_df.set_index("date").astype({"bike_count": float})
 
     # cutoff outliers at over 10 000 bikes a day
     bikes_df = bikes_df[bikes_df["bike_count"] <= 10000]
+
     bikes_df = bikes_df.asfreq("D").interpolate()
     return bikes_df
 
@@ -93,7 +95,7 @@ def get_energy_data(ignore_years: int = 6) -> pd.DataFrame:
     # ignore first x years
     timestamps = list(response.json()["timestamps"])[ignore_years * 52 :]
 
-    col_names = ["date_time", "load"]
+    col_names = ["date", "load"]
     energy_data = pd.DataFrame(columns=col_names)
 
     # loop over all available timestamps
@@ -116,17 +118,16 @@ def get_energy_data(ignore_years: int = 6) -> pd.DataFrame:
 
     energy_data = energy_data.dropna()
 
-    # adjust label
-    energy_data["date_time"] = pd.to_datetime(energy_data.date_time) + pd.DateOffset(
-        hours=1
+    # convert to local time
+    date = pd.to_datetime(energy_data.date)
+    date_local = date.dt.tz_localize(
+        "Europe/Berlin", ambiguous="infer", nonexistent="shift_backward"
     )
-    # handle DST
-    energy_data = energy_data.drop_duplicates(subset=["date_time"])
-    energy_data = energy_data.set_index("date_time")
+    energy_data = (
+        energy_data.set_index(date_local).drop(columns="date").asfreq("h").interpolate()
+    )
 
-    energy_data = energy_data.asfreq("h").bfill()
-
-    # convert to MWh
+    # convert to GWh
     energy_data["load"] /= 1000
 
     return energy_data
