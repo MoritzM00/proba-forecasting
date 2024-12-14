@@ -74,7 +74,10 @@ def prepare(target: str) -> None:
     weather_features = generate_weather_features(
         data.index, forecast_days=7, past_days=60
     )
-    weather_features = weather_features[params.data[target].weather_features]
+    selected_features = params.data[target].weather_features
+    if selected_features is None:
+        selected_features = []
+    weather_features = weather_features[selected_features]
 
     # weather features are generated for the next 7 days,
     # but interpolate will fill the missing values after timezone conversion
