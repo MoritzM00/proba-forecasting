@@ -20,12 +20,12 @@ data:
     freq: D
     target_col: bike_count
     weather_features:
-    #  - temperature_2m_max
+     - temperature_2m_max
      - temperature_2m_min
-    #  - daylight_duration
+     - daylight_duration
      - sunshine_duration
      - precipitation_sum
-    #  - wind_speed_10m_max
+     - wind_speed_10m_max
   no2:
     filename: no2.parquet
     start_date: '2016-01-01'
@@ -74,6 +74,11 @@ train:
       X_lag_cols: null
       xgb_kwargs:
         n_jobs: -1
+        early_stopping_rounds: 50
+        n_estimators: 1000
+        # learning_rate: 0.05
+        # subsample: 0.8
+        # colsample_bytree: 0.8
 
 
   energy:
@@ -106,6 +111,11 @@ train:
       X_lag_cols: null
       xgb_kwargs:
         n_jobs: -1
+        early_stopping_rounds: 50
+        n_estimators: 1000
+        # learning_rate: 0.05
+        # subsample: 0.8
+        # colsample_bytree: 0.8
 
 eval:
   backend: loky # null or 'loky' for parallel evaluate
