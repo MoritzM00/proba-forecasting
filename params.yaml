@@ -74,8 +74,8 @@ train:
       X_lag_cols: null
       xgb_kwargs:
         n_jobs: -1
-        early_stopping_rounds: 50
-        n_estimators: 1000
+        # early_stopping_rounds: 50
+        # n_estimators: 1000
         # learning_rate: 0.05
         # subsample: 0.8
         # colsample_bytree: 0.8
@@ -111,8 +111,8 @@ train:
       X_lag_cols: null
       xgb_kwargs:
         n_jobs: -1
-        early_stopping_rounds: 50
-        n_estimators: 1000
+        # early_stopping_rounds: 50
+        # n_estimators: 1000
         # learning_rate: 0.05
         # subsample: 0.8
         # colsample_bytree: 0.8
