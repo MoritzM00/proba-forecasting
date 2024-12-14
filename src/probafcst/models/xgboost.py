@@ -2,9 +2,10 @@
 
 import numpy as np
 import pandas as pd
+import xgboost as xgb
 from loguru import logger
 from sktime.forecasting.base import BaseForecaster
-from xgboost import XGBRegressor
+from sktime.split import temporal_train_test_split
 
 from probafcst.utils.tabularization import create_lagged_features
 
@@ -41,7 +42,7 @@ class XGBQuantileForecaster(BaseForecaster):
         self.xgb_kwargs = xgb_kwargs or {}
         self.X_lag_cols = X_lag_cols
 
-        self.model = XGBRegressor(
+        self.model = xgb.XGBRegressor(
             objective="reg:quantileerror",
             quantile_alpha=quantiles,
             **self.xgb_kwargs,
@@ -56,7 +57,7 @@ class XGBQuantileForecaster(BaseForecaster):
         y = y.copy()
         y.name = self._target_name
 
-        X_lagged, y_lagged = create_lagged_features(
+        features, labels = create_lagged_features(
             X=X,
             y=y,
             lags=self.lags,
@@ -66,8 +67,23 @@ class XGBQuantileForecaster(BaseForecaster):
             is_training=True,
             freq=self.freq_,
         )
-        self.model.fit(X_lagged, y_lagged)
-        self.feature_names_in_ = X_lagged.columns
+
+        if "early_stopping_rounds" in self.xgb_kwargs:
+            train_features, val_features, train_labels, val_labels = (
+                temporal_train_test_split(
+                    features, labels, test_size=30 if self.freq_ == "D" else 24 * 7
+                )
+            )
+            self.model.fit(
+                train_features,
+                train_labels,
+                eval_set=[(val_features, val_labels)],
+                verbose=False,
+            )
+        else:
+            self.model.fit(features, labels)
+
+        self.feature_names_in_ = features.columns
         return self
 
     def _predict(self, fh, X=None):
