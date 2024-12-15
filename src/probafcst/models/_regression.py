@@ -3,10 +3,42 @@
 import numpy as np
 import pandas as pd
 from loguru import logger
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator, RegressorMixin, clone
 from sktime.forecasting.base import BaseForecaster
 
 from probafcst.utils.tabularization import create_lagged_features
+
+
+class MultipleQuantileRegressor(BaseEstimator, RegressorMixin):
+    """Predict multiple quantiles using single-quantile optimized regressors."""
+
+    def __init__(self, quantiles, regressor, alpha_name="alpha"):
+        self.quantiles = quantiles
+        self.regressor = regressor
+        self.alpha_name = alpha_name
+
+        regressors = {}
+        for q in quantiles:
+            regressors[q] = clone(regressor)
+            regressors[q].set_params(**{f"{alpha_name}": q})
+        self.regressors = regressors
+
+    def fit(self, X, y, **kwargs):
+        for regressor in self.regressors.values():
+            regressor.fit(X, y, **kwargs)
+        return self
+
+    def predict(self, X):
+        predictions = {}
+        for q, regressor in self.regressors.items():
+            predictions[q] = regressor.predict(X)
+        predictions = np.vstack([predictions[q] for q in self.quantiles]).T
+        return predictions
+
+    def __sklearn_tags__(self):
+        tags = super().__sklearn_tags__()
+        tags.target_tags.single_output = False
+        return tags
 
 
 class QuantileRegressionForecaster(BaseForecaster):
