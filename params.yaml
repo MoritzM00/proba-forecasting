@@ -47,7 +47,7 @@ data:
 
 train:
   bikes:
-    selected: xgb-custom
+    selected: lgbm
     cutoff: '2021-11-14' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 100
@@ -108,7 +108,7 @@ train:
 
 
   energy:
-    selected: xgb-custom
+    selected: lgbm
     cutoff: '2021-11-14'
     benchmark:
       n_weeks: 100
@@ -169,6 +169,7 @@ train:
       X_lag_cols: null
       kwargs:
         n_jobs: -1
+        verbose: -1
 
 eval:
   backend: loky # null or 'loky' for parallel evaluate
