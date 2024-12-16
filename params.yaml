@@ -80,7 +80,7 @@ train:
         - 7
         - 14
       include_seasonal_dummies: true
-      cyclical_encodings: false
+      cyclical_encodings: true
       X_lag_cols: null
       kwargs:
         n_jobs: -1
@@ -101,7 +101,7 @@ train:
         - 7
         - 14
       include_seasonal_dummies: true
-      cyclical_encodings: false
+      cyclical_encodings: true
       X_lag_cols: null
       kwargs:
         n_jobs: -1
@@ -118,7 +118,7 @@ train:
         - 7
         - 14
       include_seasonal_dummies: true
-      cyclical_encodings: false
+      cyclical_encodings: true
       X_lag_cols: null
       kwargs:
         n_estimators: 100
@@ -162,7 +162,7 @@ train:
         - 504 # 3 weeks
         - 672
       include_seasonal_dummies: true
-      cyclical_encodings: false
+      cyclical_encodings: true
       X_lag_cols: null
       kwargs:
         n_jobs: -1
@@ -185,7 +185,7 @@ train:
         - 504 # 3 weeks
         - 672
       include_seasonal_dummies: true
-      cyclical_encodings: false
+      cyclical_encodings: true
       X_lag_cols: null
       kwargs:
         n_jobs: -1
@@ -205,7 +205,7 @@ train:
         - 504 # 3 weeks
         - 672
       include_seasonal_dummies: true
-      cyclical_encodings: false
+      cyclical_encodings: true
       X_lag_cols: null
       kwargs:
         n_estimators: 100
