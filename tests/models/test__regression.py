@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import QuantileRegressor
 
-from probafcst.models._regression import MultipleQuantileRegressor
+from probafcst.models.regression import MultipleQuantileRegressor
 
 
 def test_MultipleQuantileRegressor():

@@ -4,7 +4,7 @@ import pandas as pd
 import xgboost as xgb
 from sktime.split import temporal_train_test_split
 
-from probafcst.models._regression import QuantileRegressionForecaster
+from probafcst.models.regression import QuantileRegressionForecaster
 from probafcst.utils.tabularization import create_lagged_features
 
 

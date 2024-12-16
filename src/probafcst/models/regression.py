@@ -1,4 +1,16 @@
-"""Probabilistic XGBoost Forecasting Model."""
+"""Base Implementations for Regression Forecasting Models.
+
+This module contains base implementations for regression forecasting models, i.e. traditional
+tabular regression models like QuantileRegressor of sklearn, adapted for forecasting tasks.
+
+If a regressor does not support multi-quantile regression natively, the MultipleQuantileRegressor
+can be used to predict multiple quantiles using a single-quantile regressor, like it is the case
+for the sklearn QuantileRegressor.
+
+The QuantileRegressionForecaster is a probabilistic regression forecaster for quantile forecasting, that
+creates lagged features using timestamp information and exogeneous variables,
+and predicts quantiles using the given regression model.
+"""
 
 import numpy as np
 import pandas as pd
@@ -43,6 +55,22 @@ class MultipleQuantileRegressor(BaseEstimator, RegressorMixin):
         self.n_jobs = n_jobs
 
     def fit(self, X, y, **kwargs):
+        """Fit regressors for each quantile.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training data.
+        y : array-like of shape (n_samples,)
+            Target values.
+        **kwargs
+            Additional keyword arguments passed to the regressor during fit.
+
+        Returns
+        -------
+        self
+            The fitted instance.
+        """
         regressors = []
         for q in self.quantiles:
             reg_q = clone(self.regressor)
@@ -66,6 +94,18 @@ class MultipleQuantileRegressor(BaseEstimator, RegressorMixin):
         return self
 
     def predict(self, X) -> np.ndarray:
+        """Predict quantiles for each regressor.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Input data.
+
+        Returns
+        -------
+        predictions : np.ndarray of shape (n_samples, n_quantiles)
+            Predicted quantiles for each quantile level.
+        """
         predictions = {}
         for q, regressor in self.regressors_.items():
             predictions[q] = regressor.predict(X)
@@ -73,6 +113,7 @@ class MultipleQuantileRegressor(BaseEstimator, RegressorMixin):
         return predictions
 
     def __sklearn_tags__(self):
+        """Return sklearn tags for the regressor."""
         tags = super().__sklearn_tags__()
         tags.target_tags.single_output = False
         return tags

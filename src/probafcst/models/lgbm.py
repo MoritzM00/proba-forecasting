@@ -2,7 +2,7 @@
 
 import lightgbm as lgb
 
-from probafcst.models._regression import (
+from probafcst.models.regression import (
     MultipleQuantileRegressor,
     QuantileRegressionForecaster,
 )

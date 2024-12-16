@@ -2,7 +2,7 @@
 
 from sklearn.linear_model import QuantileRegressor
 
-from ._regression import MultipleQuantileRegressor, QuantileRegressionForecaster
+from .regression import MultipleQuantileRegressor, QuantileRegressionForecaster
 
 
 class LinearQuantileForecaster(QuantileRegressionForecaster):
