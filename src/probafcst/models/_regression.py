@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from joblib import Parallel, delayed
 from loguru import logger
 from sklearn.base import BaseEstimator, RegressorMixin, clone
 from sktime.forecasting.base import BaseForecaster
@@ -10,27 +11,63 @@ from probafcst.utils.tabularization import create_lagged_features
 
 
 class MultipleQuantileRegressor(BaseEstimator, RegressorMixin):
-    """Predict multiple quantiles using single-quantile optimized regressors."""
+    """Predict multiple quantiles using single-quantile optimized regressors.
 
-    def __init__(self, quantiles, regressor, alpha_name="alpha"):
+    Parameters
+    ----------
+    quantiles : list of float
+        List of quantiles to predict.
+    regressor : BaseEstimator
+        Regressor to use for each quantile. Must have capability to predict quantiles.
+    alpha_name : str, default="alpha"
+        Name of the parameter in the regressor that sets the quantile to predict.
+    n_jobs : int, default=1
+        Number of jobs to run fit in parallel.
+
+    Attributes
+    ----------
+    regressors_ : dict
+        Fitted regressors for each quantile.
+    """
+
+    def __init__(
+        self,
+        quantiles: list[float],
+        regressor: BaseEstimator,
+        alpha_name="alpha",
+        n_jobs=1,
+    ):
         self.quantiles = quantiles
         self.regressor = regressor
         self.alpha_name = alpha_name
-
-        regressors = {}
-        for q in quantiles:
-            regressors[q] = clone(regressor)
-            regressors[q].set_params(**{f"{alpha_name}": q})
-        self.regressors = regressors
+        self.n_jobs = n_jobs
 
     def fit(self, X, y, **kwargs):
-        for regressor in self.regressors.values():
-            regressor.fit(X, y, **kwargs)
+        regressors = []
+        for q in self.quantiles:
+            reg_q = clone(self.regressor)
+            reg_q.set_params(**{self.alpha_name: q})
+            params = reg_q.get_params()
+            if params.get(self.alpha_name, -1) != q:
+                raise ValueError(
+                    f"Regressor {reg_q} does not support setting quantile {q} with parameter {self.alpha_name}"
+                )
+            regressors.append(reg_q)
+
+        # fit regressors in parallel
+        fitted_regressors = Parallel(n_jobs=self.n_jobs)(
+            delayed(regressor.fit)(X, y, **kwargs) for regressor in regressors
+        )
+        # put them into dict
+        regressors_ = {}
+        for i, q in enumerate(self.quantiles):
+            regressors_[q] = fitted_regressors[i]
+        self.regressors_ = regressors_
         return self
 
-    def predict(self, X):
+    def predict(self, X) -> np.ndarray:
         predictions = {}
-        for q, regressor in self.regressors.items():
+        for q, regressor in self.regressors_.items():
             predictions[q] = regressor.predict(X)
         predictions = np.vstack([predictions[q] for q in self.quantiles]).T
         return predictions
