@@ -79,7 +79,23 @@ class MultipleQuantileRegressor(BaseEstimator, RegressorMixin):
 
 
 class QuantileRegressionForecaster(BaseForecaster):
-    """Probabilistic regression forecaster for quantile forecasting."""
+    """Probabilistic regression forecaster for quantile forecasting.
+
+    Parameters
+    ----------
+    model : BaseEstimator
+        Model that supports quantile regression.
+    lags : list of int
+        List of lag values to use for creating lagged features.
+    quantiles : list of float
+        List of quantiles to predict.
+    include_seasonal_dummies : bool, default=True
+        If True, include seasonal dummy variables in the lagged features.
+    cyclical_encodings : bool, default=True
+        If True, use cyclical (cos and sin functions) encoding for time features.
+    X_lag_cols : list of str, default=None
+        List of column names in X to include as lagged features. If None, all columns are used.
+    """
 
     _tags = {
         "y_inner_mtype": "pd.Series",
