@@ -22,13 +22,13 @@ class LGBMQuantileForecaster(QuantileRegressionForecaster):
         include_seasonal_dummies=True,
         cyclical_encodings=True,
         X_lag_cols: list[str] | None = None,
-        lgbm_kwargs: dict | None = None,
+        kwargs: dict | None = None,
     ):
-        self.lgbm_kwargs = lgbm_kwargs or {}
+        self.kwargs = kwargs or {}
 
         lgb_model = lgb.LGBMRegressor(
             objective="quantile",
-            **self.lgbm_kwargs,
+            **self.kwargs,
         )
         # lgbm does not support native multiple quantile regression
         model = MultipleQuantileRegressor(

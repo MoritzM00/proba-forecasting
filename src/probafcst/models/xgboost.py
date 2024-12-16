@@ -18,13 +18,13 @@ class XGBQuantileForecaster(QuantileRegressionForecaster):
         include_seasonal_dummies=True,
         cyclical_encodings=True,
         X_lag_cols: list[str] | None = None,
-        xgb_kwargs: dict | None = None,
+        kwargs: dict | None = None,
     ):
-        self.xgb_kwargs = xgb_kwargs or {}
+        self.kwargs = kwargs or {}
         model = xgb.XGBRegressor(
             objective="reg:quantileerror",
             quantile_alpha=quantiles,
-            **(xgb_kwargs or {}),
+            **self.kwargs,
         )
         super().__init__(
             model=model,
@@ -55,7 +55,7 @@ class XGBQuantileForecaster(QuantileRegressionForecaster):
             freq=self.freq_,
         )
 
-        if "early_stopping_rounds" in self.xgb_kwargs:
+        if "early_stopping_rounds" in self.kwargs:
             train_features, val_features, train_labels, val_labels = (
                 temporal_train_test_split(
                     features, labels, test_size=30 if self.freq_ == "D" else 24 * 7

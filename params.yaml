@@ -51,9 +51,19 @@ train:
     cutoff: '2021-11-14' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 100
+
     quantreg:
-      freq: D
-      output_chunk_length: 7
+      kwargs:
+        solver: highs-ipm
+      lags:
+        - 1
+        - 2
+        - 7
+        - 14
+      include_seasonal_dummies: true
+      cyclical_encodings: true
+      X_lag_cols: null
+
     xgboost:
       freq: D
       output_chunk_length: 7
@@ -72,13 +82,28 @@ train:
       include_seasonal_dummies: true
       cyclical_encodings: false
       X_lag_cols: null
-      xgb_kwargs:
+      kwargs:
         n_jobs: -1
         # early_stopping_rounds: 50
         # n_estimators: 1000
         # learning_rate: 0.05
         # subsample: 0.8
         # colsample_bytree: 0.8
+    lgbm:
+      lags:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 14
+      include_seasonal_dummies: true
+      cyclical_encodings: false
+      X_lag_cols: null
+      kwargs:
+        n_jobs: -1
 
 
   energy:
@@ -86,14 +111,24 @@ train:
     cutoff: '2021-11-14'
     benchmark:
       n_weeks: 100
+
     quantreg:
-      freq: h
-      output_chunk_length: 24
+      kwargs:
+        solver: highs-ipm
+      lags:
+        - 24
+        - 48
+        - 168
+      include_seasonal_dummies: true
+      cyclical_encodings: true
+      X_lag_cols: null
+
     xgboost:
       freq: h
       output_chunk_length: 24
       xgb_kwargs:
         n_jobs: -1
+
     xgb-custom:
       lags:
         - 24
@@ -109,13 +144,23 @@ train:
       include_seasonal_dummies: true
       cyclical_encodings: false
       X_lag_cols: null
-      xgb_kwargs:
+      kwargs:
         n_jobs: -1
         # early_stopping_rounds: 50
         # n_estimators: 1000
         # learning_rate: 0.05
         # subsample: 0.8
         # colsample_bytree: 0.8
+    lgbm:
+      lags:
+        - 24
+        - 48
+        - 168
+      include_seasonal_dummies: true
+      cyclical_encodings: true
+      X_lag_cols: null
+      kwargs:
+        n_jobs: -1
 
 eval:
   backend: loky # null or 'loky' for parallel evaluate

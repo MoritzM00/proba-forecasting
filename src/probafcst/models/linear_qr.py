@@ -15,15 +15,15 @@ class LinearQuantileForecaster(QuantileRegressionForecaster):
         include_seasonal_dummies=True,
         cyclical_encodings=True,
         X_lag_cols: list[str] | None = None,
-        est_kwargs: dict | None = None,
+        kwargs: dict | None = None,
     ):
-        self.est_kwargs = est_kwargs or {}
+        self.kwargs = kwargs or {}
 
         # use different default solver
-        if "solver" not in self.est_kwargs:
-            self.est_kwargs["solver"] = "highs-ipm"
+        if "solver" not in self.kwargs:
+            self.kwargs["solver"] = "highs-ipm"
 
-        regressor = QuantileRegressor(**self.est_kwargs)
+        regressor = QuantileRegressor(**self.kwargs)
         # lgbm does not support native multiple quantile regression
         model = MultipleQuantileRegressor(
             quantiles=quantiles, regressor=regressor, alpha_name="quantile"
