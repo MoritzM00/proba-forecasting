@@ -7,6 +7,7 @@ import pandas as pd
 from omegaconf import DictConfig
 from sktime.forecasting.base import BaseForecaster
 
+from probafcst.models.catboost import CatBoostQuantileForecaster
 from probafcst.models.darts import get_xgboost_model
 from probafcst.models.lgbm import LGBMQuantileForecaster
 from probafcst.models.linear_qr import LinearQuantileForecaster
@@ -48,6 +49,8 @@ def get_model(
             if n_jobs is not None:
                 model_params["kwargs"]["n_jobs"] = n_jobs
             model = LGBMQuantileForecaster(**model_params, quantiles=quantiles)
+        case "catboost":
+            model = CatBoostQuantileForecaster(**model_params, quantiles=quantiles)
 
     return model
 

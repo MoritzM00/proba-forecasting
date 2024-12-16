@@ -47,7 +47,7 @@ data:
 
 train:
   bikes:
-    selected: lgbm
+    selected: catboost
     cutoff: '2021-11-14' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 100
@@ -84,6 +84,7 @@ train:
       X_lag_cols: null
       kwargs:
         n_jobs: -1
+        random_state: 0
         # early_stopping_rounds: 50
         # n_estimators: 1000
         # learning_rate: 0.05
@@ -105,6 +106,24 @@ train:
       kwargs:
         n_jobs: -1
         verbose: -1
+        random_state: 0
+    catboost:
+      lags:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 14
+      include_seasonal_dummies: true
+      cyclical_encodings: false
+      X_lag_cols: null
+      kwargs:
+        n_estimators: 100
+        verbose: 0
+        random_state: 0
 
 
   energy:
@@ -147,6 +166,7 @@ train:
       X_lag_cols: null
       kwargs:
         n_jobs: -1
+        random_state: 0
         # early_stopping_rounds: 50
         # n_estimators: 1000
         # learning_rate: 0.05
@@ -170,6 +190,27 @@ train:
       kwargs:
         n_jobs: -1
         verbose: -1
+        random_state: 0
+
+    catboost:
+      lags:
+        - 24
+        - 48
+        - 72
+        - 96
+        - 120
+        - 144
+        - 168
+        - 336 # 2 weeks
+        - 504 # 3 weeks
+        - 672
+      include_seasonal_dummies: true
+      cyclical_encodings: false
+      X_lag_cols: null
+      kwargs:
+        n_estimators: 100
+        random_state: 0
+        verbose: 0
 
 eval:
   backend: loky # null or 'loky' for parallel evaluate
