@@ -136,6 +136,13 @@ class QuantileRegressionForecaster(BaseForecaster):
         If True, use cyclical (cos and sin functions) encoding for time features.
     X_lag_cols : list of str, default=None
         List of column names in X to include as lagged features. If None, all columns are used.
+
+    Attributes
+    ----------
+    max_lag_ : int
+        Maximum lag value used for creating lagged features.
+    freq_ : str
+        Inferred frequency of the time series index.
     """
 
     _tags = {

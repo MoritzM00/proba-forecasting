@@ -6,7 +6,10 @@ from .regression import MultipleQuantileRegressor, QuantileRegressionForecaster
 
 
 class LinearQuantileForecaster(QuantileRegressionForecaster):
-    """Linear Quantile Regression model."""
+    """Linear Quantile Regression model.
+
+    Fits separate quantile regressors for each quantile.
+    """
 
     def __init__(
         self,

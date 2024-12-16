@@ -32,8 +32,6 @@ def get_model(
         case "benchmark":
             model = BenchmarkForecaster(**model_params)
         case "quantreg":
-            if n_jobs is not None:
-                model_params["kwargs"]["n_jobs"] = n_jobs
             model = LinearQuantileForecaster(**model_params, quantiles=quantiles)
         case "xgboost":
             model = get_xgboost_model(**model_params, quantiles=quantiles)

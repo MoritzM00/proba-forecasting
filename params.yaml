@@ -104,6 +104,7 @@ train:
       X_lag_cols: null
       kwargs:
         n_jobs: -1
+        verbose: -1
 
 
   energy:
@@ -155,9 +156,16 @@ train:
       lags:
         - 24
         - 48
+        - 72
+        - 96
+        - 120
+        - 144
         - 168
+        - 336 # 2 weeks
+        - 504 # 3 weeks
+        - 672
       include_seasonal_dummies: true
-      cyclical_encodings: true
+      cyclical_encodings: false
       X_lag_cols: null
       kwargs:
         n_jobs: -1
