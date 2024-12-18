@@ -47,7 +47,7 @@ data:
 
 train:
   bikes:
-    selected: catboost
+    selected: lgbm
     cutoff: '2021-11-14' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 100
@@ -201,9 +201,10 @@ train:
         - 120
         - 144
         - 168
-        - 336 # 2 weeks
+        - 336
         - 504 # 3 weeks
         - 672
+
       include_seasonal_dummies: true
       cyclical_encodings: true
       X_lag_cols: null
