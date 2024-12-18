@@ -37,9 +37,9 @@ data:
     freq: h
     target_col: load
     weather_features:
-      - temperature_2m
+      # - temperature_2m
       # - relative_humidity_2m
-      - precipitation
+      # - precipitation
       # - cloud_cover
       # - wind_speed_100m
       # - is_day
