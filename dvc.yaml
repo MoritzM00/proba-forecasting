@@ -31,6 +31,7 @@ stages:
         - data/${item}.parquet
         - ${pipe_dir}/train.py
         - ${code_dir}/models/
+        - ${code_dir}/utils/tabularization.py
       outs:
         - models/${item}_model.pkl
   eval:
@@ -47,6 +48,7 @@ stages:
         - ${pipe_dir}/evaluate.py
         - ${code_dir}/plotting.py
         - ${code_dir}/backtest.py
+        - ${code_dir}/utils/tabularization.py
 
       outs:
         - output/${item}_eval_results.csv

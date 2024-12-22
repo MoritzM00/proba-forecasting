@@ -164,6 +164,7 @@ class QuantileRegressionForecaster(BaseForecaster):
         lags: list[int],
         quantiles: list[int],
         include_seasonal_dummies=True,
+        include_rolling_stats=True,
         cyclical_encodings=True,
         X_lag_cols: list[str] | None = None,
     ):
@@ -171,6 +172,7 @@ class QuantileRegressionForecaster(BaseForecaster):
         self.quantiles = quantiles
         self.include_seasonal_dummies = include_seasonal_dummies
         self.cyclical_encodings = cyclical_encodings
+        self.include_rolling_stats = include_rolling_stats
         self.X_lag_cols = X_lag_cols
 
         self.model = model
@@ -191,6 +193,7 @@ class QuantileRegressionForecaster(BaseForecaster):
             lags=self.lags,
             include_seasonal_dummies=self.include_seasonal_dummies,
             cyclical_encodings=self.cyclical_encodings,
+            include_rolling_stats=self.include_rolling_stats,
             X_lag_cols=self.X_lag_cols,
             is_training=True,
             freq=self.freq_,
@@ -245,6 +248,7 @@ class QuantileRegressionForecaster(BaseForecaster):
                 lags=self.lags,
                 include_seasonal_dummies=self.include_seasonal_dummies,
                 cyclical_encodings=self.cyclical_encodings,
+                include_rolling_stats=self.include_rolling_stats,
                 X_lag_cols=self.X_lag_cols,
                 is_training=False,
                 freq=self.freq_,
