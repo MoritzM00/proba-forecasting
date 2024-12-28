@@ -39,7 +39,7 @@ def test_xgboost_evaluate_no_X(energy_sample, include_seasonal_dummies):
         quantiles=QUANTILES,
         include_seasonal_dummies=include_seasonal_dummies,
         cyclical_encodings=False,
-        xgb_kwargs={"n_jobs": 1, "n_estimators": 10},
+        kwargs={"n_jobs": 1, "n_estimators": 10},
     )
     # generate three splits, using 6 weeks for training
     backtest_results = backtest(
@@ -67,7 +67,7 @@ def test_xgboost_evaluate_with_X(energy_sample):
         quantiles=QUANTILES,
         include_seasonal_dummies=False,
         cyclical_encodings=False,
-        xgb_kwargs={"n_jobs": 1, "n_estimators": 10},
+        kwargs={"n_jobs": 1, "n_estimators": 10},
     )
     # generate three splits, using 6 weeks for training
     backtest_results = backtest(

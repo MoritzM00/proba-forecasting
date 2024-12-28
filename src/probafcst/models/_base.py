@@ -7,7 +7,10 @@ import pandas as pd
 from omegaconf import DictConfig
 from sktime.forecasting.base import BaseForecaster
 
-from probafcst.models.darts import get_quantile_regressor, get_xgboost_model
+from probafcst.models.catboost import CatBoostQuantileForecaster
+from probafcst.models.darts import get_xgboost_model
+from probafcst.models.lgbm import LGBMQuantileForecaster
+from probafcst.models.linear_qr import LinearQuantileForecaster
 from probafcst.models.xgboost import XGBQuantileForecaster
 
 
@@ -30,7 +33,7 @@ def get_model(
         case "benchmark":
             model = BenchmarkForecaster(**model_params)
         case "quantreg":
-            model = get_quantile_regressor(**model_params, quantiles=quantiles)
+            model = LinearQuantileForecaster(**model_params, quantiles=quantiles)
         case "xgboost":
             model = get_xgboost_model(**model_params, quantiles=quantiles)
             if n_jobs is not None:
@@ -40,8 +43,14 @@ def get_model(
                 model.set_params(kwargs=kwargs)
         case "xgb-custom":
             if n_jobs is not None:
-                model_params["xgb_kwargs"]["n_jobs"] = n_jobs
+                model_params["kwargs"]["n_jobs"] = n_jobs
             model = XGBQuantileForecaster(**model_params, quantiles=quantiles)
+        case "lgbm":
+            if n_jobs is not None:
+                model_params["kwargs"]["n_jobs"] = n_jobs
+            model = LGBMQuantileForecaster(**model_params, quantiles=quantiles)
+        case "catboost":
+            model = CatBoostQuantileForecaster(**model_params, quantiles=quantiles)
 
     return model
 

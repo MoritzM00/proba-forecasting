@@ -13,7 +13,7 @@ from probafcst.pipeline._base import pipeline_setup
 from probafcst.plotting import plot_quantiles
 from probafcst.utils import check_submission, create_submission
 from probafcst.utils.paths import get_data_path, get_model_path
-from probafcst.utils.time import get_forecast_dates
+from probafcst.utils.time import get_current_wednesday, get_forecast_dates
 
 
 def submit():
@@ -34,14 +34,16 @@ def submit():
             lead_times = np.arange(2, 8)
             fh = ForecastingHorizon(lead_times, is_relative=True)
         else:
-            _, forecast_hours = get_forecast_dates()
-            fh = ForecastingHorizon(forecast_hours, is_relative=True)
+            # get current wednesday of this week
+            start_date = get_current_wednesday()
+            forecast_dates = get_forecast_dates(start_date=start_date)
+            fh = ForecastingHorizon(forecast_dates, is_relative=False)
 
         y_pred = forecaster.predict_quantiles(fh, X=X, alpha=params.quantiles)
 
         sns.set_theme(style="ticks")
         # plot last 14 days of actual series, and Out-of-Sample forecast
-        last_date = forecaster._y.index[-1]
+        last_date = forecaster.cutoff[0]
         to_plot = forecaster._y.loc[last_date - pd.Timedelta(days=14) :]
         fig, _ = plot_quantiles(to_plot, y_pred)
         fig.savefig(
