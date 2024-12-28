@@ -164,7 +164,7 @@ class QuantileRegressionForecaster(BaseForecaster):
         lags: list[int],
         quantiles: list[int],
         include_seasonal_dummies=True,
-        include_rolling_stats=True,
+        include_rolling_stats=False,
         cyclical_encodings=True,
         X_lag_cols: list[str] | None = None,
     ):

@@ -17,6 +17,7 @@ class XGBQuantileForecaster(QuantileRegressionForecaster):
         quantiles: list[int],
         include_seasonal_dummies=True,
         cyclical_encodings=True,
+        include_rolling_stats=False,
         X_lag_cols: list[str] | None = None,
         kwargs: dict | None = None,
     ):
@@ -31,6 +32,7 @@ class XGBQuantileForecaster(QuantileRegressionForecaster):
             lags=lags,
             quantiles=quantiles,
             include_seasonal_dummies=include_seasonal_dummies,
+            include_rolling_stats=include_rolling_stats,
             cyclical_encodings=cyclical_encodings,
             X_lag_cols=X_lag_cols,
         )
