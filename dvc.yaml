@@ -49,6 +49,7 @@ stages:
         - ${code_dir}/plotting.py
         - ${code_dir}/backtest.py
         - ${code_dir}/utils/tabularization.py
+        - ${code_dir}/metrics/
 
       outs:
         - output/${item}_eval_results.csv
