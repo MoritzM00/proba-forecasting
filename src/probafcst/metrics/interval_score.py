@@ -38,3 +38,27 @@ def interval_score_vectorized(alpha, a, b, y):
         np.where(y < a, a - y, 0) + np.where(y > b, y - b, 0)
     )
     return iscore
+
+
+def interval_score_from_pinball_losses(
+    alpha: float, pl_lower: float, pl_upper: float
+) -> float:
+    """Compute the interval score from the two involved pinball losses at level alpha.
+
+    The interval score is a scaled version of the two involved pinball losses.
+
+    Parameters
+    ----------
+    alpha : float
+        The significance level of the prediction interval (e.g., 0.05 for a 95% prediction interval).
+    pl_lower : float
+        The pinball loss for the lower bound (alpha/2) of the prediction interval.
+    pl_upper : float
+        The pinball loss for the upper bound (1 - alpha/2) of the prediction interval.
+
+    Returns
+    -------
+    float
+        The interval score.
+    """
+    return (pl_lower + pl_upper) / alpha
