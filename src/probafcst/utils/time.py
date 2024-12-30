@@ -26,8 +26,10 @@ def get_hours_until_midnight(start: pd.Timestamp | None = None) -> int:
     return int(hours_until_midnight)
 
 
-def get_current_wednesday(start: pd.Timestamp | None = None) -> pd.Timestamp:
-    """Get the current Wednesday.
+def get_next_wednesday(start: pd.Timestamp | None = None) -> pd.Timestamp:
+    """Get the next Wednesday.
+
+    Returns the next Wednesday from the current time. If today is Wednesday, it returns the current time.
 
     Parameters
     ----------
@@ -37,15 +39,18 @@ def get_current_wednesday(start: pd.Timestamp | None = None) -> pd.Timestamp:
     Returns
     -------
     pd.Timestamp
-        The current Wednesday.
+        The next Wednesday.
     """
-    if start is None:
-        start = pd.Timestamp.now()
-        # Get the current week's Wednesday
-    # Week starts on Monday (0), Tuesday (1), Wednesday (2), ..., Sunday (6)
-    weekday = start.weekday()
-    wednesday = start + pd.Timedelta(days=(2 - weekday))
-    return wednesday.floor("h")
+    start = pd.Timestamp.now() if start is None else pd.Timestamp(start)
+
+    weekday = start.weekday()  # Monday is 0, Sunday is 6
+
+    if weekday == 2:  # Start is Wednesday
+        return start
+    else:
+        days_until_wednesday = (2 - weekday) % 7
+        next_wednesday = start + pd.Timedelta(days=days_until_wednesday)
+        return pd.Timestamp(next_wednesday).floor("h")
 
 
 def get_forecast_dates(

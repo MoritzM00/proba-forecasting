@@ -13,7 +13,7 @@ from probafcst.pipeline._base import pipeline_setup
 from probafcst.plotting import plot_quantiles
 from probafcst.utils import check_submission, create_submission
 from probafcst.utils.paths import get_data_path, get_model_path
-from probafcst.utils.time import get_current_wednesday, get_forecast_dates
+from probafcst.utils.time import get_forecast_dates, get_next_wednesday
 
 
 def submit():
@@ -35,7 +35,7 @@ def submit():
             fh = ForecastingHorizon(lead_times, is_relative=True)
         else:
             # get current wednesday of this week
-            start_date = get_current_wednesday()
+            start_date = get_next_wednesday()
             forecast_dates = get_forecast_dates(start_date=start_date)
             fh = ForecastingHorizon(forecast_dates, is_relative=False)
 

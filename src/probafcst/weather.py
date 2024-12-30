@@ -84,7 +84,7 @@ def generate_weather_features(
 
     if freq == "D":
         # adjust the index to match the target timeseries
-        periods = len(y_index) + forecast_days
+        periods = len(weather_features)
         weather_features.index = pd.date_range(
             start=y_index[0], periods=periods, freq=freq, name=y_index.name
         )

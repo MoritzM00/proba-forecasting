@@ -102,8 +102,8 @@ train:
         - 14
       include_seasonal_dummies: true
       cyclical_encodings: true
-      X_lag_cols:
-        - precipitation_sum
+      include_rolling_stats: false
+      X_lag_cols: null
       kwargs:
         n_jobs: -1
         verbose: -1
@@ -188,6 +188,7 @@ train:
       include_seasonal_dummies: true
       cyclical_encodings: true
       X_lag_cols: null
+      include_rolling_stats: false
       kwargs:
         n_jobs: -1
         verbose: -1
