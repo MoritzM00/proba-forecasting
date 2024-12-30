@@ -216,10 +216,11 @@ class QuantileRegressionForecaster(BaseForecaster):
 
         if X.shape[0] < len(fh):
             raise ValueError(f"X must contain at least {self.max_lag_} rows")
-        elif X.shape[0] > len(fh):
-            max_needed_timestamp = fh.to_absolute_index(self.cutoff).max()
-            X = X.loc[:max_needed_timestamp]
-            logger.debug(f"X truncated to {X.index[0]} - {X.index[-1]}")
+
+        # elif X.shape[0] > len(fh) + len(self._y):
+        #     max_needed_timestamp = fh.to_absolute_index(self.cutoff).max()
+        #     X = X.loc[:max_needed_timestamp]
+        #     logger.debug(f"X truncated to {X.index[0]} - {X.index[-1]}")
 
         logger.debug(f"Predicting {len(fh)} steps ahead.")
         logger.debug(f"Future X shape: {X.shape}")
@@ -235,6 +236,12 @@ class QuantileRegressionForecaster(BaseForecaster):
         y_pred = pd.Series(np.nan, index=forecast_index)
         y_full = pd.concat([y_train, y_pred])
         y_full.name = self._target_name
+
+        if X.index[-1] < forecast_index[-1]:
+            raise ValueError(
+                f"X does not contain enough data for the forecast horizon. "
+                f"Last timestamp in X: {X.index[-1]}, last timestamp in forecast: {forecast_index[-1]}"
+            )
 
         logger.debug(f"Forecast index: {forecast_index[0]} - {forecast_index[-1]}")
 

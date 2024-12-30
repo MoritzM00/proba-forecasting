@@ -34,7 +34,6 @@ def submit():
             lead_times = np.arange(2, 8)
             fh = ForecastingHorizon(lead_times, is_relative=True)
         else:
-            # get current wednesday of this week
             start_date = get_next_wednesday()
             forecast_dates = get_forecast_dates(start_date=start_date)
             fh = ForecastingHorizon(forecast_dates, is_relative=False)
