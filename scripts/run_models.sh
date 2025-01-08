@@ -9,7 +9,7 @@ for model in "${models[@]}"; do
   dvc exp run --queue \
       --set-param "train.energy.selected=$model" \
       --set-param "train.bikes.selected=$model" \
-      --message "$model
+      --message "$model"
 done
 
-echo "All experiments queued. Run `dvc queue start` to start execution."
+echo "All experiments queued."
