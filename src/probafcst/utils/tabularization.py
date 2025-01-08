@@ -48,10 +48,10 @@ def create_seasonal_features(
                 2 * np.pi * datetime_features[col] / period
             )
     else:
-        seasonal_features = datetime_features
+        seasonal_features = datetime_features.astype("category")
 
     if is_weekend:
-        seasonal_features["is_weekend"] = (X.index.dayofweek > 4).astype(int)
+        seasonal_features["is_weekend"] = (X.index.dayofweek > 4).astype("int")
 
     return seasonal_features
 

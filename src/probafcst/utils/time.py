@@ -46,7 +46,7 @@ def get_next_wednesday(start: pd.Timestamp | None = None) -> pd.Timestamp:
     weekday = start.weekday()  # Monday is 0, Sunday is 6
 
     if weekday == 2:  # Start is Wednesday
-        return start
+        return start.floor("h")
     else:
         days_until_wednesday = (2 - weekday) % 7
         next_wednesday = start + pd.Timedelta(days=days_until_wednesday)
