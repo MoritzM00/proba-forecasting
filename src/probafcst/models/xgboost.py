@@ -25,6 +25,7 @@ class XGBQuantileForecaster(QuantileRegressionForecaster):
         model = xgb.XGBRegressor(
             objective="reg:quantileerror",
             quantile_alpha=quantiles,
+            enable_categorical=True,
             **self.kwargs,
         )
         super().__init__(
