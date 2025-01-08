@@ -61,7 +61,8 @@ train:
         - 7
         - 14
       include_seasonal_dummies: true
-      cyclical_encodings: true
+      include_rolling_stats: false
+      cyclical_encodings: false
       X_lag_cols: null
 
     xgboost:
@@ -137,11 +138,15 @@ train:
       kwargs:
         solver: highs-ipm
       lags:
+        - 1
+        - 2
+        - 3
         - 24
         - 48
         - 168
       include_seasonal_dummies: true
-      cyclical_encodings: true
+      include_rolling_stats: false
+      cyclical_encodings: false
       X_lag_cols: null
 
     xgboost:
