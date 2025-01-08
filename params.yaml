@@ -25,7 +25,7 @@ data:
      - daylight_duration
      - sunshine_duration
      - precipitation_sum
-     - wind_speed_10m_max
+    #  - wind_speed_10m_max
   no2:
     filename: no2.parquet
     start_date: '2016-01-01'
@@ -109,6 +109,7 @@ train:
         n_jobs: -1
         verbose: -1
         random_state: 0
+
     catboost:
       lags:
         - 1

@@ -8,7 +8,7 @@ for model in "${models[@]}"; do
   echo "Queueing experiment using model $model"
   dvc exp run --queue \
       --set-param "train.energy.selected=$model" \
-      --set-param "train.bikes.selected=$model"
+      --set-param "train.bikes.selected=$model" \
       --message "$model
 done
 
