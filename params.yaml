@@ -41,7 +41,7 @@ data:
       # - relative_humidity_2m
       # - precipitation
       # - cloud_cover
-      # - wind_speed_100m
+      # - wind_speed
       # - is_day
       # - sunshine_duration
 
