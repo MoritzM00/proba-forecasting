@@ -228,19 +228,25 @@ class QuantileRegressionForecaster(BaseForecaster):
         assert alpha == self.quantiles, "alpha must be equal to quantiles used in fit"
 
         y_train = self._y.copy()
-
         X_full = X.copy()
-        logger.debug(f"X values available from {X_full.index[0]} to {X_full.index[-1]}")
+
+        # only data from max_lag onwards to reduce computational effort
+        # due to repeated calls to create_lagged_features
+        max_lag_idx = len(y_train) - self.max_lag_
+        y_train = y_train.iloc[max_lag_idx:]
+        X_full = X_full.iloc[max_lag_idx:]
+
+        logger.debug(f"X values used from {X_full.index[0]} to {X_full.index[-1]}")
 
         forecast_index = fh.to_absolute_index(self.cutoff)
         y_pred = pd.Series(np.nan, index=forecast_index)
         y_full = pd.concat([y_train, y_pred])
         y_full.name = self._target_name
 
-        if X.index[-1] < forecast_index[-1]:
+        if X_full.index[-1] < forecast_index[-1]:
             raise ValueError(
                 f"X does not contain enough data for the forecast horizon. "
-                f"Last timestamp in X: {X.index[-1]}, last timestamp in forecast: {forecast_index[-1]}"
+                f"Last timestamp in X: {X_full.index[-1]}, last timestamp in forecast: {forecast_index[-1]}"
             )
 
         logger.debug(f"Forecast index: {forecast_index[0]} - {forecast_index[-1]}")
