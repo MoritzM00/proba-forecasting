@@ -150,8 +150,20 @@ def backtest(
         test_PinballLoss=eval_results[quantiles].sum(axis=1)
     )
 
+    # compute interval scores from pinball losses
     alpha_50 = 0.5
     alpha_95 = 0.05
+    interval_scores_50 = interval_score_from_pinball_losses(
+        alpha=alpha_50,
+        pl_lower=eval_results[alpha_50 / 2],
+        pl_upper=eval_results[1 - alpha_50 / 2],
+    )
+    interval_scores_95 = interval_score_from_pinball_losses(
+        alpha=alpha_95,
+        pl_lower=eval_results[alpha_95 / 2],
+        pl_upper=eval_results[1 - alpha_95 / 2],
+    )
+
     metrics = {
         "avg_fit_time": results["fit_time"].mean(),
         "avg_pred_time": results["pred_quantiles_time"].mean(),
@@ -159,16 +171,14 @@ def backtest(
             "mean": eval_results["test_PinballLoss"].mean(),
             "std": eval_results["test_PinballLoss"].std(),
         },
-        "interval_score_50": interval_score_from_pinball_losses(
-            alpha=alpha_50,
-            pl_lower=eval_results[alpha_50 / 2].mean(),
-            pl_upper=eval_results[1 - alpha_50 / 2].mean(),
-        ),
-        "interval_score_95": interval_score_from_pinball_losses(
-            alpha=alpha_95,
-            pl_lower=eval_results[alpha_95 / 2].mean(),
-            pl_upper=eval_results[1 - alpha_95 / 2].mean(),
-        ),
+        "interval_score_50": {
+            "mean": interval_scores_50.mean(),
+            "std": interval_scores_50.std(),
+        },
+        "interval_score_95": {
+            "mean": interval_scores_95.mean(),
+            "std": interval_scores_95.std(),
+        },
     }
     additional_metrics = {
         f"pinball_loss_q{q}": {

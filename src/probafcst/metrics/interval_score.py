@@ -41,8 +41,8 @@ def interval_score_vectorized(alpha, a, b, y):
 
 
 def interval_score_from_pinball_losses(
-    alpha: float, pl_lower: float, pl_upper: float
-) -> float:
+    alpha: float, pl_lower: float | np.ndarray, pl_upper: float | np.ndarray
+) -> float | np.ndarray:
     """Compute the interval score from the two involved pinball losses at level alpha.
 
     The interval score is a scaled version of the two involved pinball losses.
