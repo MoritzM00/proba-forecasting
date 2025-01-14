@@ -12,7 +12,6 @@ quantiles:
 - 0.5
 - 0.75
 - 0.975
-
 data:
   bikes:
     filename: bikes.parquet
@@ -20,12 +19,11 @@ data:
     freq: D
     target_col: bike_count
     weather_features:
-     - temperature_2m_max
-     - temperature_2m_min
-     - daylight_duration
-     - sunshine_duration
-     - precipitation_sum
-    #  - wind_speed_10m_max
+    - temperature_2m_max
+    - temperature_2m_min
+    - daylight_duration
+    - sunshine_duration
+    - precipitation_sum
   no2:
     filename: no2.parquet
     start_date: '2016-01-01'
@@ -47,7 +45,7 @@ data:
 
 train:
   bikes:
-    selected: lgbm
+    selected: benchmark
     cutoff: '2021-11-14' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 100
@@ -56,14 +54,14 @@ train:
       kwargs:
         solver: highs-ipm
       lags:
-        - 1
-        - 2
-        - 7
-        - 14
+      - 1
+      - 2
+      - 7
+      - 14
       include_seasonal_dummies: true
       include_rolling_stats: false
       cyclical_encodings: false
-      X_lag_cols: null
+      X_lag_cols:
 
     xgboost:
       freq: D
@@ -72,17 +70,17 @@ train:
         n_jobs: -1
     xgb-custom:
       lags:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-        - 6
-        - 7
-        - 14
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 14
       include_seasonal_dummies: true
       cyclical_encodings: true
-      X_lag_cols: null
+      X_lag_cols:
       kwargs:
         n_jobs: -1
         random_state: 0
@@ -93,18 +91,18 @@ train:
         # colsample_bytree: 0.8
     lgbm:
       lags:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-        - 6
-        - 7
-        - 14
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 14
       include_seasonal_dummies: true
       cyclical_encodings: true
       include_rolling_stats: false
-      X_lag_cols: null
+      X_lag_cols:
       kwargs:
         n_jobs: -1
         verbose: -1
@@ -112,17 +110,17 @@ train:
 
     catboost:
       lags:
-        - 1
-        - 2
-        - 3
-        - 4
-        - 5
-        - 6
-        - 7
-        - 14
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 14
       include_seasonal_dummies: true
       cyclical_encodings: true
-      X_lag_cols: null
+      X_lag_cols:
       kwargs:
         n_estimators: 100
         verbose: 0
@@ -130,7 +128,7 @@ train:
 
 
   energy:
-    selected: lgbm
+    selected: benchmark
     cutoff: '2021-11-14'
     benchmark:
       n_weeks: 100
@@ -139,16 +137,16 @@ train:
       kwargs:
         solver: highs-ipm
       lags:
-        - 1
-        - 2
-        - 3
-        - 24
-        - 48
-        - 168
+      - 1
+      - 2
+      - 3
+      - 24
+      - 48
+      - 168
       include_seasonal_dummies: true
       include_rolling_stats: false
       cyclical_encodings: false
-      X_lag_cols: null
+      X_lag_cols:
 
     xgboost:
       freq: h
@@ -158,19 +156,19 @@ train:
 
     xgb-custom:
       lags:
-        - 24
-        - 48
-        - 72
-        - 96
-        - 120
-        - 144
-        - 168
-        - 336 # 2 weeks
-        - 504 # 3 weeks
-        - 672
+      - 24
+      - 48
+      - 72
+      - 96
+      - 120
+      - 144
+      - 168
+      - 336
+      - 504
+      - 672
       include_seasonal_dummies: true
       cyclical_encodings: true
-      X_lag_cols: null
+      X_lag_cols:
       kwargs:
         n_jobs: -1
         random_state: 0
@@ -181,19 +179,19 @@ train:
         # colsample_bytree: 0.8
     lgbm:
       lags:
-        - 24
-        - 48
-        - 72
-        - 96
-        - 120
-        - 144
-        - 168
-        - 336 # 2 weeks
-        - 504 # 3 weeks
-        - 672
+      - 24
+      - 48
+      - 72
+      - 96
+      - 120
+      - 144
+      - 168
+      - 336
+      - 504
+      - 672
       include_seasonal_dummies: true
       cyclical_encodings: true
-      X_lag_cols: null
+      X_lag_cols:
       include_rolling_stats: false
       kwargs:
         n_jobs: -1
@@ -202,20 +200,19 @@ train:
 
     catboost:
       lags:
-        - 24
-        - 48
-        - 72
-        - 96
-        - 120
-        - 144
-        - 168
-        - 336
-        - 504 # 3 weeks
-        - 672
-
+      - 24
+      - 48
+      - 72
+      - 96
+      - 120
+      - 144
+      - 168
+      - 336
+      - 504
+      - 672
       include_seasonal_dummies: true
       cyclical_encodings: true
-      X_lag_cols: null
+      X_lag_cols:
       kwargs:
         n_estimators: 100
         random_state: 0
