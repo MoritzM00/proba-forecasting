@@ -13,6 +13,7 @@ from sktime.performance_metrics.forecasting.probabilistic import (
 )
 from sktime.split import ExpandingWindowSplitter, SlidingWindowSplitter
 
+from probafcst.metrics.coverage import compute_coverage
 from probafcst.metrics.interval_score import interval_score_from_pinball_losses
 
 
@@ -163,6 +164,7 @@ def backtest(
         pl_lower=eval_results[alpha_95 / 2],
         pl_upper=eval_results[1 - alpha_95 / 2],
     )
+    coverage_mean, coverage_std = compute_coverage(predictions)
 
     metrics = {
         "avg_fit_time": results["fit_time"].mean(),
@@ -178,6 +180,14 @@ def backtest(
         "interval_score_95": {
             "mean": interval_scores_95.mean(),
             "std": interval_scores_95.std(),
+        },
+        "coverage_50": {
+            "mean": coverage_mean[0.5],
+            "std": coverage_std[0.5],
+        },
+        "coverage_95": {
+            "mean": coverage_mean[0.95],
+            "std": coverage_std[0.95],
         },
     }
     additional_metrics = {

@@ -309,13 +309,13 @@ stages:
       size: 2270440
     - path: src/probafcst//backtest.py
       hash: md5
-      md5: 5ffac284ef310d888b5153a6d2d6a395
-      size: 6186
+      md5: c352b34254b7299b5ec810bac65b0949
+      size: 6536
     - path: src/probafcst//metrics/
       hash: md5
-      md5: d575ed6bf465ff4a450cf73a15fcc88f.dir
-      size: 4648
-      nfiles: 4
+      md5: 48be3d3f5e64e5c814d2f68c586d8631.dir
+      size: 13350
+      nfiles: 8
     - path: src/probafcst//plotting.py
       hash: md5
       md5: 482a42cf8b0b9196d98b0d8e772d83d2
@@ -344,19 +344,19 @@ stages:
     outs:
     - path: output/energy_eval_results.csv
       hash: md5
-      md5: 7e1949e08f6ac534c393928b80ca8237
-      size: 5282
+      md5: ca4000e0cbee2cce6786429e74b287a8
+      size: 5276
     - path: output/energy_metrics.json
       hash: md5
-      md5: dc45cb2546556dab3b26c87af9247f2c
-      size: 387
+      md5: e7bbcc83e1ea20054024cd5562ab5f8c
+      size: 583
     - path: output/energy_pinball_losses.svg
       hash: md5
-      md5: 01e9e2ce253c1aa6825ae2e4e0f579ca
+      md5: 881313066b24cc31d9bbf79213b71921
       size: 26352
     - path: output/eval_plots/energy/
       hash: md5
-      md5: 91449558e5293fef71fe2d96967fa17a.dir
+      md5: 5e312a7dd00540a9eeb92484e1568fcf.dir
       size: 213972
       nfiles: 3
   eval@bikes:
@@ -372,13 +372,13 @@ stages:
       size: 1209622
     - path: src/probafcst//backtest.py
       hash: md5
-      md5: 5ffac284ef310d888b5153a6d2d6a395
-      size: 6186
+      md5: c352b34254b7299b5ec810bac65b0949
+      size: 6536
     - path: src/probafcst//metrics/
       hash: md5
-      md5: d575ed6bf465ff4a450cf73a15fcc88f.dir
-      size: 4648
-      nfiles: 4
+      md5: 48be3d3f5e64e5c814d2f68c586d8631.dir
+      size: 13350
+      nfiles: 8
     - path: src/probafcst//plotting.py
       hash: md5
       md5: 482a42cf8b0b9196d98b0d8e772d83d2
@@ -407,19 +407,19 @@ stages:
     outs:
     - path: output/bikes_eval_results.csv
       hash: md5
-      md5: 51389fc163d42760f748913fc5faeaf2
-      size: 19763
+      md5: da56db163d72c0812a34b739afd52a79
+      size: 19757
     - path: output/bikes_metrics.json
       hash: md5
-      md5: f31391c394bc119a094a7e86a468d356
-      size: 386
+      md5: a47f47f531bcb32de7f4d68330c9592a
+      size: 585
     - path: output/bikes_pinball_losses.svg
       hash: md5
-      md5: d307d806feb92f50b2cbe9cd5f8168c2
+      md5: 7c673107a0e343455aa72af3bd6a4435
       size: 30087
     - path: output/eval_plots/bikes/
       hash: md5
-      md5: a37a0357976b772e901164af453a2a1f.dir
+      md5: 723720b6e4e3b765965cba7e07298bb3.dir
       size: 96466
       nfiles: 3
   submit:
