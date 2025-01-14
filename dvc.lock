@@ -313,8 +313,8 @@ stages:
       size: 6536
     - path: src/probafcst//metrics/
       hash: md5
-      md5: 48be3d3f5e64e5c814d2f68c586d8631.dir
-      size: 13350
+      md5: 3df79f73cbcc32ff15b6c9d58a1c04a9.dir
+      size: 13366
       nfiles: 8
     - path: src/probafcst//plotting.py
       hash: md5
@@ -326,8 +326,8 @@ stages:
       size: 5805
     - path: src/probafcst/pipeline/evaluate.py
       hash: md5
-      md5: 924860f2a82c3fbe10a84de59038987b
-      size: 2743
+      md5: bedc55975710762e19c84c530584ab9a
+      size: 3031
     params:
       params.yaml:
         eval:
@@ -344,21 +344,21 @@ stages:
     outs:
     - path: output/energy_eval_results.csv
       hash: md5
-      md5: ca4000e0cbee2cce6786429e74b287a8
-      size: 5276
+      md5: c3881a424a85361bfa618ff073a8bfb6
+      size: 5270
     - path: output/energy_metrics.json
       hash: md5
-      md5: e7bbcc83e1ea20054024cd5562ab5f8c
-      size: 583
+      md5: ce0365eccddd027fade0db5e7b9c4407
+      size: 582
     - path: output/energy_pinball_losses.svg
       hash: md5
-      md5: 881313066b24cc31d9bbf79213b71921
+      md5: ff60c8c997cbaca01250fdc6a9945551
       size: 26352
     - path: output/eval_plots/energy/
       hash: md5
-      md5: 5e312a7dd00540a9eeb92484e1568fcf.dir
-      size: 213972
-      nfiles: 3
+      md5: dd1d03aaf6fec865e1caf41dc5d1e2bc.dir
+      size: 254076
+      nfiles: 4
   eval@bikes:
     cmd: python src/probafcst/pipeline/evaluate.py --target bikes
     deps:
@@ -376,8 +376,8 @@ stages:
       size: 6536
     - path: src/probafcst//metrics/
       hash: md5
-      md5: 48be3d3f5e64e5c814d2f68c586d8631.dir
-      size: 13350
+      md5: 3df79f73cbcc32ff15b6c9d58a1c04a9.dir
+      size: 13366
       nfiles: 8
     - path: src/probafcst//plotting.py
       hash: md5
@@ -389,8 +389,8 @@ stages:
       size: 5805
     - path: src/probafcst/pipeline/evaluate.py
       hash: md5
-      md5: 924860f2a82c3fbe10a84de59038987b
-      size: 2743
+      md5: bedc55975710762e19c84c530584ab9a
+      size: 3031
     params:
       params.yaml:
         eval:
@@ -407,21 +407,21 @@ stages:
     outs:
     - path: output/bikes_eval_results.csv
       hash: md5
-      md5: da56db163d72c0812a34b739afd52a79
-      size: 19757
+      md5: 9a8675cd3ee98b56cf78ef90d60dda8c
+      size: 19768
     - path: output/bikes_metrics.json
       hash: md5
-      md5: a47f47f531bcb32de7f4d68330c9592a
+      md5: 7decf86265712ad1bdee82d69206a99d
       size: 585
     - path: output/bikes_pinball_losses.svg
       hash: md5
-      md5: 7c673107a0e343455aa72af3bd6a4435
+      md5: 081714965bb430fed7f5b063befdf3dd
       size: 30087
     - path: output/eval_plots/bikes/
       hash: md5
-      md5: 723720b6e4e3b765965cba7e07298bb3.dir
-      size: 96466
-      nfiles: 3
+      md5: f4f4e95dd724c09a5b48505cdbab6cf2.dir
+      size: 136570
+      nfiles: 4
   submit:
     cmd: python src/probafcst/pipeline/submit.py
     deps:

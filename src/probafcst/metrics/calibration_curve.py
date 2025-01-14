@@ -44,7 +44,7 @@ def plot_calibration_curve(predictions: pd.DataFrame, quantile_levels: list[floa
     empirical_coverage_std = {q: np.std(calibration_values[q]) for q in quantile_levels}
 
     # Plot calibration curve with error bars
-    _, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=(8, 6))
     plt.errorbar(
         quantile_levels,
         list(empirical_coverage_mean.values()),
@@ -59,4 +59,4 @@ def plot_calibration_curve(predictions: pd.DataFrame, quantile_levels: list[floa
     plt.title("Calibration Plot with Standard Deviation Across Folds")
     plt.legend()
     plt.grid(True)
-    return ax
+    return fig, ax

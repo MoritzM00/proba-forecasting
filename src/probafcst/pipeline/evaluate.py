@@ -10,6 +10,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 
 from probafcst.backtest import backtest, get_window_params
+from probafcst.metrics.calibration_curve import plot_calibration_curve
 from probafcst.models import get_model
 from probafcst.pipeline._base import pipeline_setup
 from probafcst.plotting import plot_quantiles
@@ -83,6 +84,12 @@ def evaluate_forecaster(target: str):
     fig, ax = plt.subplots()
     sns.boxplot(data=melted, x="quantile", y="loss", hue="quantile", ax=ax)
     fig.savefig(output_dir / f"{target}_pinball_losses.svg", bbox_inches="tight")
+
+    # compute calibration curve
+    fig, ax = plot_calibration_curve(
+        predictions=predictions, quantile_levels=params.quantiles
+    )
+    fig.savefig(plots_dir / "calibration_curve.svg", bbox_inches="tight")
 
 
 if __name__ == "__main__":
