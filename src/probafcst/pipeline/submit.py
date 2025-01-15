@@ -4,7 +4,6 @@ import pickle
 from datetime import date
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import seaborn as sns
 from sktime.forecasting.base import ForecastingHorizon
@@ -30,9 +29,11 @@ def submit():
         with open(model_path, "rb") as f:
             forecaster = pickle.load(f)
 
+        start_date = get_next_wednesday()
         if target == "bikes":
-            lead_times = np.arange(2, 8)
-            fh = ForecastingHorizon(lead_times, is_relative=True)
+            start_date = start_date.replace(hour=0, minute=0, second=0)
+            horizon = pd.date_range(start_date, periods=7, freq="D", inclusive="right")
+            fh = ForecastingHorizon(horizon, is_relative=False)
         else:
             start_date = get_next_wednesday()
             forecast_dates = get_forecast_dates(start_date=start_date)

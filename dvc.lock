@@ -447,8 +447,8 @@ stages:
       size: 3407
     - path: src/probafcst/pipeline/submit.py
       hash: md5
-      md5: 050533d9a1d7cb7b916d1726c246a5e2
-      size: 2231
+      md5: 281f1a642c30c54376b0a2306c8d1b02
+      size: 2371
     params:
       params.yaml:
         quantiles:
@@ -460,13 +460,13 @@ stages:
     outs:
     - path: output/bikes_forecast.svg
       hash: md5
-      md5: e1ba7e74d432c24653bffb8ba34861d0
-      size: 30898
+      md5: 58c530db26aea325a44ce96d103966e3
+      size: 31804
     - path: output/energy_forecast.svg
       hash: md5
-      md5: 426a5b30d21a95b9b3a9063e3924f0dd
+      md5: c37a92577c7a453ad1363be2eec43414
       size: 70856
     - path: output/submission.csv
       hash: md5
-      md5: b8b9b1b2740e1a191d951f7b41fe93c2
-      size: 1609
+      md5: e860a41ec5fb9cd1183c71ff97f37748
+      size: 1613
