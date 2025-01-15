@@ -53,6 +53,7 @@ class XGBQuantileForecaster(QuantileRegressionForecaster):
             lags=self.lags,
             include_seasonal_dummies=self.include_seasonal_dummies,
             cyclical_encodings=self.cyclical_encodings,
+            include_rolling_stats=self.include_rolling_stats,
             X_lag_cols=self.X_lag_cols,
             is_training=True,
             freq=self.freq_,

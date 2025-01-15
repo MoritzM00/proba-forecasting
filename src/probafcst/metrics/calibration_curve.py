@@ -51,7 +51,7 @@ def plot_calibration_curve(predictions: pd.DataFrame, quantile_levels: list[floa
         yerr=list(empirical_coverage_std.values()),
         fmt="o-",
         capsize=4,
-        label="Empirical Coverage",
+        label="Model Calibration",
     )
     plt.plot([0, 1], [0, 1], "k--", label="Perfect Calibration")
     plt.xlabel("Nominal Quantile Level")
