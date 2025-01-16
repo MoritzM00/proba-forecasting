@@ -313,8 +313,8 @@ stages:
       size: 6536
     - path: src/probafcst//metrics/
       hash: md5
-      md5: 069232bf1a982a3144265377888856c1.dir
-      size: 13384
+      md5: 12a9187686c90eb86f5543e1b508397b.dir
+      size: 14811
       nfiles: 8
     - path: src/probafcst//plotting.py
       hash: md5
@@ -344,20 +344,20 @@ stages:
     outs:
     - path: output/energy_eval_results.csv
       hash: md5
-      md5: d6d33b7ef74689b60dae53c78d24a9a1
+      md5: 1e2c18d0068fe140a030c5c2bbb0aa9d
       size: 5283
     - path: output/energy_metrics.json
       hash: md5
-      md5: d4954e565de3e7042ae42a161e6a92b4
-      size: 582
+      md5: 2e6bbb6c30a136bc5b015b5f20f3ecda
+      size: 583
     - path: output/energy_pinball_losses.svg
       hash: md5
-      md5: 2b774b292354f366f540a116e82c7693
+      md5: b57ac5a526cfac4e2ce1b474b1440548
       size: 26352
     - path: output/eval_plots/energy/
       hash: md5
-      md5: 733c4567231fbcedc7d53efe9bf1ad2a.dir
-      size: 254322
+      md5: 98b3bf69bae135ef004e158f4d46b288.dir
+      size: 254098
       nfiles: 4
   eval@bikes:
     cmd: python src/probafcst/pipeline/evaluate.py --target bikes
@@ -376,8 +376,8 @@ stages:
       size: 6536
     - path: src/probafcst//metrics/
       hash: md5
-      md5: 069232bf1a982a3144265377888856c1.dir
-      size: 13384
+      md5: 12a9187686c90eb86f5543e1b508397b.dir
+      size: 14811
       nfiles: 8
     - path: src/probafcst//plotting.py
       hash: md5
@@ -407,20 +407,20 @@ stages:
     outs:
     - path: output/bikes_eval_results.csv
       hash: md5
-      md5: c320837136436fdbb0005c8429790e10
-      size: 19754
+      md5: d39110b6f1a9d03ea508523800d14809
+      size: 19771
     - path: output/bikes_metrics.json
       hash: md5
-      md5: 74574b6c1aad3c980598546f81d04db2
-      size: 586
+      md5: b5bf3cd362a1c17c96ed5cc1cb88152e
+      size: 587
     - path: output/bikes_pinball_losses.svg
       hash: md5
-      md5: 7f9615906bc7e53fe2e0661f02e1ead0
+      md5: 5cf0f389ba591e34a7da49233a453837
       size: 30193
     - path: output/eval_plots/bikes/
       hash: md5
-      md5: 5ac9dd88c399cabdd622d73e7a60bd43.dir
-      size: 136808
+      md5: dd6ff629968d8ee8a3f8259a21eae60d.dir
+      size: 136584
       nfiles: 4
   submit:
     cmd: python src/probafcst/pipeline/submit.py
