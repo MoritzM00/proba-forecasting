@@ -72,7 +72,7 @@ def prepare(target: str) -> None:
 
     # generate whether features
     weather_features = generate_weather_features(
-        data.index, forecast_days=12, past_days=60
+        data.index, forecast_days=14, past_days=60
     )
     selected_features = params.data[target].weather_features
     if selected_features is None:
