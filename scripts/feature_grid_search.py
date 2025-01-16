@@ -47,7 +47,7 @@ def run_grid_search(model):
             include_rolling_stats,
         ) = params
         # Convert None to YAML-compatible null
-        X_lag_cols_value = "null" if X_lag_cols is None else "[]"
+        X_lag_cols_value = "null" if X_lag_cols is None else []
 
         message = f"Grid Search for model: {model}"
 
@@ -76,7 +76,9 @@ def run_grid_search(model):
         # Execute the command
         subprocess.run(command, check=True)
 
-    print("All experiments queued.")
+    print("All experiments queued. Start the queue with `dvc queue start`.")
+    print(f"Total number of experiments: {len(filtered_combinations)}")
+    print("You can delete them with `dvc queue remove --queued`, if needed.")
 
 
 if __name__ == "__main__":
