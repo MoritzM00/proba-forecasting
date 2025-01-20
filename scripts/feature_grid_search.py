@@ -8,7 +8,7 @@ import click
 
 @click.command()
 @click.argument(
-    "model", type=click.Choice(["lgbm", "xgb-custom", "quantreg", "catboost"])
+    "model", type=click.Choice(["lgbm", "xgb-custom", "quantreg", "catboost", "qrf"])
 )
 def run_grid_search(model):
     """Run Grid Search over Feature Engineering Parameters."""
