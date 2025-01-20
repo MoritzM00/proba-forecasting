@@ -11,6 +11,7 @@ from probafcst.models.catboost import CatBoostQuantileForecaster
 from probafcst.models.darts import get_xgboost_model
 from probafcst.models.lgbm import LGBMQuantileForecaster
 from probafcst.models.linear_qr import LinearQuantileForecaster
+from probafcst.models.qrf import RandomForestQuantileForecaster
 from probafcst.models.xgboost import XGBQuantileForecaster
 
 
@@ -51,6 +52,12 @@ def get_model(
             model = LGBMQuantileForecaster(**model_params, quantiles=quantiles)
         case "catboost":
             model = CatBoostQuantileForecaster(**model_params, quantiles=quantiles)
+        case "qrf":
+            if n_jobs is not None:
+                model_params["kwargs"]["n_jobs"] = n_jobs
+            model = RandomForestQuantileForecaster(**model_params, quantiles=quantiles)
+        case _:
+            raise ValueError(f"Unsupported model: {params.selected}")
 
     return model
 

@@ -35,6 +35,7 @@ dependencies = [
     "lightgbm>=4.5.0",
     "scikit-learn>=1.5.2",
     "catboost>=1.2.7",
+    "quantile-forest>=1.3.11",
 ]
 
 
