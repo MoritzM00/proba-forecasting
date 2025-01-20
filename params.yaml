@@ -47,7 +47,7 @@ data:
 
 train:
   bikes:
-    selected: lgbm
+    selected: qrf
     cutoff: '2021-11-14' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 100
@@ -143,7 +143,7 @@ train:
 
 
   energy:
-    selected: lgbm
+    selected: qrf
     cutoff: '2021-11-14'
     benchmark:
       n_weeks: 100

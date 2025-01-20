@@ -1,5 +1,6 @@
 """Quantile regression forecaster using a random forest model."""
 
+from omegaconf import ListConfig, OmegaConf
 from quantile_forest import RandomForestQuantileRegressor
 
 from probafcst.models.regression import QuantileRegressionForecaster
@@ -19,6 +20,10 @@ class RandomForestQuantileForecaster(QuantileRegressionForecaster):
         kwargs: dict | None = None,
     ):
         self.kwargs = kwargs or {}
+        if isinstance(quantiles, ListConfig):
+            # quantile-forests needs a list object
+            quantiles = OmegaConf.to_object(quantiles)
+
         model = RandomForestQuantileRegressor(
             default_quantiles=quantiles,
             **self.kwargs,
