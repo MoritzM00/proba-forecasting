@@ -47,7 +47,7 @@ data:
 
 train:
   bikes:
-    selected: qrf
+    selected: lgbm
     cutoff: '2021-11-14' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 100
@@ -106,6 +106,12 @@ train:
         n_jobs: -1
         verbose: -1
         random_state: 0
+        num_leaves: 15
+        n_estimators: 200
+        max_depth: 4
+        learning_rate: 0.1
+        subsample_freq: 0
+        subsample: 1.0
 
     catboost:
       lags:
@@ -143,7 +149,7 @@ train:
 
 
   energy:
-    selected: qrf
+    selected: lgbm
     cutoff: '2021-11-14'
     benchmark:
       n_weeks: 100
@@ -207,6 +213,12 @@ train:
         n_jobs: -1
         verbose: -1
         random_state: 0
+        num_leaves: 15
+        n_estimators: 300
+        max_depth: -1
+        learning_rate: 0.1
+        subsample_freq: 0
+        subsample: 1.0
 
     catboost:
       lags:
