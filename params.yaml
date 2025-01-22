@@ -204,7 +204,12 @@ train:
         - 168
         - 336 # 2 weeks
         - 504 # 3 weeks
-        - 672
+        - 672 # 4 weeks
+        - 840
+        - 1008
+        - 1176
+        - 1344 # 8 weeks
+
       include_seasonal_dummies: true
       cyclical_encodings: true
       X_lag_cols: null
