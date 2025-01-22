@@ -112,6 +112,7 @@ train:
         learning_rate: 0.1
         subsample_freq: 0
         subsample: 1.0
+        reg_lambda: 1e-3
 
     catboost:
       lags:
@@ -224,6 +225,7 @@ train:
         learning_rate: 0.1
         subsample_freq: 0
         subsample: 1.0
+        reg_lambda: 1e-3
 
     catboost:
       lags:

@@ -18,7 +18,7 @@ def run_lgbm_grid_search():
         "learning_rate": [0.1],  # Fixed learning rate
         "subsample_freq": [1.0],  # subsample every time
         "subsample": [0.8, 1.0],
-        "reg_lambda": [0.0, 1e-3, 1, 10],
+        "reg_lambda": [1e-3],
     }
 
     # Generate all combinations of parameters using itertools.product
@@ -38,7 +38,6 @@ def run_lgbm_grid_search():
             param_dict["num_leaves"] = min(
                 2 ** param_dict["max_depth"], param_dict["num_leaves"]
             )
-            print("Setting num_leaves to", param_dict["num_leaves"])
 
         model = "lgbm"
         # Construct the DVC command dynamically
