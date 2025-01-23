@@ -107,12 +107,14 @@ train:
         verbose: -1
         random_state: 0
         num_leaves: 15
-        n_estimators: 200
+        min_child_samples: 20
+        n_estimators: 250
         max_depth: 4
         learning_rate: 0.1
         subsample_freq: 0
         subsample: 1.0
         reg_lambda: 1e-3
+        colsample_bytree: 0.8
 
     catboost:
       lags:
@@ -220,12 +222,14 @@ train:
         verbose: -1
         random_state: 0
         num_leaves: 15
-        n_estimators: 300
+        min_child_samples: 20
+        n_estimators: 300 # increase leads to worse coverage
         max_depth: -1
         learning_rate: 0.1
         subsample_freq: 0
         subsample: 1.0
         reg_lambda: 1e-3
+        colsample_bytree: 1.0
 
     catboost:
       lags:

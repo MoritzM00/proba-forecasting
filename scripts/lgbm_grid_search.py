@@ -7,17 +7,24 @@ import click
 
 
 @click.command()
-def run_lgbm_grid_search():
+@click.option(
+    "--auto-start",
+    is_flag=True,
+    help="Automatically start the queue after queuing all experiments.",
+)
+def run_lgbm_grid_search(auto_start: bool):
     """Run a small Grid Search on LightGBM."""
     # Define the parameter grid
     param_grid = {
         # 31 is the default, should be smaller than 2^max_depth
-        "num_leaves": [15, 31, 150],
-        "max_depth": [-1, 4, 8],
-        "n_estimators": [100, 250, 500, 750],
+        "num_leaves": [6, 15, 31, 62, 90],
+        "min_child_samples": [5, 25, 50],
+        "max_depth": [-1],
+        "n_estimators": [100, 200, 300],
         "learning_rate": [0.1],  # Fixed learning rate
-        "subsample_freq": [1.0],  # subsample every time
-        "subsample": [0.8, 1.0],
+        # "subsample_freq": [0],  # subsample every time
+        # "subsample": [1.0],
+        "colsample_bytree": [0.8],
         "reg_lambda": [1e-3],
     }
 
@@ -63,9 +70,13 @@ def run_lgbm_grid_search():
         # Execute the command
         subprocess.run(command, check=True)
 
-    print("All experiments queued. Start the queue with `dvc queue start`.")
-    print(f"Total number of experiments: {len(param_combinations)}")
-    print("You can delete them with `dvc queue remove --queued`, if needed.")
+    if auto_start:
+        print("Starting the queue...")
+        subprocess.run(["dvc", "queue", "start"], check=True)
+    else:
+        print("All experiments queued. Start the queue with `dvc queue start`.")
+        print(f"Total number of experiments: {len(param_combinations)}")
+        print("You can delete them with `dvc queue remove --queued`, if needed.")
 
 
 if __name__ == "__main__":
