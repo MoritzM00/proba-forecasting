@@ -19,7 +19,10 @@ from loguru import logger
 from sklearn.base import BaseEstimator, RegressorMixin, clone
 from sktime.forecasting.base import BaseForecaster
 
-from probafcst.utils.tabularization import create_lagged_features
+from probafcst.utils.tabularization import (
+    ROLLING_STATS_WINDOW_LENGTH_DAYS,
+    create_lagged_features,
+)
 
 
 class MultipleQuantileRegressor(BaseEstimator, RegressorMixin):
@@ -232,7 +235,14 @@ class QuantileRegressionForecaster(BaseForecaster):
 
         # only data from max_lag onwards to reduce computational effort
         # due to repeated calls to create_lagged_features
-        max_lag_idx = len(y_train) - self.max_lag_
+        if self.include_rolling_stats:
+            # make sure there is enough data for rolling windows
+            day_repr = 1 if self.freq_ == "D" else 24
+            max_lag = max(self.max_lag_, ROLLING_STATS_WINDOW_LENGTH_DAYS * day_repr)
+        else:
+            max_lag = self.max_lag_
+
+        max_lag_idx = len(y_train) - max_lag
         y_train = y_train.iloc[max_lag_idx:]
         X_full = X_full.iloc[max_lag_idx:]
 

@@ -5,6 +5,8 @@ from typing import Literal
 import numpy as np
 import pandas as pd
 
+ROLLING_STATS_WINDOW_LENGTH_DAYS = 90
+
 
 def create_seasonal_features(
     X: pd.DataFrame,
@@ -137,30 +139,18 @@ def create_lagged_features(
     if include_rolling_stats:
         freq = pd.infer_freq(y.index)
         groupby = [y.index.hour, y.index.weekday] if freq == "h" else y.index.weekday
-        grouped_median = (
-            y.groupby(groupby).rolling(window="100D", closed="left").median()
-        )
-        level = [0, 1] if freq == "h" else 0
-        grouped_median = grouped_median.reset_index(level=level, drop=True).sort_index()
-        X_lags[f"{varname}_grouped_median"] = grouped_median
 
-        # and just x day rolling median and quantiles
-        window = "30D"
-        X_lags[f"{varname}_rolling_median"] = y.rolling(
-            window=window, closed="left"
-        ).median()
-        X_lags[f"{varname}_rolling_q025"] = y.rolling(
-            window=window, closed="left"
-        ).quantile(0.025)
-        X_lags[f"{varname}_rolling_q25"] = y.rolling(
-            window=window, closed="left"
-        ).quantile(0.25)
-        X_lags[f"{varname}_rolling_q75"] = y.rolling(
-            window=window, closed="left"
-        ).quantile(0.75)
-        X_lags[f"{varname}_rolling_q975"] = y.rolling(
-            window=window, closed="left"
-        ).quantile(0.975)
+        quantiles = [0.025, 0.25, 0.5, 0.75, 0.975]
+        names = ["025", "25", "50", "75", "975"]
+        level = [0, 1] if freq == "h" else 0
+        roller = y.groupby(groupby).rolling(
+            window=f"{ROLLING_STATS_WINDOW_LENGTH_DAYS}D", closed="left"
+        )
+        for q, name in zip(quantiles, names):
+            grouped_quantile = (
+                roller.quantile(q).reset_index(level=level, drop=True).sort_index()
+            )
+            X_lags[f"{varname}_q{name}"] = grouped_quantile
 
     X = pd.concat([X, X_lags], axis=1)
     if is_training:

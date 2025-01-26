@@ -28,7 +28,22 @@ def get_model(
     n_jobs: int | None = None,
     freq: Literal["D", "h"] = "h",
 ) -> BaseForecaster:
-    """Return the model with the given configuration."""
+    """Return the model with the given configuration.
+
+    Parameters
+    ----------
+    params : DictConfig
+        Configuration parameters for the model. Must be the train subset for a target
+        {bikess, energy} of the pipeline config. E.g. if `params` is the config object for
+        the whole pipeline, then `params.train.bikes` must be passed to this function to get
+        the currently selected model for the bikes target
+    quantiles : list of float
+        List of quantiles to forecast.
+    n_jobs : int, default=None
+        Number of jobs to run in parallel. If None, the default value is used.
+    freq : Literal["D", "h"], default="h"
+        Frequency of the time series index. Not used.
+    """
     model_params = params[params.selected]
     match params.selected:
         case "benchmark":

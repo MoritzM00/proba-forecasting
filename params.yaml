@@ -100,7 +100,7 @@ train:
         - 14
       include_seasonal_dummies: true
       cyclical_encodings: true
-      include_rolling_stats: false
+      include_rolling_stats: true
       X_lag_cols: null
       kwargs:
         n_jobs: -1
