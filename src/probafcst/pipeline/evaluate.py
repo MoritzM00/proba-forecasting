@@ -9,7 +9,7 @@ import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-from probafcst.backtest import backtest, get_window_params
+from probafcst.backtest import backtest
 from probafcst.metrics.calibration_curve import plot_calibration_curve
 from probafcst.models import get_model
 from probafcst.pipeline._base import pipeline_setup
@@ -38,26 +38,27 @@ def evaluate_forecaster(target: str):
     target_col = params.data[target].target_col
     data = pd.read_parquet(data_path).asfreq(freq).dropna()
 
+    eval_start = params.eval.eval_start
+    eval_end = params.eval.eval_end
+    data = data.loc[:eval_end]
+    DAY_HOURS = 24 if freq == "h" else 1
+
     y = data[target_col]
     X = data.drop(columns=target_col)
+
+    # compute initial window size
+    initial_window = X.loc[:eval_start].shape[0]
 
     forecaster = get_model(
         params=params.train[target], n_jobs=1, quantiles=params.quantiles
     )
 
-    eval_params = params.eval[target]
-
-    window_params = get_window_params(
-        n_years_initial_window=eval_params.n_years_initial_window,
-        step_length_days=eval_params.step_length_days,
-        forecast_steps_days=eval_params.forecast_steps_days,
-        freq=params.data[target].freq,
-    )
-
     results, metrics, predictions, _ = backtest(
         forecaster,
         y,
-        **window_params,
+        forecast_steps=DAY_HOURS * params.eval[target].forecast_steps_days,
+        step_length=DAY_HOURS * params.eval[target].step_length_days,
+        initial_window=initial_window,
         X=X,
         quantiles=params.quantiles,
         backend=params.eval.backend,
@@ -73,7 +74,7 @@ def evaluate_forecaster(target: str):
 
     sns.set_theme(style="ticks")
     # visualize some forecasts
-    idx = [0, len(results) // 2, -1]
+    idx = [0, 8, 10, 47]
     for i, (_, row) in enumerate(predictions.iloc[idx].iterrows()):
         fig, _ = plot_quantiles(row.y_test, row.y_pred_quantiles)
         fig.savefig(plots_dir / f"forecast_{i + 1}.svg", bbox_inches="tight")

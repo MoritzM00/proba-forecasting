@@ -48,7 +48,7 @@ data:
 train:
   bikes:
     selected: lgbm
-    cutoff: '2021-11-14' # use only data onwards this date for training the final model
+    cutoff: '2012-10-23' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 100
 
@@ -92,29 +92,29 @@ train:
       lags:
         - 1
         - 2
-        - 3
-        - 4
-        - 5
         - 6
         - 7
+        - 8
         - 14
+        - 21
+        - 28
       include_seasonal_dummies: true
       cyclical_encodings: true
-      include_rolling_stats: true
+      include_rolling_stats: false
       X_lag_cols: null
       kwargs:
         n_jobs: -1
         verbose: -1
         random_state: 0
-        num_leaves: 15
-        min_child_samples: 20
-        n_estimators: 250
-        max_depth: 4
-        learning_rate: 0.1
-        subsample_freq: 0
-        subsample: 1.0
-        reg_lambda: 1e-3
-        colsample_bytree: 0.8
+        # num_leaves: 15
+        # min_child_samples: 20
+        # n_estimators: 250
+        # max_depth: 4
+        # learning_rate: 0.1
+        # subsample_freq: 0
+        # subsample: 1.0
+        # reg_lambda: 1e-3
+        # colsample_bytree: 0.8
 
     catboost:
       lags:
@@ -153,7 +153,7 @@ train:
 
   energy:
     selected: lgbm
-    cutoff: '2021-11-14'
+    cutoff: '2015-10-23'
     benchmark:
       n_weeks: 100
 
@@ -208,10 +208,12 @@ train:
         - 336 # 2 weeks
         - 504 # 3 weeks
         - 672 # 4 weeks
-        - 840
-        - 1008
-        - 1176
-        - 1344 # 8 weeks
+        # - 840
+        # - 1008
+        # - 1176
+        # - 1344 # 8 weeks
+        # - 8760 # 1 year
+        # - 17520 # 2 years
 
       include_seasonal_dummies: true
       cyclical_encodings: true
@@ -221,15 +223,15 @@ train:
         n_jobs: -1
         verbose: -1
         random_state: 0
-        num_leaves: 15
-        min_child_samples: 20
-        n_estimators: 300 # increase leads to worse coverage
-        max_depth: -1
-        learning_rate: 0.1
-        subsample_freq: 0
-        subsample: 1.0
-        reg_lambda: 1e-3
-        colsample_bytree: 1.0
+        # num_leaves: 15
+        # min_child_samples: 20
+        # n_estimators: 300 # increase leads to worse coverage
+        # max_depth: -1
+        # learning_rate: 0.1
+        # subsample_freq: 0
+        # subsample: 1.0
+        # reg_lambda: 1e-3
+        # colsample_bytree: 0.8
 
     catboost:
       lags:
@@ -276,12 +278,11 @@ train:
 eval:
   backend: loky # null or 'loky' for parallel evaluate
   splitter_type: sliding # or expanding
+  eval_start: '2023-10-23'
+  eval_end: '2024-10-23'
   bikes:
     forecast_steps_days: 7
-    # for sliding windows, this determines the window length in years (train size)
-    n_years_initial_window: 3
-    step_length_days: 30
+    step_length_days: 7
   energy:
     forecast_steps_days: 7
-    n_years_initial_window: 3
-    step_length_days: 90
+    step_length_days: 7
