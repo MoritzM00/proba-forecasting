@@ -83,12 +83,12 @@ train:
       kwargs:
         n_jobs: -1
         random_state: 0
-        n_estimators: 100
+        n_estimators: 250
         tree_method: hist
         grow_policy: depthwise
         learning_rate: 0.1
         max_depth: 5
-        colsample_bylevel: 0.9
+        colsample_bylevel: 0.6
     lgbm:
       lags:
         - 1
@@ -110,34 +110,36 @@ train:
         num_leaves: 15
         min_child_samples: 50
         n_estimators: 250
-        max_depth: 4
+        max_depth: 6
         learning_rate: 0.1
-        subsample_freq: 0
-        subsample: 1.0
-        reg_lambda: 1e-1
-        colsample_bytree: 0.8
+        reg_lambda: 1e-2
+        colsample_bytree: 0.6
 
     catboost:
       lags:
         - 1
         - 2
-        - 3
+        - 6
         - 7
         - 14
         - 21
+        - 28
       include_seasonal_dummies: true
       cyclical_encodings: true
-      include_rolling_stats: true
-      X_lag_cols: []
+      include_rolling_stats: false
+      X_lag_cols: null
       kwargs:
-        n_estimators: 100
+        thread_count: -1
+        learning_rate: 0.1
+        n_estimators: 250 # default: 1000
         verbose: 0
         random_state: 0
-        max_depth: 5
-        boosting_type: Ordered
-        reg_lambda: 1e-3
-        grow_policy: SymmetricTree
-        min_child_samples: 200
+        max_depth: 6 # default: 6
+        boosting_type: Plain # default: Ordered
+        reg_lambda: 1e-2
+        grow_policy: SymmetricTree # the default
+        colsample_bylevel: 0.6
+
     qrf:
       lags:
         - 1
@@ -197,12 +199,12 @@ train:
       kwargs:
         n_jobs: -1
         random_state: 0
-        n_estimators: 100
+        n_estimators: 250
         tree_method: hist
         grow_policy: depthwise
         learning_rate: 0.1
         max_depth: 5
-        colsample_bylevel: 0.8
+        colsample_bylevel: 0.6
 
     lgbm:
       lags:
@@ -232,9 +234,9 @@ train:
         verbose: -1
         random_state: 0
         num_leaves: 20
-        min_child_samples: 500
-        n_estimators: 200
-        max_depth: 7
+        min_child_samples: 200
+        n_estimators: 250
+        max_depth: 12
         learning_rate: 0.1
         subsample_freq: 0
         subsample: 1.0
@@ -258,14 +260,16 @@ train:
       include_rolling_stats: false
       X_lag_cols: []
       kwargs:
-        n_estimators: 100
+        thread_count: -1
+        learning_rate: 0.1
+        n_estimators: 250
         random_state: 0
         verbose: 0
-        max_depth: 5
-        boosting_type: Ordered
-        reg_lambda: 1e-3
+        max_depth: 6
+        boosting_type: Plain # default: Ordered (much slower and performs worse here)
+        reg_lambda: 1e-2
         grow_policy: SymmetricTree
-        min_child_samples: 200
+        colsample_bylevel: 0.8
 
 
     qrf:

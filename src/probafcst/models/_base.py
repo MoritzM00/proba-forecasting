@@ -66,6 +66,8 @@ def get_model(
                 model_params["kwargs"]["n_jobs"] = n_jobs
             model = LGBMQuantileForecaster(**model_params, quantiles=quantiles)
         case "catboost":
+            if n_jobs is not None:
+                model_params["kwargs"]["thread_count"] = n_jobs
             model = CatBoostQuantileForecaster(**model_params, quantiles=quantiles)
         case "qrf":
             if n_jobs is not None:
