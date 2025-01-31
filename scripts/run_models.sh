@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Array of parameter values
-models=("benchmark" "quantreg" "xgb-custom" "lgbm" "catboost" "qrf")
+models=("benchmark" "xgb-custom" "lgbm" "catboost")
 
 # Nested loops to iterate over all combinations
 for model in "${models[@]}"; do

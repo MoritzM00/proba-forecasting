@@ -71,23 +71,24 @@ train:
       lags:
         - 1
         - 2
-        - 3
-        - 4
-        - 5
         - 6
         - 7
         - 14
+        - 21
+        - 28
       include_seasonal_dummies: true
       cyclical_encodings: true
+      include_rolling_stats: false
       X_lag_cols: null
       kwargs:
         n_jobs: -1
         random_state: 0
-        # early_stopping_rounds: 50
-        # n_estimators: 1000
-        # learning_rate: 0.05
-        # subsample: 0.8
-        # colsample_bytree: 0.8
+        n_estimators: 100
+        tree_method: hist
+        grow_policy: depthwise
+        learning_rate: 0.1
+        max_depth: 5
+        colsample_bylevel: 0.9
     lgbm:
       lags:
         - 1
@@ -106,15 +107,15 @@ train:
         n_jobs: -1
         verbose: -1
         random_state: 0
-        # num_leaves: 15
-        # min_child_samples: 20
-        # n_estimators: 250
-        # max_depth: 4
-        # learning_rate: 0.1
-        # subsample_freq: 0
-        # subsample: 1.0
-        # reg_lambda: 1e-3
-        # colsample_bytree: 0.8
+        num_leaves: 15
+        min_child_samples: 50
+        n_estimators: 250
+        max_depth: 4
+        learning_rate: 0.1
+        subsample_freq: 0
+        subsample: 1.0
+        reg_lambda: 1e-1
+        colsample_bytree: 0.8
 
     catboost:
       lags:
@@ -132,6 +133,11 @@ train:
         n_estimators: 100
         verbose: 0
         random_state: 0
+        max_depth: 5
+        boosting_type: Ordered
+        reg_lambda: 1e-3
+        grow_policy: SymmetricTree
+        min_child_samples: 200
     qrf:
       lags:
         - 1
@@ -191,11 +197,13 @@ train:
       kwargs:
         n_jobs: -1
         random_state: 0
-        # early_stopping_rounds: 50
-        # n_estimators: 1000
-        # learning_rate: 0.05
-        # subsample: 0.8
-        # colsample_bytree: 0.8
+        n_estimators: 100
+        tree_method: hist
+        grow_policy: depthwise
+        learning_rate: 0.1
+        max_depth: 5
+        colsample_bylevel: 0.8
+
     lgbm:
       lags:
         - 24
@@ -223,15 +231,15 @@ train:
         n_jobs: -1
         verbose: -1
         random_state: 0
-        # num_leaves: 15
-        # min_child_samples: 20
-        # n_estimators: 300 # increase leads to worse coverage
-        # max_depth: -1
-        # learning_rate: 0.1
-        # subsample_freq: 0
-        # subsample: 1.0
-        # reg_lambda: 1e-3
-        # colsample_bytree: 0.8
+        num_leaves: 20
+        min_child_samples: 500
+        n_estimators: 200
+        max_depth: 7
+        learning_rate: 0.1
+        subsample_freq: 0
+        subsample: 1.0
+        reg_lambda: 2
+        colsample_bytree: 0.6
 
     catboost:
       lags:
@@ -245,15 +253,21 @@ train:
         - 336
         - 504 # 3 weeks
         - 672
-
       include_seasonal_dummies: true
       cyclical_encodings: true
       include_rolling_stats: false
       X_lag_cols: []
       kwargs:
-        n_estimators: 200
+        n_estimators: 100
         random_state: 0
         verbose: 0
+        max_depth: 5
+        boosting_type: Ordered
+        reg_lambda: 1e-3
+        grow_policy: SymmetricTree
+        min_child_samples: 200
+
+
     qrf:
       lags:
         - 24

@@ -130,6 +130,12 @@ stages:
             kwargs:
               n_jobs: -1
               random_state: 0
+              n_estimators: 100
+              tree_method: hist
+              grow_policy: depthwise
+              learning_rate: 0.1
+              max_depth: 5
+              colsample_bylevel: 0.8
           lgbm:
             lags:
             - 24
@@ -150,6 +156,15 @@ stages:
               n_jobs: -1
               verbose: -1
               random_state: 0
+              num_leaves: 20
+              min_child_samples: 500
+              n_estimators: 200
+              max_depth: 7
+              learning_rate: 0.1
+              subsample_freq: 0
+              subsample: 1.0
+              reg_lambda: 2
+              colsample_bytree: 0.6
           catboost:
             lags:
             - 24
@@ -167,9 +182,14 @@ stages:
             include_rolling_stats: false
             X_lag_cols: []
             kwargs:
-              n_estimators: 200
+              n_estimators: 100
               random_state: 0
               verbose: 0
+              max_depth: 5
+              boosting_type: Ordered
+              reg_lambda: 0.001
+              grow_policy: SymmetricTree
+              min_child_samples: 200
           qrf:
             lags:
             - 24
@@ -193,8 +213,8 @@ stages:
     outs:
     - path: models/energy_model.pkl
       hash: md5
-      md5: 37de9da1f34c7407a09a9956f3938ffc
-      size: 3797052
+      md5: b6e2f92773d4acd30f6e48d36eb48252
+      size: 4323352
   train@bikes:
     cmd: python src/probafcst/pipeline/train.py --target bikes
     deps:
@@ -257,18 +277,24 @@ stages:
             lags:
             - 1
             - 2
-            - 3
-            - 4
-            - 5
             - 6
             - 7
             - 14
+            - 21
+            - 28
             include_seasonal_dummies: true
             cyclical_encodings: true
+            include_rolling_stats: false
             X_lag_cols:
             kwargs:
               n_jobs: -1
               random_state: 0
+              n_estimators: 100
+              tree_method: hist
+              grow_policy: depthwise
+              learning_rate: 0.1
+              max_depth: 5
+              colsample_bylevel: 0.9
           lgbm:
             lags:
             - 1
@@ -287,6 +313,15 @@ stages:
               n_jobs: -1
               verbose: -1
               random_state: 0
+              num_leaves: 15
+              min_child_samples: 50
+              n_estimators: 250
+              max_depth: 4
+              learning_rate: 0.1
+              subsample_freq: 0
+              subsample: 1.0
+              reg_lambda: 0.1
+              colsample_bytree: 0.8
           catboost:
             lags:
             - 1
@@ -303,6 +338,11 @@ stages:
               n_estimators: 100
               verbose: 0
               random_state: 0
+              max_depth: 5
+              boosting_type: Ordered
+              reg_lambda: 0.001
+              grow_policy: SymmetricTree
+              min_child_samples: 200
           qrf:
             lags:
             - 1
@@ -322,8 +362,8 @@ stages:
     outs:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: ff7c2a794533f5badc809764f7c09a0e
-      size: 1657083
+      md5: e32df6fb64be8a85bf464233c7bf65b8
+      size: 1584738
   eval@energy:
     cmd: python src/probafcst/pipeline/evaluate.py --target energy
     deps:
@@ -333,8 +373,8 @@ stages:
       size: 1284809
     - path: models/energy_model.pkl
       hash: md5
-      md5: 37de9da1f34c7407a09a9956f3938ffc
-      size: 3797052
+      md5: b6e2f92773d4acd30f6e48d36eb48252
+      size: 4323352
     - path: src/probafcst//backtest.py
       hash: md5
       md5: c352b34254b7299b5ec810bac65b0949
@@ -372,20 +412,20 @@ stages:
     outs:
     - path: output/energy_eval_results.csv
       hash: md5
-      md5: a8837fdac3dd6f6dcdec32eca4103275
-      size: 9322
+      md5: 9a95306ba9ecb48c24ac86989b01a544
+      size: 9372
     - path: output/energy_metrics.json
       hash: md5
-      md5: 84660b152a54ed97f0d4952fda754d9c
-      size: 583
+      md5: d6c60df9802b1dfec9017ad85c44af0f
+      size: 580
     - path: output/energy_pinball_losses.svg
       hash: md5
-      md5: 745c760ca60b7ac2296a2c8811b50c77
-      size: 25641
+      md5: c768d9cd5350683a885a40cc05a2e145
+      size: 25760
     - path: output/eval_plots/energy/
       hash: md5
-      md5: 81ec1b40b583d9e6e17fa6652da154dd.dir
-      size: 323801
+      md5: ef75a1e2942c30f235657d3af73a0870.dir
+      size: 323906
       nfiles: 5
   eval@bikes:
     cmd: python src/probafcst/pipeline/evaluate.py --target bikes
@@ -396,8 +436,8 @@ stages:
       size: 149267
     - path: models/bikes_model.pkl
       hash: md5
-      md5: ff7c2a794533f5badc809764f7c09a0e
-      size: 1657083
+      md5: e32df6fb64be8a85bf464233c7bf65b8
+      size: 1584738
     - path: src/probafcst//backtest.py
       hash: md5
       md5: c352b34254b7299b5ec810bac65b0949
@@ -435,32 +475,32 @@ stages:
     outs:
     - path: output/bikes_eval_results.csv
       hash: md5
-      md5: db368d9331ae14711ce8fc4456cae489
-      size: 8685
+      md5: 9929a6afd44320f0f360a4e5af1e782d
+      size: 8688
     - path: output/bikes_metrics.json
       hash: md5
-      md5: 800705c8511063228850a02190f60a0a
-      size: 583
+      md5: 1a110ad28c5b733d9a76b966b43c2002
+      size: 582
     - path: output/bikes_pinball_losses.svg
       hash: md5
-      md5: 6519d63a37f77cc6369dcae83a2d1800
-      size: 25918
+      md5: 2be93654193d8dcc4652594cef163e3a
+      size: 25738
     - path: output/eval_plots/bikes/
       hash: md5
-      md5: 574d0aab9683e82b85bc9142c81f24bf.dir
-      size: 165465
+      md5: d3466b99c7bad3c5cc5383508f7b4a6f.dir
+      size: 166555
       nfiles: 5
   submit:
     cmd: python src/probafcst/pipeline/submit.py
     deps:
     - path: models/bikes_model.pkl
       hash: md5
-      md5: ff7c2a794533f5badc809764f7c09a0e
-      size: 1657083
+      md5: e32df6fb64be8a85bf464233c7bf65b8
+      size: 1584738
     - path: models/energy_model.pkl
       hash: md5
-      md5: 37de9da1f34c7407a09a9956f3938ffc
-      size: 3797052
+      md5: b6e2f92773d4acd30f6e48d36eb48252
+      size: 4323352
     - path: src/probafcst//plotting.py
       hash: md5
       md5: 482a42cf8b0b9196d98b0d8e772d83d2
@@ -488,13 +528,13 @@ stages:
     outs:
     - path: output/bikes_forecast.svg
       hash: md5
-      md5: 02fb07ebbe839d34e071cea6668a2970
-      size: 32585
+      md5: 035f0604d906a47d05b73ac998009322
+      size: 32906
     - path: output/energy_forecast.svg
       hash: md5
-      md5: fc98267fb713c010acd9a903d0dc63f7
-      size: 70864
+      md5: cdeed1f2964a9a0be6c34db8ac0b966f
+      size: 67206
     - path: output/submission.csv
       hash: md5
-      md5: ab334731e58043ca747c3cd1ce034c9f
-      size: 1607
+      md5: 0d48a884f8774e7f3e0392098ff37684
+      size: 1610
