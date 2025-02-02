@@ -38,9 +38,11 @@ def evaluate_forecaster(target: str):
     target_col = params.data[target].target_col
     data = pd.read_parquet(data_path).asfreq(freq).dropna()
 
+    train_start = params.train[target].cutoff
+
     eval_start = params.eval.eval_start
     eval_end = params.eval.eval_end
-    data = data.loc[:eval_end]
+    data = data.loc[train_start:eval_end]
     DAY_HOURS = 24 if freq == "h" else 1
 
     y = data[target_col]
