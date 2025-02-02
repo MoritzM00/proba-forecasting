@@ -47,7 +47,7 @@ data:
 
 train:
   bikes:
-    selected: catboost
+    selected: quantreg
     cutoff: '2012-10-23' # use only data onwards this date for training the final model
     benchmark:
       n_weeks: 100
@@ -167,8 +167,8 @@ train:
 
 
   energy:
-    selected: catboost
-    cutoff: '2015-10-23'
+    selected: quantreg
+    cutoff: '2021-10-23'
     benchmark:
       n_weeks: 100
 
