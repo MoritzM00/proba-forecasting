@@ -133,7 +133,7 @@ train:
       include_seasonal_dummies: true
       cyclical_encodings: true
       include_rolling_stats: false
-      X_lag_cols: null
+      X_lag_cols: []
       kwargs:
         thread_count: -1
         learning_rate: 0.1
@@ -141,7 +141,7 @@ train:
         verbose: 0
         random_state: 0
         max_depth: 6 # default: 6
-        boosting_type: Plain # default: Ordered
+        boosting_type: Ordered # default: Ordered
         reg_lambda: 1e-2
         grow_policy: SymmetricTree # the default
         colsample_bylevel: 0.6
@@ -268,7 +268,7 @@ train:
       include_seasonal_dummies: true
       cyclical_encodings: true
       include_rolling_stats: false
-      X_lag_cols: null
+      X_lag_cols: []
       kwargs:
         thread_count: -1
         learning_rate: 0.1
@@ -276,7 +276,7 @@ train:
         random_state: 0
         verbose: 0
         max_depth: 6
-        boosting_type: Plain # default: Ordered (much slower and performs worse here)
+        boosting_type: Ordered # default: Ordered (much slower and performs worse here)
         reg_lambda: 1e-2
         grow_policy: SymmetricTree
         colsample_bylevel: 0.6
