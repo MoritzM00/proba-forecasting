@@ -212,7 +212,6 @@ train:
         max_depth: 6
         colsample_bylevel: 0.6
         subsample: 0.8
-        min_split_gain: 1e-3
         reg_lambda: 1e-3
 
     lgbm:

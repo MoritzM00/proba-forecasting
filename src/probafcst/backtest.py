@@ -115,6 +115,8 @@ def backtest(
             )
         case _:
             raise ValueError(f"Unknown splitter type: {splitter_type}")
+    cutoffs = cv.get_cutoffs(y)
+    logger.debug(f"Using cutoffs: {y.iloc[cutoffs].index}")
 
     n_splits = cv.get_n_splits(y)
     scoring = PinballLoss(alpha=quantiles, score_average=False)
