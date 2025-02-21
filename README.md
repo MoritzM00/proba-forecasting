@@ -13,6 +13,8 @@ The challenge is based on two datasets: `bikes` and `energy`. A third dataset `n
 
 DVC tracked parameters, as well as metrics and plots can be found on [DVC Studio](https://studio.dvc.ai/user/MoritzM00/projects/proba-forecasting-jclqxio6ht).
 
+![Forecast Visualizations](https://github.com/MoritzM00/proba-forecasting/blob/main/images/visualizations.png?raw=true)
+
 ## Quickstart
 
 First, clone the repository:
@@ -63,6 +65,8 @@ The pipeline consists of four stages:
 4. `submit`: Create out-of-sample forecasts in the required format for this forecasting challenge.
 
 Stages 1-3 are run for two datasets: `bikes` and `energy`.
+
+![Example Pipeline Run](https://github.com/MoritzM00/proba-forecasting/blob/main/images/example_run.png?raw=true)
 
 ## Development Guide
 
