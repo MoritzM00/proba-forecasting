@@ -6,7 +6,7 @@
 
 [pre-commit]: https://github.com/pre-commit/pre-commit
 
-Repository for the Probabilistic Timeseries Forecasting Challenge. This challenge focuses on quantile forecasting for timeseries data in Germany and Karlsruhe. Results can be found [here](https://gitlab.kit.edu/nils.koster/ptsfc24_results).
+Repository for the Probabilistic Timeseries Forecasting Challenge. This challenge focuses on quantile forecasting for timeseries data in Germany and Karlsruhe. Results can be found [here](https://gitlab.kit.edu/nils.koster/ptsfc24_results) and are visualized [here](https://jobrac.shinyapps.io/ptsfc24_viz/).
 
 Forecasts are inherently uncertain, and it is important to quantify this uncertainty. The goal is to predict some kind of distribution of future values, rather than just a single point estimate. Quantiles are a relatively straightforward way to quantify such an uncertainty.
 The challenge is based on two datasets: `bikes` and `energy`. A third dataset `no2` is also available, but was not selected for forecast submissions.
@@ -29,9 +29,16 @@ Then follow the instructions [here](#set-up-the-environment) to set up a dev env
 Finally, reproduce the results by running:
 
 ```shell
-dvc pull
 dvc repro
 ```
+
+To delete the cache files (`*.sqlite`), that are created by the pipeline, run:
+
+```shell
+make submit
+```
+
+This will delete the files that store the API calls to openMeteo and the data itself, thus updating the data and then force a pipeline reproduction, e.g. to make a submission in a new forecasting week.
 
 ## Data Pipeline
 
@@ -66,6 +73,7 @@ The pipeline consists of four stages:
 
 Stages 1-3 are run for two datasets: `bikes` and `energy`.
 
+The image below shows an example run of the pipeline, showcasing the automatic caching capabilities of DVC. Therefore, only the stages that have changed since the last run are executed.
 ![Example Pipeline Run](https://github.com/MoritzM00/proba-forecasting/blob/main/images/example_run.png?raw=true)
 
 ## Development Guide
@@ -84,24 +92,13 @@ source .venv/bin/activate
 
 ### Reproduce the results
 
-Run
+After setting up and activating the environment, run:
 
 ```shell
-dvc pull
 dvc repro
 ```
 
-to reproduce the results,
-or equivalently
-
-```shell
-uv run dvc pull
-uv run dvc repro
-```
-
-if you did not activate the virtual environment.
-
-`dvc pull` first pulls all the data (including experiments) from the remote storage, and `dvc repro` then runs the pipeline to reproduce the results.
+to reproduce the results.
 
 ### Documentation
 
