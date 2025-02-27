@@ -76,6 +76,39 @@ Stages 1-3 are run for two datasets: `bikes` and `energy`.
 The image below shows an example run of the pipeline, showcasing the automatic caching capabilities of DVC. Therefore, only the stages that have changed since the last run are executed.
 ![Example Pipeline Run](https://github.com/MoritzM00/proba-forecasting/blob/main/images/example_run.png?raw=true)
 
+## Repository Structure
+
+The following is the structure of the repository:
+
+```shell
+proba-forecasting
+├── data # DVC managed data directory
+├── models # stores the trained models in .pkl, dvc managed
+├── notebooks # used for development
+├── output # dvc managed output directory, contains all artifacts created by the pipeline
+├── scripts
+├── src
+│   └── probafcst
+│       ├── metrics
+│       ├── models # defines all models using sktime interface
+│       ├── pipeline # defines the data pipeline scripts used by dvc.yaml
+│       ├── utils # utils such as tabularization, checking etc.
+│       ├── __init__.py
+│       ├── backtest.py # implements TSCV with sktime
+│       ├── data.py # data fetching
+│       ├── plotting.py
+│       └── weather.py
+├── tests
+├── LICENSE
+├── Makefile
+├── README.md
+├── dvc.lock
+├── dvc.yaml # Pipeline definition in yaml
+├── params.yaml # defines parameters
+├── pyproject.toml
+└── uv.lock
+```
+
 ## Development Guide
 
 This guide shows how to reproduce the results of the challenge.
